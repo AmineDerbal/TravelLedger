@@ -7,5 +7,10 @@ export const setupGuards = (router) => {
      * Examples of public routes are, 404, under maintenance, etc.
      */
     if (to.meta.public) return;
+
+    const isLoggedIn = !!(
+      useCookie('userData').value && useCookie('accessToken').value
+    );
+    if (!isLoggedIn) return '/login';
   });
 };
