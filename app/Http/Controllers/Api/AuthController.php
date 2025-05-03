@@ -38,14 +38,14 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-        ]
+        ];
 
         $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->accessToken;
+        $token = $tokenResult->plainTextToken;
         return response()->json(['user' => $user])->cookie(
             'access_token',
             $token,
-            $tokenResult->token->expires_at->diffInMinutes(now()), // Default expiration time
+            60 * 24 * 30 * 60,
             '/',
             null,
             true,
@@ -53,7 +53,7 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         )->cookie(
             'user_data',
             json_encode($userdata),
-            $tokenResult->token->expires_at->diffInMinutes(now()), // Default expiration time
+            60 * 24 * 30 * 60,
             '/',
             null,
             true,
