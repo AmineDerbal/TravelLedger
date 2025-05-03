@@ -34,11 +34,25 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         }
         $user = Auth::user();
 
+        $userdata = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]
+
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->accessToken;
         return response()->json(['user' => $user])->cookie(
             'access_token',
             $token,
+            $tokenResult->token->expires_at->diffInMinutes(now()), // Default expiration time
+            '/',
+            null,
+            true,
+            true,
+        )->cookie(
+            'user_data',
+            json_encode($userdata),
             $tokenResult->token->expires_at->diffInMinutes(now()), // Default expiration time
             '/',
             null,
