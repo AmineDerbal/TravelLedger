@@ -91,6 +91,6 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         $request->user()->currentAccessToken()->delete();
         return response()->json([
             'message' => 'Logout successful',
-        ], 200)->withCookie(Cookie::forget('access_token'));
+        ], 200)->withCookie(Cookie::forget('access_token'))->withCookie(Cookie::forget('user_data'));
     }
 }
