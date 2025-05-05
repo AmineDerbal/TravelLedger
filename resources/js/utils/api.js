@@ -21,4 +21,18 @@ export const apiCall = async (url, method = 'GET', data = null) => {
   }
 };
 
-export const apiAction = async (apiCall, store, onSuccess = null) => {};
+export const apiAction = async (apiCall, store, onSuccess = null) => {
+  store.hasError = false;
+  store.errors = {};
+
+  try {
+    const response = await apiCall();
+    if (onSuccess) onSuccess(response.data);
+  } catch (error) {
+    store.hasError = true;
+    if (error.response && error.response.status === 422) {
+      store.errors = error.response.data.errors;
+    }
+    return error.response;
+  }
+};
