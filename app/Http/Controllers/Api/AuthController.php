@@ -9,9 +9,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
 
+
 class AuthController extends Controller
 {
-    public function login(Request $request){
+    public function register(Request $request){
+ 
+   
+        $request->validate([
+             'name' => 'required|string|max:255',
+             'email' => 'required|string|email|max:255|unique:users',
+             'password' => 'required|string|min:8',
+             'password_confirmation' => 'required|same:password',
+ 
+         ]);
+ 
+     
+         $user = User::create([
+             'name' => $request->name,
+             'email' => $request->email,
+             'password' => Hash::make($request->password),
+         ]);
+ 
+         return response()->json([
+             'message' => 'Registration successful',
+             'user' => $user,
+         ], 201);
+     }
+   
+     public function login(Request $request){
         // login with name or email and with password
 
         $request->validate([
@@ -42,6 +67,7 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->plainTextToken;
+
         return response()->json(['user' => $user])->cookie(
             'access_token',
             $token,
@@ -63,32 +89,10 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
     }
 
-    public function register(Request $request){
-
-   
-       $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'password_confirmation' => 'required|same:password',
-
-        ]);
-
-    
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'message' => 'Registration successful',
-            'user' => $user,
-        ], 201);
-    }
-
     public function logout(Request $request){
+    
         $request->user()->currentAccessToken()->delete();
+     
         return response()->json([
             'message' => 'Logout successful',
         ], 200)->withCookie(Cookie::forget('access_token'))->withCookie(Cookie::forget('user_data'));
