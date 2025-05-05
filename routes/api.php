@@ -19,9 +19,12 @@ use Illuminate\Support\Facades\Auth;
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/register', 'register')->name('auth.register');
     Route::post('auth/login', 'login')->name('auth.login');
-    Route::post('auth/logout', 'logout')->name('auth.logout');
+});
+Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
+    Route::post('auth/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
