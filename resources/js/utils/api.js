@@ -10,4 +10,15 @@ export const $api = ofetch.create({
   },
 });
 
-export const apiRequest = async (options) => {};
+export const apiCall = async (url, method = 'GET', data = null) => {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
+  const newUrl = `${baseUrl}/${url}`;
+  try {
+    const response = await axios({ url: newUrl, method, data });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const apiAction = async (apiCall, store, onSuccess = null) => {};
