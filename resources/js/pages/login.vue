@@ -1,4 +1,5 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import useUserStore from '@/store/user';
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
@@ -34,9 +35,13 @@ const authThemeImg = useGenerateImageVariant(
   true,
 );
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark);
-
+const router = useRouter();
 const login = async () => {
   const response = await userStore.login(form.value);
+  if (response.status === 200) {
+    userStore.setIsAuthenticated(true);
+    router.push({ path: '/' });
+  }
 };
 </script>
 
