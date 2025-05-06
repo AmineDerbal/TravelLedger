@@ -1,3 +1,4 @@
+import useUserStore from '@/store/user';
 export const setupGuards = (router) => {
   // 👉 router.beforeEach
   // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
@@ -8,9 +9,10 @@ export const setupGuards = (router) => {
      */
     if (to.meta.public) return;
 
-    const isLoggedIn = !!(
-      useCookie('userData').value && useCookie('accessToken').value
-    );
+    // If user is not logged in, redirect to login page.
+    const userStore = useUserStore();
+    const isLoggedIn = userStore.isAuthenticated;
+
     if (!isLoggedIn && to.meta.requiresAuth) return '/login';
   });
 };
