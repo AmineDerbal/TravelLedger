@@ -1,31 +1,43 @@
 <script setup>
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
-import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
-import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
-import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png'
-import authV2MaskDark from '@images/pages/misc-mask-dark.png'
-import authV2MaskLight from '@images/pages/misc-mask-light.png'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
-
+import useUserStore from '@/store/user';
+import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
+import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png';
+import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png';
+import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png';
+import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png';
+import authV2MaskDark from '@images/pages/misc-mask-dark.png';
+import authV2MaskLight from '@images/pages/misc-mask-light.png';
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
+import { themeConfig } from '@themeConfig';
 definePage({
   meta: {
     layout: 'blank',
     public: true,
   },
-})
+});
+
+const userStore = useUserStore();
 
 const form = ref({
-  email: '',
+  login: '',
   password: '',
   remember: false,
-})
+});
 
-const isPasswordVisible = ref(false)
-const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
-const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
+const isPasswordVisible = ref(false);
+const authThemeImg = useGenerateImageVariant(
+  authV2LoginIllustrationLight,
+  authV2LoginIllustrationDark,
+  authV2LoginIllustrationBorderedLight,
+  authV2LoginIllustrationBorderedDark,
+  true,
+);
+const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark);
+
+const login = async () => {
+  const response = await userStore.login(form.value);
+};
 </script>
 
 <template>
@@ -49,7 +61,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
       <div class="position-relative bg-background w-100 me-0">
         <div
           class="d-flex align-center justify-center w-100 h-100"
-          style="padding-inline: 6.25rem;"
+          style="padding-inline: 6.25rem"
         >
           <VImg
             max-width="613"
@@ -64,7 +76,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
           alt="auth-footer-mask"
           height="280"
           width="100"
-        >
+        />
       </div>
     </VCol>
 
@@ -80,7 +92,9 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
       >
         <VCardText>
           <h4 class="text-h4 mb-1">
-            Welcome to <span class="text-capitalize">{{ themeConfig.app.title }}</span>! 👋🏻
+            Welcome to
+            <span class="text-capitalize">{{ themeConfig.app.title }}</span
+            >! 👋🏻
           </h4>
           <p class="mb-0">
             Please sign-in to your account and start the adventure
@@ -89,13 +103,13 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
         <VCardText>
           <VForm @submit.prevent="() => {}">
             <VRow>
-              <!-- email -->
+              <!-- login -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.email"
+                  v-model="form.login"
                   autofocus
                   label="Email or Username"
-                  type="email"
+                  type="text"
                   placeholder="johndoe@email.com"
                 />
               </VCol>
@@ -108,11 +122,15 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                   placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   autocomplete="password"
-                  :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                  :append-inner-icon="
+                    isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'
+                  "
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
 
-                <div class="d-flex align-center flex-wrap justify-space-between my-6">
+                <div
+                  class="d-flex align-center flex-wrap justify-space-between my-6"
+                >
                   <VCheckbox
                     v-model="form.remember"
                     label="Remember me"
@@ -128,6 +146,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                 <VBtn
                   block
                   type="submit"
+                  @click="login"
                 >
                   Login
                 </VBtn>
@@ -138,9 +157,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                 cols="12"
                 class="text-body-1 text-center"
               >
-                <span class="d-inline-block">
-                  New on our platform?
-                </span>
+                <span class="d-inline-block"> New on our platform? </span>
                 <a
                   class="text-primary ms-1 d-inline-block text-body-1"
                   href="javascript:void(0)"
@@ -174,5 +191,5 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 </template>
 
 <style lang="scss">
-@use "@core-scss/template/pages/page-auth";
+@use '@core-scss/template/pages/page-auth';
 </style>
