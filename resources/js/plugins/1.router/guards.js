@@ -11,6 +11,6 @@ export const setupGuards = (router) => {
     const isLoggedIn = !!(
       useCookie('userData').value && useCookie('accessToken').value
     );
-    if (!isLoggedIn) return '/login';
+    if (!isLoggedIn && to.meta.requiresAuth) return '/login';
   });
 };
