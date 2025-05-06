@@ -37,7 +37,6 @@ import { definePage } from 'vue-router/auto';
 
 definePage({
   meta: {
-    layout: 'blank',
     requiresAuth: true,
   },
 });
