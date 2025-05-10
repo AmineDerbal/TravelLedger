@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('type');
             $table->unsignedBigInteger('category');
             $table->decimal('amount', 10, 2);
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
