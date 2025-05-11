@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -17,6 +18,12 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
+        DB::table('ledgers')->insert([
+            'name' => 'RTW',
+            'amount' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**
@@ -26,4 +33,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('ledgers');
     }
+
+   
 };
