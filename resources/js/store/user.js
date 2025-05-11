@@ -8,14 +8,23 @@ export default defineStore('user', {
     hasError: false,
     errors: {},
   }),
-  persist: true,
+  persist: ['isAuthenticated'],
 
   actions: {
+    setIsAuthenticated(value) {
+      this.isAuthenticated = value;
+    },
     async login(data) {
       return await apiAction(() => apiCall('auth/login', 'POST', data), this);
     },
-    setIsAuthenticated(value) {
-      this.isAuthenticated = value;
+
+    async logout(data) {
+      const response = await apiAction(
+        () => apiCall('auth/logout', 'POST', data),
+        this,
+      );
+      if (response.status === 200) this.setIsAuthenticated(false);
+      return response;
     },
   },
 });
