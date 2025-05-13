@@ -1,9 +1,8 @@
-<template></template>
-
 <script setup>
 import { definePage } from 'vue-router/auto';
-import { useTransactionStore } from '@/store/transaction';
-import { computed } from 'vue';
+import useTransactionStore from '@/store/transaction';
+import { computed, ref } from 'vue';
+import useLedgerStore from '@/store/ledger';
 
 definePage({
   meta: {
@@ -15,6 +14,17 @@ const transactionStore = useTransactionStore();
 
 const transactions = computed(() => {
   return transactionStore.transactions;
+});
+
+const ledgerStore = useLedgerStore();
+
+const isDialogVisible = ref(false);
+const transactionForm = ref({
+  ledger: '',
+  name: '',
+  amount: 0,
+  type: '',
+  category: '',
 });
 </script>
 
