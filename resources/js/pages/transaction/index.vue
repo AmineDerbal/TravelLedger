@@ -3,6 +3,7 @@ import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
 import { computed, ref } from 'vue';
 import useLedgerStore from '@/store/ledger';
+import DialogCloseBtn from '@/@core/components/DialogCloseBtn.vue';
 
 definePage({
   meta: {
@@ -29,7 +30,46 @@ const transactionForm = ref({
 </script>
 
 <template>
-  <VBtn variant="tonal">Add Transaction</VBtn>
+  <!-- <VBtn variant="tonal">Add Transaction</VBtn> -->
+  <VDialog
+    v-model="isDialogVisible"
+    max-width="600"
+  >
+    <template #activator="{ props }">
+      <VBtn
+        v-bind="props"
+        variant="tonal"
+        >Add Transaction</VBtn
+      >
+    </template>
+    <DialogCloseBtn @click="isDialogVisible = false" />
+    <VCard title="Transaction">
+      <VCardText>
+        <VRow>
+          <VCol
+            cols="12"
+            md="6"
+          >
+            <AppTextField
+              v-model="transactionForm.name"
+              label="Name"
+              placeholder="Name"
+            />
+          </VCol>
+          <VCol
+            cols="12"
+            md="6"
+          >
+            <AppTextField
+              v-model="transactionForm.amount"
+              label="Amount"
+              placeholder="Amount"
+            />
+          </VCol>
+        </VRow>
+      </VCardText>
+    </VCard>
+  </VDialog>
   <div v-if="transactions.length < 1">
     <h2>There are no transactions</h2>
   </div>
