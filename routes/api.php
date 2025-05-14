@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LedgerController;
+use App\Http\Controllers\Api\CategoryController;
 
 
 /*
@@ -25,7 +26,11 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
     Route::post('auth/logout', [AuthController::class, 'logout']);
 
     Route::controller(LedgerController::class)->group(function () {
-        Route::get('ledger/first', 'getFirstLedger')->name('ledger.first');
+        Route::get('ledgers/first', 'getFirstLedger')->name('ledgers.first');
+    });
+
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('categories', 'index')->name('categories.index');
     });
 });
 
