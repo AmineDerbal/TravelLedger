@@ -43,4 +43,30 @@ public function label(): string
 
 }
 
+public static function values(): array
+{
+  return [
+        [
+            'value' => self::Flight,
+            'label' => self::Flight->label(),
+        ],
+        [
+            'value' => self::Hotel,
+            'label' => self::Hotel->label(),
+        ],
+        [
+            'value' => self::Visa,
+            'label' => self::Visa->label(),
+        ],
+        [
+            'value' => self::Insurance,
+            'label' => self::Insurance->label(),
+        ],
+        [
+            'value' => self::Rechargement,
+            'label' => self::Rechargement->label(),
+        ],
+    ];
+}
+
 }
