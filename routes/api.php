@@ -23,10 +23,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('auth/login', 'login')->name('auth.login');
 });
 Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
-    Route::post('auth/logout', [AuthController::class, 'logout']);
+    Route::post('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::controller(LedgerController::class)->group(function () {
-        Route::get('ledgers/first', 'getFirstLedger')->name('ledgers.first');
+        Route::get('ledgers/first-entry', 'getFirstLedger')->name('ledgers.first-entry');
     });
 
     Route::controller(CategoryController::class)->group(function () {
