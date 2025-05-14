@@ -4,6 +4,7 @@ import { apiCall, apiAction } from '@/utils/api';
 export default defineStore('ledger', {
   state: () => ({
     ledger: null,
+    ledgers: [],
     hasError: false,
     errors: {},
   }),
@@ -11,7 +12,7 @@ export default defineStore('ledger', {
   actions: {
     async getFirstLedger() {
       return await apiAction(
-        () => apiCall('ledger/first'),
+        () => apiCall('ledgers/first'),
         this,
         (data) => (this.ledger = data),
       );
