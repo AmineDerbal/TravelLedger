@@ -1,7 +1,7 @@
 <script setup>
 import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
-import { computed, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import useLedgerStore from '@/store/ledger';
 import DialogCloseBtn from '@/@core/components/DialogCloseBtn.vue';
 
@@ -18,6 +18,12 @@ const transactions = computed(() => {
 });
 
 const ledgerStore = useLedgerStore();
+const transactionCategories = computed(() => {
+  return transactionStore.categories;
+});
+const transactionTypes = computed(() => {
+  return transactionStore.types;
+});
 
 const isDialogVisible = ref(false);
 const transactionForm = ref({
@@ -26,6 +32,11 @@ const transactionForm = ref({
   amount: 0,
   type: '',
   category: '',
+});
+
+onBeforeMount(async () => {
+  await transactionStore.getTransactionTypes();
+  await transactionStore.getTransactionCategories();
 });
 </script>
 
