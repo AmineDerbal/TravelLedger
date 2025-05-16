@@ -2,11 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LedgerController;
-use App\Http\Controllers\Api\CategoryController;
-
+use App\Http\Controllers\Api\TransactionMetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +27,12 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::get('ledgers/first-entry', 'getFirstLedger')->name('ledgers.first-entry');
     });
 
-    Route::controller(CategoryController::class)->group(function () {
-        Route::get('categories', 'index')->name('categories.index');
+    Route::controller(TransactionMetaController::class)->group(function () {
+        Route::get('transaction-categories', 'categories')->name('transaction-categories');
+        Route::get('transaction-types', 'types')->name('transaction-types');
     });
+
+
 });
 
 
