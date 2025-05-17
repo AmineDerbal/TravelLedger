@@ -49,22 +49,32 @@ public static function values(): array
         [
             'value' => self::Flight,
             'label' => self::Flight->label(),
+            'type' => TransactionType::Debit
         ],
         [
             'value' => self::Hotel,
             'label' => self::Hotel->label(),
+            'type' => TransactionType::Debit
         ],
         [
             'value' => self::Visa,
             'label' => self::Visa->label(),
+            'type' => TransactionType::Debit
         ],
         [
             'value' => self::Insurance,
             'label' => self::Insurance->label(),
+            'type' => TransactionType::Debit
         ],
         [
             'value' => self::Rechargement,
             'label' => self::Rechargement->label(),
+            'type' => TransactionType::Credit
+        ],
+        [
+            'value' => self::Refund,
+            'label' => self::Refund->label(),
+            'type' => TransactionType::Credit
         ],
     ];
 }
