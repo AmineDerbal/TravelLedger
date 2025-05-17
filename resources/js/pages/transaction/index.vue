@@ -26,6 +26,13 @@ const transactionTypes = computed(() => {
   return transactionStore.types;
 });
 
+const filteredCategories = computed(() => {
+  if (!transactionForm.value.type) return [];
+  return transactionCategories.value.filter(
+    (category) => category.type === transactionForm.value.type.value,
+  );
+});
+
 const isDialogVisible = ref(false);
 const transactionForm = ref({
   ledger: '',
@@ -34,6 +41,13 @@ const transactionForm = ref({
   category: null,
   date: '',
 });
+
+watch(
+  () => transactionForm.value.type,
+  () => {
+    transactionForm.value.category = null;
+  },
+);
 
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
@@ -86,7 +100,7 @@ onBeforeMount(async () => {
               v-model="transactionForm.category"
               :hint="transactionForm.category?.label"
               label="Category"
-              :items="transactionCategories"
+              :items="filteredCategories"
               item-title="label"
               item-value="value"
               persistent-hint
