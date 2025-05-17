@@ -4,6 +4,7 @@ import useTransactionStore from '@/store/transaction';
 import { computed, onBeforeMount, ref } from 'vue';
 import useLedgerStore from '@/store/ledger';
 import DialogCloseBtn from '@/@core/components/DialogCloseBtn.vue';
+import AppSelect from '@/@core/components/app-form-elements/AppSelect.vue';
 
 definePage({
   meta: {
@@ -28,15 +29,17 @@ const transactionTypes = computed(() => {
 const isDialogVisible = ref(false);
 const transactionForm = ref({
   ledger: '',
-  name: '',
   amount: 0,
-  type: '',
-  category: '',
+  type: null,
+  category: null,
+  date: '',
 });
 
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
+  console.log(transactionCategories.value);
+  console.log(transactionTypes.value);
 });
 </script>
 
@@ -61,10 +64,35 @@ onBeforeMount(async () => {
             cols="12"
             md="6"
           >
-            <AppTextField
-              v-model="transactionForm.name"
-              label="Name"
-              placeholder="Name"
+            <AppSelect
+              v-model="transactionForm.type"
+              :hint="transactionForm.type?.label"
+              label="Type"
+              :items="transactionTypes"
+              item-title="label"
+              item-value="value"
+              persistent-hint
+              return-object
+              single-line
+              placeholder="Select Type"
+            />
+          </VCol>
+          <VCol
+            cols="12"
+            md="6"
+            v-if="transactionForm.type"
+          >
+            <AppSelect
+              v-model="transactionForm.category"
+              :hint="transactionForm.category?.label"
+              label="Category"
+              :items="transactionCategories"
+              item-title="label"
+              item-value="value"
+              persistent-hint
+              return-object
+              single-line
+              placeholder="Select Category"
             />
           </VCol>
           <VCol
