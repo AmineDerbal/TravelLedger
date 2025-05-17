@@ -1,10 +1,8 @@
 <script setup>
 import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import useLedgerStore from '@/store/ledger';
-import DialogCloseBtn from '@/@core/components/DialogCloseBtn.vue';
-import AppSelect from '@/@core/components/app-form-elements/AppSelect.vue';
 
 definePage({
   meta: {
@@ -26,34 +24,41 @@ const transactionTypes = computed(() => {
   return transactionStore.types;
 });
 
-const filteredCategories = computed(() => {
-  if (!transactionForm.value.type) return [];
-  return transactionCategories.value.filter(
-    (category) => category.type === transactionForm.value.type.value,
-  );
-});
-
 const isDialogVisible = ref(false);
-const transactionForm = ref({
+const transactionForm = reactive({
   ledger: '',
   amount: 0,
   type: null,
   category: null,
-  date: '',
+  date: null,
+  description: null,
+});
+
+const filteredCategories = computed(() => {
+  if (!transactionForm.type) return [];
+  return transactionCategories.value.filter(
+    (category) => category.type === transactionForm.type.value,
+  );
 });
 
 watch(
-  () => transactionForm.value.type,
+  () => transactionForm.type,
   () => {
-    transactionForm.value.category = null;
+    transactionForm.category = null;
+  },
+);
+
+watch(
+  () => transactionForm.amount,
+  () => {
+    if (transactionForm.amount < 0)
+      transactionForm.amount = transactionForm.amount * -1;
   },
 );
 
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
-  console.log(transactionCategories.value);
-  console.log(transactionTypes.value);
 });
 </script>
 
@@ -74,10 +79,33 @@ onBeforeMount(async () => {
     <VCard title="Transaction">
       <VCardText>
         <VRow>
-          <VCol
-            cols="12"
-            md="6"
-          >
+          <VCol cols="12">
+            <AppTextField
+              v-model="transactionForm.amount"
+              type="number"
+              suffix="DZD"
+              min="0"
+              label="Amount"
+              placeholder="Amount"
+            />
+          </VCol>
+          <VCol cols="12">
+            <AppDateTimePicker
+              v-model="transactionForm.date"
+              label="Date"
+              placeholder="Select Date"
+              :config="{ dateFormat: 'F j, Y' }"
+            />
+          </VCol>
+          <VCol cols="12">
+            <AppTextarea
+              v-model="transactionForm.description"
+              label="Description"
+              placeholder="Description"
+              auto-grow
+            />
+          </VCol>
+          <VCol cols="12">
             <AppSelect
               v-model="transactionForm.type"
               :hint="transactionForm.type?.label"
@@ -93,7 +121,6 @@ onBeforeMount(async () => {
           </VCol>
           <VCol
             cols="12"
-            md="6"
             v-if="transactionForm.type"
           >
             <AppSelect
@@ -109,17 +136,17 @@ onBeforeMount(async () => {
               placeholder="Select Category"
             />
           </VCol>
-          <VCol
-            cols="12"
-            md="6"
-          >
-            <AppTextField
-              v-model="transactionForm.amount"
-              label="Amount"
-              placeholder="Amount"
-            />
-          </VCol>
         </VRow>
+      </VCardText>
+      <VCardText class="d-flex justify-end flex-wrap gap-3">
+        <VBtn
+          variant="tonal"
+          color="secondary"
+          @click="isDialogVisible = false"
+        >
+          Close
+        </VBtn>
+        <VBtn @click="isDialogVisible = false"> Save </VBtn>
       </VCardText>
     </VCard>
   </VDialog>
