@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LedgerController;
 use App\Http\Controllers\Api\TransactionMetaController;
+use App\Http\Controllers\Api\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,10 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
     Route::controller(TransactionMetaController::class)->group(function () {
         Route::get('transaction-categories', 'categories')->name('transaction-categories');
         Route::get('transaction-types', 'types')->name('transaction-types');
+    });
+
+    Route::controller(TransactionController::class)->group(function () {
+        Route::post('transactions/store', 'store')->name('transactions.store');
     });
 
 
