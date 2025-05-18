@@ -26,7 +26,7 @@ const transactionTypes = computed(() => {
 
 const isDialogVisible = ref(false);
 const transactionForm = reactive({
-  ledger: '',
+  ledger: ledgerStore.ledger.id,
   amount: 0,
   type: null,
   category: null,
@@ -40,6 +40,21 @@ const filteredCategories = computed(() => {
     (category) => category.type === transactionForm.type.value,
   );
 });
+
+const isFormValid = computed(() => {
+  const form = transactionForm;
+
+  return form.ledger &&
+    form.amount > 0 &&
+    form.type &&
+    form.category &&
+    form.date &&
+    form.description
+    ? true
+    : false;
+});
+
+const submitForm = async () => {};
 
 watch(
   () => transactionForm.type,
@@ -94,7 +109,7 @@ onBeforeMount(async () => {
               v-model="transactionForm.date"
               label="Date"
               placeholder="Select Date"
-              :config="{ dateFormat: 'F j, Y' }"
+              :config="{ altFormat: 'F j, Y', altInput: true }"
             />
           </VCol>
           <VCol cols="12">
@@ -146,7 +161,12 @@ onBeforeMount(async () => {
         >
           Close
         </VBtn>
-        <VBtn @click="isDialogVisible = false"> Save </VBtn>
+        <VBtn
+          @click="submitForm"
+          :disabled="!isFormValid"
+        >
+          Save
+        </VBtn>
       </VCardText>
     </VCard>
   </VDialog>
