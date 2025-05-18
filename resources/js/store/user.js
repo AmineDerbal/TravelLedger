@@ -8,7 +8,7 @@ export default defineStore('user', {
     hasError: false,
     errors: {},
   }),
-  persist: ['isAuthenticated', 'user'],
+  persist: ['isAuthenticated', 'userData'],
 
   actions: {
     clearUserData() {
