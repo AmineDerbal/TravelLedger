@@ -1,8 +1,8 @@
 <script setup>
 import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
-import { computed, onBeforeMount, reactive, ref } from 'vue';
 import useLedgerStore from '@/store/ledger';
+import useUserStore from '@/store/user';
 
 definePage({
   meta: {
@@ -11,12 +11,17 @@ definePage({
 });
 
 const transactionStore = useTransactionStore();
+const ledgerStore = useLedgerStore();
+const userStore = useUserStore();
+
+const user = computed(() => {
+  return userStore.userData;
+});
 
 const transactions = computed(() => {
   return transactionStore.transactions;
 });
 
-const ledgerStore = useLedgerStore();
 const transactionCategories = computed(() => {
   return transactionStore.categories;
 });
@@ -54,7 +59,24 @@ const isFormValid = computed(() => {
     : false;
 });
 
-const submitForm = async () => {};
+const submitForm = async () => {
+  const data = {
+    ledger_id: transactionForm.ledger,
+    user_id: user.value.id,
+    amount: transactionForm.amount,
+    type: transactionForm.type.value,
+    category: transactionForm.category.value,
+    date: transactionForm.date,
+    description: transactionForm.description,
+  };
+
+  const response = await transactionStore.storeTransaction(data);
+
+  if (response.status === 201) {
+    await ledgerStore.UpdateLedgerAmount(transactionForm.ledger);
+    isDialogVisible.value = false;
+  }
+};
 
 watch(
   () => transactionForm.type,
