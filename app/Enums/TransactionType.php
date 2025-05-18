@@ -28,4 +28,10 @@ enum TransactionType: int
           ],
         ];
     }
+
+    // For validation
+    public static function valueList(): array
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
 }
