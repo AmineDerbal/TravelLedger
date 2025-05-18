@@ -22,7 +22,7 @@ const ledgerItem = {
 const ledgerStore = useLedgerStore();
 const ledger = computed(() => ledgerStore.ledger);
 onBeforeMount(async () => {
-  if (!ledger.value) {
+  if (!ledger.value.name && !ledger.value.id && !ledger.value.amount) {
     await ledgerStore.getFirstLedger();
   }
 });
