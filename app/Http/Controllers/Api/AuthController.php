@@ -68,17 +68,9 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->plainTextToken;
 
-        return response()->json(['user' => $user])->cookie(
+        return response()->json(['user' => $userdata])->cookie(
             'access_token',
             $token,
-            60 * 24 * 30 * 60,
-            '/',
-            null,
-            true,
-            true,
-        )->cookie(
-            'user_data',
-            json_encode($userdata),
             60 * 24 * 30 * 60,
             '/',
             null,
