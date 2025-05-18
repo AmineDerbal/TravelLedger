@@ -3,19 +3,27 @@ import { apiCall, apiAction } from '@/utils/api';
 
 export default defineStore('user', {
   state: () => ({
-    user: null,
+    userData: null,
     isAuthenticated: false,
     hasError: false,
     errors: {},
   }),
-  persist: ['isAuthenticated'],
+  persist: ['isAuthenticated', 'user'],
 
   actions: {
+    clearUserData() {
+      this.userData = null;
+      this.isAuthenticated = false;
+    },
     setIsAuthenticated(value) {
       this.isAuthenticated = value;
     },
     async login(data) {
-      return await apiAction(() => apiCall('auth/login', 'POST', data), this);
+      return await apiAction(
+        () => apiCall('auth/login', 'POST', data),
+        this,
+        (data) => (this.userData = data),
+      );
     },
 
     async logout(data) {
@@ -23,7 +31,7 @@ export default defineStore('user', {
         () => apiCall('auth/logout', 'POST', data),
         this,
       );
-      if (response.status === 200) this.setIsAuthenticated(false);
+      if (response.status === 200) this.clearUserData();
       return response;
     },
   },
