@@ -3,7 +3,11 @@ import { apiCall, apiAction } from '@/utils/api';
 
 export default defineStore('ledger', {
   state: () => ({
-    ledger: null,
+    ledger: {
+      id: null,
+      name: null,
+      amount: null,
+    },
     ledgers: [],
     hasError: false,
     errors: {},
