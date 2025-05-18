@@ -13,4 +13,12 @@ class LedgerController extends Controller
        $ledger = Ledger::first();
        return response()->json($ledger);
    }
+
+   public function getLedgerAmount($id)
+   {
+       $ledger = Ledger::find($id);
+       return response()->json($ledger->amount);
+   }
+
+
 }
