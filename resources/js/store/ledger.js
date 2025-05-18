@@ -21,5 +21,13 @@ export default defineStore('ledger', {
         (data) => (this.ledger = data),
       );
     },
+
+    async UpdateLedgerAmount(id) {
+      return await apiAction(
+        () => apiCall(`ledgers/${id}/amount`),
+        this,
+        (data) => (this.ledger.amount = Number(data)),
+      );
+    },
   },
 });
