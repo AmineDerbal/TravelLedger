@@ -26,6 +26,7 @@ class storeTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => 'required|exists:users,id',
             'ledger_id' => 'required|exists:ledgers,id',
            'type' => ['required', Rule::in(TransactionType::valueList())],
    'category' => [
