@@ -26,6 +26,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
 
     Route::controller(LedgerController::class)->group(function () {
         Route::get('ledgers/first-entry', 'getFirstLedger')->name('ledgers.first-entry');
+        Route::get('ledgers/{id}/amount', 'getLedgerAmount')->name('ledgers.amount');
     });
 
     Route::controller(TransactionMetaController::class)->group(function () {
