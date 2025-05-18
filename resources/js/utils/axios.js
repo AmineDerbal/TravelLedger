@@ -15,7 +15,7 @@ const configureAxios = () => {
       const statusCode = error.response.status;
 
       if (statusCode === 401) {
-        useUSerStore().setIsAuthenticated(false);
+        useUSerStore().clearUserData();
         window.location.href = '/login';
       }
 
