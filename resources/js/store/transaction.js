@@ -24,5 +24,12 @@ export default defineStore('transaction', {
         (data) => (this.types = data),
       );
     },
+
+    async storeTransaction(data) {
+      return await apiAction(
+        () => apiCall('transactions/store', 'POST', data),
+        this,
+      );
+    },
   },
 });
