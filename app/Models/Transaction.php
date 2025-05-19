@@ -18,4 +18,14 @@ class Transaction extends Model
         'date',
         'description',
     ];
+
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function ledger() {
+        return $this->belongsTo(Ledger::class);
+    }
+ 
 }
