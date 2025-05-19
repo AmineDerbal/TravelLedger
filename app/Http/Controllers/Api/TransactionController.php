@@ -7,8 +7,9 @@ use App\Models\Transaction;
 use App\Models\Ledger;
 use App\Http\Requests\Transaction\storeTransactionRequest;
 use App\Http\Requests\Transaction\getTransactionsByDateRangeRequest;    
-
+use App\Http\Resources\Transaction\BasicTransactionResource;
 use App\Enums\TransactionType;
+
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -16,7 +17,7 @@ class TransactionController extends Controller
     public function getTransactionsByDateRange(getTransactionsByDateRangeRequest $request) {
         $data = $request->validated();
         $transactions = Transaction::where('ledger_id', $data['ledger_id'])->whereBetween('date', [$data['start_date'], $data['end_date']])->get();
-        return response()->json($transactions, 200);
+        return response()->json(BasicTransactionResource::collection($transactions), 201);
         
     }
     public function store(storeTransactionRequest $request) {
