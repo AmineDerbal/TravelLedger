@@ -29,6 +29,12 @@ const transactionTypes = computed(() => {
   return transactionStore.types;
 });
 
+const todayDate = new Date().toISOString().split('T')[0];
+const yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1))
+  .toISOString()
+  .split('T')[0];
+const startDate = ref(yesterdayDate);
+const endDate = ref(todayDate);
 const isDialogVisible = ref(false);
 const transactionForm = reactive({
   ledger: ledgerStore.ledger.id,
@@ -59,6 +65,15 @@ const isFormValid = computed(() => {
     : false;
 });
 
+const clearForm = () => {
+  transactionForm.ledger = ledgerStore.ledger.id;
+  transactionForm.amount = 0;
+  transactionForm.type = null;
+  transactionForm.category = null;
+  transactionForm.date = null;
+  transactionForm.description = null;
+};
+
 const submitForm = async () => {
   const data = {
     ledger_id: transactionForm.ledger,
@@ -75,7 +90,18 @@ const submitForm = async () => {
   if (response.status === 201) {
     await ledgerStore.UpdateLedgerAmount(transactionForm.ledger);
     isDialogVisible.value = false;
+    clearForm();
   }
+};
+
+const fetchTransactionsByDateRange = async () => {
+  const data = {
+    ledger_id: ledgerStore.ledger.id,
+    start_date: startDate.value,
+    end_date: endDate.value,
+  };
+
+  await transactionStore.getTransactionsByDateRange(data);
 };
 
 watch(
@@ -100,7 +126,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <!-- <VBtn variant="tonal">Add Transaction</VBtn> -->
   <VDialog
     v-model="isDialogVisible"
     max-width="600"
@@ -109,6 +134,7 @@ onBeforeMount(async () => {
       <VBtn
         v-bind="props"
         variant="tonal"
+        class="mb-2"
         >Add Transaction</VBtn
       >
     </template>
@@ -131,7 +157,11 @@ onBeforeMount(async () => {
               v-model="transactionForm.date"
               label="Date"
               placeholder="Select Date"
-              :config="{ altFormat: 'F j, Y', altInput: true }"
+              :config="{
+                altFormat: 'F j, Y',
+                altInput: true,
+                maxDate: new Date().toISOString().split('T')[0],
+              }"
             />
           </VCol>
           <VCol cols="12">
@@ -192,8 +222,77 @@ onBeforeMount(async () => {
       </VCardText>
     </VCard>
   </VDialog>
-  <div v-if="transactions.length < 1">
-    <h2>There are no transactions</h2>
-  </div>
-  <div v-else></div>
+  <VCard class="mb-6 pa-2">
+    <VRow class="align-end">
+      <VCol
+        cols="9"
+        md="4"
+      >
+        <AppDateTimePicker
+          v-model="startDate"
+          label="Start Date"
+          placeholder="Select Start Date"
+          :config="{
+            altFormat: 'F j, Y',
+            altInput: true,
+            maxDate: new Date().toISOString().split('T')[0],
+          }"
+        />
+      </VCol>
+      <VCol
+        cols="9"
+        md="4"
+      >
+        <AppDateTimePicker
+          v-model="endDate"
+          label="End Date"
+          placeholder="Select End Date"
+          :config="{
+            altFormat: 'F j, Y',
+            altInput: true,
+            maxDate: new Date().toISOString().split('T')[0],
+          }"
+        />
+      </VCol>
+      <VCol
+        cols="9"
+        md="4"
+      >
+        <VBtn
+          variant="tonal"
+          color="primary"
+          @click="fetchTransactionsByDateRange"
+          >Filter</VBtn
+        ></VCol
+      >
+    </VRow>
+  </VCard>
+  <VCard>
+    <VCardItem>
+      <VCardTitle>Transactions</VCardTitle>
+    </VCardItem>
+    <VCardText>
+      <VDataTable
+        :items="transactions"
+        :headers="[
+          { title: 'Date', key: 'date' },
+          { title: 'Description', key: 'description' },
+          { title: 'Amount', key: 'amount' },
+          { title: 'Category', key: 'category' },
+          { title: 'Type', key: 'type' },
+        ]"
+        class="text-no-wrap"
+      >
+        <template #item="{ item }">
+          <tr>
+            <td>{{ item.date }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.amount }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.type }}</td>
+          </tr>
+        </template>
+      </VDataTable>
+    </VCardText>
+  </VCard>
 </template>
