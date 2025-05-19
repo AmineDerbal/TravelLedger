@@ -65,6 +65,15 @@ const isFormValid = computed(() => {
     : false;
 });
 
+const headers = [
+  { title: 'Date', key: 'date' },
+  { title: 'Description', key: 'description', sortable: false },
+  { title: 'Amount', key: 'amount' },
+  { title: 'Category', key: 'category.value' },
+  { title: 'Type', key: 'type.value' },
+  { title: 'Actions', key: 'actions', sortable: false },
+];
+
 const clearForm = () => {
   transactionForm.ledger = ledgerStore.ledger.id;
   transactionForm.amount = 0;
@@ -274,13 +283,7 @@ onBeforeMount(async () => {
     <VCardText>
       <VDataTable
         :items="transactions"
-        :headers="[
-          { title: 'Date', key: 'date' },
-          { title: 'Description', key: 'description' },
-          { title: 'Amount', key: 'amount' },
-          { title: 'Category', key: 'category' },
-          { title: 'Type', key: 'type' },
-        ]"
+        :headers="headers"
         class="text-no-wrap"
       >
         <template #item="{ item }">
@@ -290,6 +293,16 @@ onBeforeMount(async () => {
             <td>{{ item.amount }}</td>
             <td>{{ item.category.label }}</td>
             <td>{{ item.type.label }}</td>
+            <td>
+              <div class="d-flex gap-1">
+                <IconBtn>
+                  <VIcon icon="tabler-edit" />
+                </IconBtn>
+                <IconBtn>
+                  <VIcon icon="tabler-trash" />
+                </IconBtn>
+              </div>
+            </td>
           </tr>
         </template>
       </VDataTable>
