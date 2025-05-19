@@ -288,8 +288,8 @@ onBeforeMount(async () => {
             <td>{{ item.date }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.amount }}</td>
-            <td>{{ item.category }}</td>
-            <td>{{ item.type }}</td>
+            <td>{{ item.category.label }}</td>
+            <td>{{ item.type.label }}</td>
           </tr>
         </template>
       </VDataTable>
