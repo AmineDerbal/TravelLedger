@@ -43,6 +43,11 @@ public function label(): string
 
 }
 
+    public static function labelFromValue(int $value): string
+{
+    return self::from($value)->label();
+}
+
 public static function values(): array
 {
   return [
