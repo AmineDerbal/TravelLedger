@@ -31,5 +31,13 @@ export default defineStore('transaction', {
         this,
       );
     },
+
+    async getTransactionsByDateRange(data) {
+      return await apiAction(
+        () => apiCall('transactions/date-range', 'POST', data),
+        this,
+        (data) => (this.transactions = data),
+      );
+    },
   },
 });
