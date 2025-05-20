@@ -3,6 +3,7 @@ import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledger';
 import useUserStore from '@/store/user';
+import { getTodayDate, getYesterdayDate } from '@/utils/dates';
 
 definePage({
   meta: {
@@ -29,13 +30,11 @@ const transactionTypes = computed(() => {
   return transactionStore.types;
 });
 
-const todayDate = new Date().toISOString().split('T')[0];
-const yesterdayDate = new Date(new Date().setDate(new Date().getDate() - 1))
-  .toISOString()
-  .split('T')[0];
-const startDate = ref(yesterdayDate);
-const endDate = ref(todayDate);
+const startDate = ref(getYesterdayDate());
+const endDate = ref(getTodayDate());
 const isDialogVisible = ref(false);
+const editDialogVisible = ref(false);
+
 const transactionForm = reactive({
   ledger: ledgerStore.ledger.id,
   amount: 0,
@@ -54,7 +53,6 @@ const filteredCategories = computed(() => {
 
 const isFormValid = computed(() => {
   const form = transactionForm;
-
   return form.ledger &&
     form.amount > 0 &&
     form.type &&
@@ -184,7 +182,7 @@ onBeforeMount(async () => {
               :rules="[
                 (v) =>
                   v.length <= 80 ||
-                  'Description must be less than 50 characters',
+                  'Description must be less than 80 characters',
               ]"
             />
           </VCol>
