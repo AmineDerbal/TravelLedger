@@ -54,7 +54,7 @@ class storeTransactionRequest extends FormRequest
         ],
             'amount' => 'required|numeric|gte:0',
             'date' => 'required|date|date_format:Y-m-d',
-            'description' => 'required|string',
+            'description' => 'required|string|max:80',
         ];
     }
 }

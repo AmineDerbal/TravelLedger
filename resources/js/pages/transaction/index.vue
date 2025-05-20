@@ -60,7 +60,8 @@ const isFormValid = computed(() => {
     form.type &&
     form.category &&
     form.date &&
-    form.description
+    form.description &&
+    form.description.length <= 80
     ? true
     : false;
 });
@@ -178,7 +179,13 @@ onBeforeMount(async () => {
               v-model="transactionForm.description"
               label="Description"
               placeholder="Description"
-              auto-grow
+              counter="80"
+              rows="2"
+              :rules="[
+                (v) =>
+                  v.length <= 80 ||
+                  'Description must be less than 50 characters',
+              ]"
             />
           </VCol>
           <VCol cols="12">
