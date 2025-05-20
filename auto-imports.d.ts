@@ -56,6 +56,8 @@ declare global {
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getTodayDate: typeof import('./resources/js/utils/dates.js')['getTodayDate']
+  const getYesterdayDate: typeof import('./resources/js/utils/dates.js')['getYesterdayDate']
   const h: typeof import('vue')['h']
   const hexToRgb: typeof import('./resources/js/@core/utils/colorConverter.js')['hexToRgb']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
@@ -418,6 +420,8 @@ declare module 'vue' {
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getTodayDate: UnwrapRef<typeof import('./resources/js/utils/dates.js')['getTodayDate']>
+    readonly getYesterdayDate: UnwrapRef<typeof import('./resources/js/utils/dates.js')['getYesterdayDate']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly hexToRgb: UnwrapRef<typeof import('./resources/js/@core/utils/colorConverter.js')['hexToRgb']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
