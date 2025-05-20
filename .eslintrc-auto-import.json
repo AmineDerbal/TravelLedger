@@ -362,6 +362,8 @@
     "whenever": true,
     "apiAction": true,
     "apiCall": true,
-    "axios": true
+    "axios": true,
+    "getTodayDate": true,
+    "getYesterdayDate": true
   }
 }
