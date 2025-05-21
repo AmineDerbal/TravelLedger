@@ -4,6 +4,7 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledger';
 import useUserStore from '@/store/user';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
+import TransactionTable from '@/components/transactions/TransactionTable.vue';
 
 definePage({
   meta: {
@@ -130,36 +131,8 @@ onBeforeMount(async () => {
       >
     </VRow>
   </VCard>
-  <VCard>
-    <VCardItem>
-      <VCardTitle>Transactions</VCardTitle>
-    </VCardItem>
-    <VCardText>
-      <VDataTable
-        :items="transactions"
-        :headers="headers"
-        class="text-no-wrap"
-      >
-        <template #item="{ item }">
-          <tr>
-            <td>{{ item.date }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.amount }}</td>
-            <td>{{ item.category.label }}</td>
-            <td>{{ item.type.label }}</td>
-            <td>
-              <div class="d-flex gap-1">
-                <IconBtn>
-                  <VIcon icon="tabler-edit" />
-                </IconBtn>
-                <IconBtn>
-                  <VIcon icon="tabler-trash" />
-                </IconBtn>
-              </div>
-            </td>
-          </tr>
-        </template>
-      </VDataTable>
-    </VCardText>
-  </VCard>
+  <TransactionTable
+    :transactions="transactions"
+    :headers="headers"
+  />
 </template>
