@@ -60,6 +60,8 @@ declare module 'vue' {
     TheCustomizer: typeof import('./resources/js/@core/components/TheCustomizer.vue')['default']
     ThemeSwitcher: typeof import('./resources/js/@core/components/ThemeSwitcher.vue')['default']
     TiptapEditor: typeof import('./resources/js/@core/components/TiptapEditor.vue')['default']
+    TransactionDialog: typeof import('./resources/js/components/transactions/TransactionDialog.vue')['default']
+    TransactionTable: typeof import('./resources/js/components/transactions/TransactionTable.vue')['default']
     TwoFactorAuthDialog: typeof import('./resources/js/components/dialogs/TwoFactorAuthDialog.vue')['default']
     UserInfoEditDialog: typeof import('./resources/js/components/dialogs/UserInfoEditDialog.vue')['default']
     UserUpgradePlanDialog: typeof import('./resources/js/components/dialogs/UserUpgradePlanDialog.vue')['default']

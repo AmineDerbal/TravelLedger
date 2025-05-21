@@ -33,36 +33,7 @@ const transactionTypes = computed(() => {
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
 const isDialogVisible = ref(false);
-const editDialogVisible = ref(false);
-
-const transactionForm = reactive({
-  ledger: ledgerStore.ledger.id,
-  amount: 0,
-  type: null,
-  category: null,
-  date: null,
-  description: null,
-});
-
-const filteredCategories = computed(() => {
-  if (!transactionForm.type) return [];
-  return transactionCategories.value.filter(
-    (category) => category.type === transactionForm.type.value,
-  );
-});
-
-const isFormValid = computed(() => {
-  const form = transactionForm;
-  return form.ledger &&
-    form.amount > 0 &&
-    form.type &&
-    form.category &&
-    form.date &&
-    form.description &&
-    form.description.length <= 80
-    ? true
-    : false;
-});
+const dialogKey = ref(0);
 
 const headers = [
   { title: 'Date', key: 'date' },
@@ -73,32 +44,19 @@ const headers = [
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
-const clearForm = () => {
-  transactionForm.ledger = ledgerStore.ledger.id;
-  transactionForm.amount = 0;
-  transactionForm.type = null;
-  transactionForm.category = null;
-  transactionForm.date = null;
-  transactionForm.description = null;
-};
-
-const submitForm = async () => {
-  const data = {
-    ledger_id: transactionForm.ledger,
+const submitForm = async (data) => {
+  data = {
+    ...data,
     user_id: user.value.id,
-    amount: transactionForm.amount,
-    type: transactionForm.type.value,
-    category: transactionForm.category.value,
-    date: transactionForm.date,
-    description: transactionForm.description,
+    ledger_id: ledgerStore.ledger.id,
   };
 
   const response = await transactionStore.storeTransaction(data);
 
   if (response.status === 201) {
-    await ledgerStore.UpdateLedgerAmount(transactionForm.ledger);
+    await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
     isDialogVisible.value = false;
-    clearForm();
+    dialogKey.value += 1;
   }
 };
 
@@ -112,21 +70,6 @@ const fetchTransactionsByDateRange = async () => {
   await transactionStore.getTransactionsByDateRange(data);
 };
 
-watch(
-  () => transactionForm.type,
-  () => {
-    transactionForm.category = null;
-  },
-);
-
-watch(
-  () => transactionForm.amount,
-  () => {
-    if (transactionForm.amount < 0)
-      transactionForm.amount = transactionForm.amount * -1;
-  },
-);
-
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
@@ -134,108 +77,14 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <VDialog
-    v-model="isDialogVisible"
-    max-width="600"
-  >
-    <template #activator="{ props }">
-      <VBtn
-        v-bind="props"
-        variant="tonal"
-        class="mb-2"
-        >Add Transaction</VBtn
-      >
-    </template>
-    <DialogCloseBtn @click="isDialogVisible = false" />
-    <VCard title="Transaction">
-      <VCardText>
-        <VRow>
-          <VCol cols="12">
-            <AppTextField
-              v-model="transactionForm.amount"
-              type="number"
-              suffix="DZD"
-              min="0"
-              label="Amount"
-              placeholder="Amount"
-            />
-          </VCol>
-          <VCol cols="12">
-            <AppDateTimePicker
-              v-model="transactionForm.date"
-              label="Date"
-              placeholder="Select Date"
-              :config="{
-                altFormat: 'F j, Y',
-                altInput: true,
-                maxDate: new Date().toISOString().split('T')[0],
-              }"
-            />
-          </VCol>
-          <VCol cols="12">
-            <AppTextarea
-              v-model="transactionForm.description"
-              label="Description"
-              placeholder="Description"
-              counter="80"
-              rows="2"
-              :rules="[
-                (v) =>
-                  v.length <= 80 ||
-                  'Description must be less than 80 characters',
-              ]"
-            />
-          </VCol>
-          <VCol cols="12">
-            <AppSelect
-              v-model="transactionForm.type"
-              :hint="transactionForm.type?.label"
-              label="Type"
-              :items="transactionTypes"
-              item-title="label"
-              item-value="value"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Type"
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            v-if="transactionForm.type"
-          >
-            <AppSelect
-              v-model="transactionForm.category"
-              :hint="transactionForm.category?.label"
-              label="Category"
-              :items="filteredCategories"
-              item-title="label"
-              item-value="value"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Category"
-            />
-          </VCol>
-        </VRow>
-      </VCardText>
-      <VCardText class="d-flex justify-end flex-wrap gap-3">
-        <VBtn
-          variant="tonal"
-          color="secondary"
-          @click="isDialogVisible = false"
-        >
-          Close
-        </VBtn>
-        <VBtn
-          @click="submitForm"
-          :disabled="!isFormValid"
-        >
-          Save
-        </VBtn>
-      </VCardText>
-    </VCard>
-  </VDialog>
+  <TransactionDialog
+    v-model:isDialogVisible="isDialogVisible"
+    :transactionTypes="transactionTypes"
+    :transactionCategories="transactionCategories"
+    @submit="submitForm"
+    :key="dialogKey"
+  />
+
   <VCard class="mb-6 pa-2">
     <VRow class="align-end">
       <VCol
