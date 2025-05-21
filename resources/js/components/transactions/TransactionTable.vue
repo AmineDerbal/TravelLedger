@@ -9,6 +9,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(['openEditDialog', 'closeDialog']);
+
+const openEditDialog = (transaction) => {
+  emit('openEditDialog', transaction);
+};
 </script>
 
 <template>
@@ -31,7 +37,7 @@ const props = defineProps({
             <td>{{ item.type.label }}</td>
             <td>
               <div class="d-flex gap-1">
-                <IconBtn>
+                <IconBtn @click="openEditDialog(item)">
                   <VIcon icon="tabler-edit" />
                 </IconBtn>
                 <IconBtn>

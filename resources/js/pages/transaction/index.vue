@@ -34,6 +34,7 @@ const transactionTypes = computed(() => {
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
 const isDialogVisible = ref(false);
+const isEdit = ref(false);
 const dialogKey = ref(0);
 
 const headers = [
@@ -45,12 +46,36 @@ const headers = [
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
-const initialData = {
+const defaultForm = {
   amount: 0,
   date: null,
   description: '',
   category: null,
   type: null,
+};
+
+const initialData = ref({ ...defaultForm });
+
+const increaseDialogKey = () => {
+  dialogKey.value += 1;
+};
+
+const resetDialog = () => {
+  isDialogVisible.value = false;
+  increaseDialogKey();
+};
+
+const openEditDialog = (transaction) => {
+  initialData.value = { ...transaction };
+  isEdit.value = true;
+  isDialogVisible.value = true;
+  increaseDialogKey();
+};
+
+const closeEditDialog = () => {
+  initialData.value = { ...defaultForm };
+  isEdit.value = false;
+  resetDialog();
 };
 
 const submitForm = async (data) => {
@@ -91,7 +116,9 @@ onBeforeMount(async () => {
     :transactionTypes="transactionTypes"
     :transactionCategories="transactionCategories"
     :initialData="initialData"
+    :isEdit="isEdit"
     @submit="submitForm"
+    @closeEditDialog="closeEditDialog"
     :key="dialogKey"
   />
 
@@ -143,5 +170,6 @@ onBeforeMount(async () => {
   <TransactionTable
     :transactions="transactions"
     :headers="headers"
+    @openEditDialog="openEditDialog"
   />
 </template>

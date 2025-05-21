@@ -25,7 +25,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:isDialogVisible', 'submit']);
+const emit = defineEmits([
+  'update:isDialogVisible',
+  'submit',
+  'closeEditDialog',
+]);
 
 const dialogVisibleUpdate = (val) => {
   emit('update:isDialogVisible', val);
@@ -37,6 +41,10 @@ const handleSubmit = () => {
     category: form.category.value,
     type: form.type.value,
   });
+};
+
+const handleCloseEditDialog = () => {
+  emit('closeEditDialog');
 };
 
 const isVisible = computed({
@@ -84,6 +92,9 @@ watch(
   <VDialog
     v-model="isVisible"
     max-width="600"
+    @click:outside="
+      isEdit ? handleCloseEditDialog() : dialogVisibleUpdate(false)
+    "
   >
     <template #activator="{ props }">
       <VBtn
@@ -93,7 +104,9 @@ watch(
         >{{ props.isEdit ? 'Edit ' : 'Add ' }}Transaction</VBtn
       >
     </template>
-    <DialogCloseBtn @click="dialogVisibleUpdate(false)" />
+    <DialogCloseBtn
+      @click="isEdit ? handleCloseEditDialog() : dialogVisibleUpdate(false)"
+    />
     <VCard title="Transaction">
       <VCardText>
         <VRow>
@@ -170,7 +183,7 @@ watch(
         <VBtn
           variant="tonal"
           color="secondary"
-          @click="dialogVisibleUpdate(false)"
+          @click="isEdit ? handleCloseEditDialog() : dialogVisibleUpdate(false)"
         >
           Close
         </VBtn>
@@ -178,7 +191,7 @@ watch(
           @click="handleSubmit"
           :disabled="!isFormValid"
         >
-          Save
+          {{ props.isEdit ? 'Update' : 'Submit' }}
         </VBtn>
       </VCardText>
     </VCard>
