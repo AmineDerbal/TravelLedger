@@ -45,6 +45,14 @@ const headers = [
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
+const initialData = {
+  amount: 0,
+  date: null,
+  description: '',
+  category: null,
+  type: null,
+};
+
 const submitForm = async (data) => {
   data = {
     ...data,
@@ -82,6 +90,7 @@ onBeforeMount(async () => {
     v-model:isDialogVisible="isDialogVisible"
     :transactionTypes="transactionTypes"
     :transactionCategories="transactionCategories"
+    :initialData="initialData"
     @submit="submitForm"
     :key="dialogKey"
   />

@@ -12,6 +12,12 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+
+  initialData: {
+    type: Object,
+    required: true,
+  },
+
   isEdit: {
     type: Boolean,
     required: false,
@@ -38,15 +44,7 @@ const isVisible = computed({
   set: (val) => emit('update:isDialogVisible', val),
 });
 
-const defaultForm = {
-  amount: 0,
-  date: null,
-  description: '',
-  category: null,
-  type: null,
-};
-
-const form = reactive({ ...defaultForm });
+const form = reactive({ ...props.initialData });
 
 const isFormValid = computed(() => {
   return form.amount > 0 &&
