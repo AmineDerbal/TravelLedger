@@ -4,7 +4,7 @@ namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class getTransactionsByDateRangeRequest extends FormRequest
+class GetTransactionsByDateRangeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class getTransactionsByDateRangeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ledger_id'=> 'required|exists:ledgers,id',
+            'ledger_id' => 'required|exists:ledgers,id',
             'start_date' => 'required|date|before_or_equal:end_date|before_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date|before_or_equal:today',
         ];
