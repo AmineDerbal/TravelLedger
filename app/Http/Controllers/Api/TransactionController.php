@@ -42,4 +42,10 @@ class TransactionController extends Controller
         return $this->transactionService->updateTransaction($data);
 
     }
+
+    public function destroy($id)
+    {
+
+        return $this->transactionService->destroyTransaction($id);
+    }
 }

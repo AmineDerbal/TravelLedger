@@ -44,6 +44,21 @@ class TransactionService
         return $this->jsonSuccess('Transaction updated successfully', 200);
     }
 
+    public function destroyTransaction($id)
+    {
+        $transaction = Transaction::find($id);
+        if (!$transaction) {
+            return $this->jsonError('Transaction not found', 404);
+        }
+        $amount = -$transaction->amount;
+        $type = $transaction->type;
+        $ledgerId = $transaction->ledger_id;
+        $transaction->delete();
+        $this->updateLedgerAmount($ledgerId, $amount, $type);
+
+        return $this->jsonSuccess('Transaction deleted successfully', 200);
+    }
+
     private function updateLedgerAmount($ledgerId, $amount, $type): void
     {
         $ledger = Ledger::find($ledgerId);
