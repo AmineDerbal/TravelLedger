@@ -46,5 +46,12 @@ export default defineStore('transaction', {
         this,
       );
     },
+
+    async deleteTransaction(id) {
+      return await apiAction(
+        () => apiCall(`transactions/${id}`, 'DELETE'),
+        this,
+      );
+    },
   },
 });
