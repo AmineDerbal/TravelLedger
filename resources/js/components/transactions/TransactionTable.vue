@@ -10,7 +10,15 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['openEditDialog', 'closeDialog']);
+const emit = defineEmits([
+  'openEditDialog',
+  'closeDialog',
+  'deleteTransaction',
+]);
+
+const handleDelete = (id) => {
+  emit('deleteTransaction', id);
+};
 
 const openEditDialog = (transaction) => {
   emit('openEditDialog', transaction);
@@ -40,7 +48,7 @@ const openEditDialog = (transaction) => {
                 <IconBtn @click="openEditDialog(item)">
                   <VIcon icon="tabler-edit" />
                 </IconBtn>
-                <IconBtn>
+                <IconBtn @click="handleDelete(item.id)">
                   <VIcon icon="tabler-trash" />
                 </IconBtn>
               </div>

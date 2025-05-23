@@ -90,6 +90,14 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
   }
 };
 
+const handleTransactionDelete = async (id) => {
+  const response = await transactionStore.deleteTransaction(id);
+  if (response.status === 200) {
+    await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
+    await transactionStore.getTransactionsByDateRange(rangeDateData.value);
+  }
+};
+
 const fetchTransactionsByDateRange = async () => {
   await transactionStore.getTransactionsByDateRange(rangeDateData.value);
 };
@@ -153,5 +161,6 @@ onBeforeMount(async () => {
     :transactions="transactions"
     :headers="headers"
     @openEditDialog="openEditDialog"
+    @deleteTransaction="handleTransactionDelete"
   />
 </template>
