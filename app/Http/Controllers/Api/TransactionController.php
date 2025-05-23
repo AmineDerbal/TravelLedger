@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
+use App\Http\Requests\Transaction\UpdateTranactionRequest;
 use App\Http\Requests\Transaction\GetTransactionsByDateRangeRequest;
 use App\Http\Resources\Transaction\BasicTransactionResource;
 use App\Services\TransactionService;
@@ -33,8 +34,12 @@ class TransactionController extends Controller
 
     }
 
-    public function update()
+    public function update(UpdateTranactionRequest $request)
     {
+        $data = $request->validated();
+
+
+        return $this->transactionService->updateTransaction($data);
 
     }
 }
