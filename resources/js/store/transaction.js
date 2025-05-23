@@ -39,5 +39,12 @@ export default defineStore('transaction', {
         (data) => (this.transactions = data),
       );
     },
+
+    async updateTransaction(data) {
+      return await apiAction(
+        () => apiCall('transactions/update', 'PUT', data),
+        this,
+      );
+    },
   },
 });
