@@ -28,19 +28,30 @@ const props = defineProps({
 const emit = defineEmits([
   'update:isDialogVisible',
   'submit',
+  'update',
   'closeEditDialog',
 ]);
 
-const dialogVisibleUpdate = (val) => {
-  emit('update:isDialogVisible', val);
-};
-
-const handleSubmit = () => {
-  emit('submit', {
+const onSubmit = () => {
+  let payLoad = {
     ...form,
     category: form.category.value,
     type: form.type.value,
-  });
+  };
+  if (props.isEdit) {
+    payLoad = {
+      ...payLoad,
+
+      ledger_id: form.ledger.id,
+      user_id: form.user.id,
+    };
+  }
+
+  emit('submit', payLoad, props.isEdit);
+};
+
+const dialogVisibleUpdate = (val) => {
+  emit('update:isDialogVisible', val);
 };
 
 const handleCloseEditDialog = () => {
@@ -188,7 +199,7 @@ watch(
           Close
         </VBtn>
         <VBtn
-          @click="handleSubmit"
+          @click="onSubmit"
           :disabled="!isFormValid"
         >
           {{ props.isEdit ? 'Update' : 'Submit' }}

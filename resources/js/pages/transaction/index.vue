@@ -1,10 +1,8 @@
 <script setup>
-import { definePage } from 'vue-router/auto';
 import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledger';
 import useUserStore from '@/store/user';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
-import TransactionTable from '@/components/transactions/TransactionTable.vue';
 
 definePage({
   meta: {
@@ -16,26 +14,22 @@ const transactionStore = useTransactionStore();
 const ledgerStore = useLedgerStore();
 const userStore = useUserStore();
 
-const user = computed(() => {
-  return userStore.userData;
-});
-
-const transactions = computed(() => {
-  return transactionStore.transactions;
-});
-
-const transactionCategories = computed(() => {
-  return transactionStore.categories;
-});
-const transactionTypes = computed(() => {
-  return transactionStore.types;
-});
+const user = computed(() => userStore.userData);
+const transactions = computed(() => transactionStore.transactions);
+const transactionCategories = computed(() => transactionStore.categories);
+const transactionTypes = computed(() => transactionStore.types);
 
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
+
+const rangeDateData = computed(() => ({
+  start_date: startDate.value,
+  end_date: endDate.value,
+  ledger_id: ledgerStore.ledger.id,
+}));
 
 const headers = [
   { title: 'Date', key: 'date' },
@@ -46,15 +40,23 @@ const headers = [
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
-const defaultForm = {
-  amount: 0,
+const defaultForm = computed(() => ({
+  ledger_id: ledgerStore.ledger.id,
+  user_id: user.value.id,
   date: null,
   description: '',
-  category: null,
+  amount: 0,
   type: null,
+  category: null,
+}));
+
+const dateConfig = {
+  altFormat: 'F j, Y',
+  altInput: true,
+  maxDate: getTodayDate(),
 };
 
-const initialData = ref({ ...defaultForm });
+const initialData = ref({ ...defaultForm.value });
 
 const increaseDialogKey = () => {
   dialogKey.value += 1;
@@ -62,6 +64,8 @@ const increaseDialogKey = () => {
 
 const resetDialog = () => {
   isDialogVisible.value = false;
+  isEdit.value = false;
+  initialData.value = { ...defaultForm.value };
   increaseDialogKey();
 };
 
@@ -72,36 +76,22 @@ const openEditDialog = (transaction) => {
   increaseDialogKey();
 };
 
-const closeEditDialog = () => {
-  initialData.value = { ...defaultForm };
-  isEdit.value = false;
-  resetDialog();
-};
+const handleTranactionSubmit = async (data, isUpdating = false) => {
+  const response = isUpdating
+    ? await transactionStore.updateTransaction(data)
+    : await transactionStore.storeTransaction(data);
+  const expectedStatus = isUpdating ? 200 : 201;
 
-const submitForm = async (data) => {
-  data = {
-    ...data,
-    user_id: user.value.id,
-    ledger_id: ledgerStore.ledger.id,
-  };
-
-  const response = await transactionStore.storeTransaction(data);
-
-  if (response.status === 201) {
+  if (response.status === expectedStatus) {
     await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
-    isDialogVisible.value = false;
-    dialogKey.value += 1;
+    if (isUpdating)
+      await transactionStore.getTransactionsByDateRange(rangeDateData.value);
+    resetDialog();
   }
 };
 
 const fetchTransactionsByDateRange = async () => {
-  const data = {
-    ledger_id: ledgerStore.ledger.id,
-    start_date: startDate.value,
-    end_date: endDate.value,
-  };
-
-  await transactionStore.getTransactionsByDateRange(data);
+  await transactionStore.getTransactionsByDateRange(rangeDateData.value);
 };
 
 onBeforeMount(async () => {
@@ -117,8 +107,8 @@ onBeforeMount(async () => {
     :transactionCategories="transactionCategories"
     :initialData="initialData"
     :isEdit="isEdit"
-    @submit="submitForm"
-    @closeEditDialog="closeEditDialog"
+    @submit="handleTranactionSubmit"
+    @closeEditDialog="resetDialog"
     :key="dialogKey"
   />
 
@@ -132,11 +122,7 @@ onBeforeMount(async () => {
           v-model="startDate"
           label="Start Date"
           placeholder="Select Start Date"
-          :config="{
-            altFormat: 'F j, Y',
-            altInput: true,
-            maxDate: new Date().toISOString().split('T')[0],
-          }"
+          :config="dateConfig"
         />
       </VCol>
       <VCol
@@ -147,11 +133,7 @@ onBeforeMount(async () => {
           v-model="endDate"
           label="End Date"
           placeholder="Select End Date"
-          :config="{
-            altFormat: 'F j, Y',
-            altInput: true,
-            maxDate: new Date().toISOString().split('T')[0],
-          }"
+          :config="dateConfig"
         />
       </VCol>
       <VCol
