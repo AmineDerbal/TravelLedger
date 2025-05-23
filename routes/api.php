@@ -38,6 +38,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::post('transactions/store', 'store')->name('transactions.store');
         Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range');
         Route::put('transactions/update', 'update')->name('transactions.update');
+        Route::delete('transactions/{id}', 'destroy')->name('transactions.destroy');
     });
 
 
