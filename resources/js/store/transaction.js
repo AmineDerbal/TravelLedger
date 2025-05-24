@@ -6,6 +6,7 @@ export default defineStore('transaction', {
     transactions: [],
     categories: [],
     types: [],
+    balance: {},
     hasError: false,
     errors: {},
   }),
@@ -36,7 +37,10 @@ export default defineStore('transaction', {
       return await apiAction(
         () => apiCall('transactions/date-range', 'POST', data),
         this,
-        (data) => (this.transactions = data),
+        (data) => {
+          this.transactions = data.transactions;
+          this.balance = data.balance;
+        },
       );
     },
 
