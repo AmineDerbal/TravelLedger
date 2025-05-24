@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\Transaction;
 use App\Models\Ledger;
+use App\Enums\TransactionType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class TransactionService
 {
@@ -58,6 +60,23 @@ class TransactionService
 
         return $this->jsonSuccess('Transaction deleted successfully', 200);
     }
+
+    public function calculateTransactionTotal(Collection $transactions): array
+    {
+
+     $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
+$totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum('amount');
+    $totalBalance = $totalCredit - $totalDebit;
+
+        return [
+         'totalDebit' => number_format($totalDebit, 2),
+        'totalCredit' => number_format($totalCredit, 2),
+        'totalBalance' => number_format($totalBalance, 2),
+        ];
+
+    }
+
+    
 
     private function updateLedgerAmount($ledgerId, $amount, $type): void
     {
