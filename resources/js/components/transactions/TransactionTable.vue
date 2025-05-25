@@ -23,6 +23,59 @@ const handleDelete = (id) => {
 const openEditDialog = (transaction) => {
   emit('openEditDialog', transaction);
 };
+
+const resolveTypeLabel = (typeMSG) => {
+  console.log(typeMSG);
+  if (typeMSG === 'Debit') {
+    return {
+      text: 'Debit',
+      color: 'error',
+    };
+  } else {
+    return {
+      text: 'Credit',
+      color: 'success',
+    };
+  }
+};
+const resolveCategoryLabel = (categoryMSG) => {
+  if (categoryMSG === 'Flight') {
+    return {
+      text: 'Flight',
+      color: 'primary',
+    };
+  }
+  if (categoryMSG === 'Hotel') {
+    return {
+      text: 'Hotel',
+      color: 'warning',
+    };
+  }
+  if (categoryMSG === 'Visa') {
+    return {
+      text: 'Visa',
+      color: 'info',
+    };
+  }
+  if (categoryMSG === 'Insurance') {
+    return {
+      text: 'Insurance',
+      color: 'error',
+    };
+  }
+  if (categoryMSG === 'Rechargement') {
+    return {
+      text: 'Rechargement',
+      color: 'success',
+    };
+  }
+  if (categoryMSG === 'Refund') {
+    return {
+      text: 'Refund',
+      color: 'secondary',
+    };
+  }
+};
 </script>
 
 <template>
@@ -38,11 +91,26 @@ const openEditDialog = (transaction) => {
       >
         <template #item="{ item }">
           <tr>
+            <td>{{ item.user.name }}</td>
             <td>{{ item.date }}</td>
             <td>{{ item.description }}</td>
-            <td>{{ item.amount }}</td>
-            <td>{{ item.category.label }}</td>
-            <td>{{ item.type.label }}</td>
+            <td>{{ item.amount }} DZD</td>
+            <td>
+              <VChip
+                v-bind="resolveTypeLabel(item.type.label)"
+                density="default"
+                label
+                size="small"
+              />
+            </td>
+            <td>
+              <VChip
+                v-bind="resolveCategoryLabel(item.category.label)"
+                density="comfortable"
+                label
+                size="small"
+              />
+            </td>
             <td>
               <div class="d-flex gap-1">
                 <IconBtn @click="openEditDialog(item)">
