@@ -16,6 +16,7 @@ const userStore = useUserStore();
 
 const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions);
+const balance = computed(() => transactionStore.balance);
 const transactionCategories = computed(() => transactionStore.categories);
 const transactionTypes = computed(() => transactionStore.types);
 
@@ -30,6 +31,33 @@ const rangeDateData = computed(() => ({
   end_date: endDate.value,
   ledger_id: ledgerStore.ledger.id,
 }));
+
+const balanceData = computed(() => [
+  {
+    name: 'Transactions',
+    value: transactions.value.length,
+    color: 'primary',
+    icon: 'tabler-exchange',
+  },
+  {
+    name: 'Debit',
+    value: balance.value.totalDebit,
+    color: 'error',
+    icon: 'tabler-arrow-down',
+  },
+  {
+    name: 'Credit',
+    value: balance.value.totalCredit,
+    color: 'success',
+    icon: 'tabler-arrow-up',
+  },
+  {
+    name: 'Balance',
+    value: balance.value.totalBalance,
+    color: 'warning',
+    icon: 'tabler-currency-dollar',
+  },
+]);
 
 const headers = [
   { title: 'User', key: 'user.name' },
@@ -120,6 +148,39 @@ onBeforeMount(async () => {
     @closeEditDialog="resetDialog"
     :key="dialogKey"
   />
+
+  <VRow class="mb-2 mt-2 match-height">
+    <VCol
+      v-for="(item, index) in balanceData"
+      :key="index"
+      cols="12"
+      md="3"
+      sm="6"
+    >
+      <VCard>
+        <VCardText>
+          <div class="d-flex justify-space-between align-center">
+            <div class="d-flex flex-column">
+              <h5 class="text-h5 mb-1">
+                {{ item.value }}
+              </h5>
+              <div class="text-body-2">{{ item.name }}</div>
+            </div>
+            <VAvatar
+              size="40"
+              :color="item.color"
+              variant="tonal"
+            >
+              <VIcon
+                size="24"
+                :icon="item.icon"
+              />
+            </VAvatar>
+          </div>
+        </VCardText>
+      </VCard>
+    </VCol>
+  </VRow>
 
   <VCard title="Transactions">
     <VCardText>
