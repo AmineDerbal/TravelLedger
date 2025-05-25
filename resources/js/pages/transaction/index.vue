@@ -32,11 +32,12 @@ const rangeDateData = computed(() => ({
 }));
 
 const headers = [
+  { title: 'User', key: 'user.name' },
   { title: 'Date', key: 'date' },
   { title: 'Description', key: 'description', sortable: false },
   { title: 'Amount', key: 'amount' },
-  { title: 'Category', key: 'category.value' },
   { title: 'Type', key: 'type.value' },
+  { title: 'Category', key: 'category.value' },
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
