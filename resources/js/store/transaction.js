@@ -6,7 +6,11 @@ export default defineStore('transaction', {
     transactions: [],
     categories: [],
     types: [],
-    balance: {},
+    balance: {
+      totalDebit: 0,
+      totalCredit: 0,
+      totalBalance: 0,
+    },
     hasError: false,
     errors: {},
   }),
