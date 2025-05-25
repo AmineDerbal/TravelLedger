@@ -25,7 +25,6 @@ const openEditDialog = (transaction) => {
 };
 
 const resolveTypeLabel = (typeMSG) => {
-  console.log(typeMSG);
   if (typeMSG === 'Debit') {
     return {
       text: 'Debit',
@@ -79,51 +78,46 @@ const resolveCategoryLabel = (categoryMSG) => {
 </script>
 
 <template>
-  <VCard>
-    <VCardItem>
-      <VCardTitle>Transactions</VCardTitle>
-    </VCardItem>
-    <VCardText>
-      <VDataTable
-        :items="props.transactions"
-        :headers="props.headers"
-        class="text-no-wrap"
-      >
-        <template #item="{ item }">
-          <tr>
-            <td>{{ item.user.name }}</td>
-            <td>{{ item.date }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ item.amount }} DZD</td>
-            <td>
-              <VChip
-                v-bind="resolveTypeLabel(item.type.label)"
-                density="default"
-                label
-                size="small"
-              />
-            </td>
-            <td>
-              <VChip
-                v-bind="resolveCategoryLabel(item.category.label)"
-                density="comfortable"
-                label
-                size="small"
-              />
-            </td>
-            <td>
-              <div class="d-flex gap-1">
-                <IconBtn @click="openEditDialog(item)">
-                  <VIcon icon="tabler-edit" />
-                </IconBtn>
-                <IconBtn @click="handleDelete(item.id)">
-                  <VIcon icon="tabler-trash" />
-                </IconBtn>
-              </div>
-            </td>
-          </tr>
-        </template>
-      </VDataTable>
-    </VCardText>
-  </VCard>
+  <VCardText>
+    <VDataTable
+      :items="props.transactions"
+      :headers="props.headers"
+      class="text-no-wrap"
+    >
+      <template #item="{ item }">
+        <tr>
+          <td>{{ item.user.name }}</td>
+          <td>{{ item.date }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.amount }} DZD</td>
+          <td>
+            <VChip
+              v-bind="resolveTypeLabel(item.type.label)"
+              density="default"
+              label
+              size="small"
+            />
+          </td>
+          <td>
+            <VChip
+              v-bind="resolveCategoryLabel(item.category.label)"
+              density="comfortable"
+              label
+              size="small"
+            />
+          </td>
+          <td>
+            <div class="d-flex gap-1">
+              <IconBtn @click="openEditDialog(item)">
+                <VIcon icon="tabler-edit" />
+              </IconBtn>
+              <IconBtn @click="handleDelete(item.id)">
+                <VIcon icon="tabler-trash" />
+              </IconBtn>
+            </div>
+          </td>
+        </tr>
+      </template>
+    </VDataTable>
+  </VCardText>
 </template>

@@ -121,47 +121,51 @@ onBeforeMount(async () => {
     :key="dialogKey"
   />
 
-  <VCard class="mb-6 pa-2">
-    <VRow class="align-end">
-      <VCol
-        cols="9"
-        md="4"
-      >
-        <AppDateTimePicker
-          v-model="startDate"
-          label="Start Date"
-          placeholder="Select Start Date"
-          :config="dateConfig"
-        />
-      </VCol>
-      <VCol
-        cols="9"
-        md="4"
-      >
-        <AppDateTimePicker
-          v-model="endDate"
-          label="End Date"
-          placeholder="Select End Date"
-          :config="dateConfig"
-        />
-      </VCol>
-      <VCol
-        cols="9"
-        md="4"
-      >
-        <VBtn
-          variant="tonal"
-          color="primary"
-          @click="fetchTransactionsByDateRange"
-          >Filter</VBtn
-        ></VCol
-      >
-    </VRow>
+  <VCard title="Transactions">
+    <VCardText>
+      <VRow class="align-end">
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <AppDateTimePicker
+            v-model="startDate"
+            label="Start Date"
+            placeholder="Select Start Date"
+            :config="dateConfig"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <AppDateTimePicker
+            v-model="endDate"
+            label="End Date"
+            placeholder="Select End Date"
+            :config="dateConfig"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <VBtn
+            variant="tonal"
+            color="primary"
+            @click="fetchTransactionsByDateRange"
+            >Filter</VBtn
+          >
+        </VCol>
+      </VRow>
+    </VCardText>
+
+    <VDivider />
+    <TransactionTable
+      :transactions="transactions"
+      :headers="headers"
+      @openEditDialog="openEditDialog"
+      @deleteTransaction="handleTransactionDelete"
+    />
   </VCard>
-  <TransactionTable
-    :transactions="transactions"
-    :headers="headers"
-    @openEditDialog="openEditDialog"
-    @deleteTransaction="handleTransactionDelete"
-  />
 </template>
