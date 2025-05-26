@@ -131,6 +131,18 @@ const fetchTransactionsByDateRange = async () => {
   await transactionStore.getTransactionsByDateRange(rangeDateData.value);
 };
 
+const downloadExcelTransactions = async () => {
+  const data = {
+    transactions: transactions.value,
+    balance: {
+      totalDebit: balance.value.totalDebit,
+      totalCredit: balance.value.totalCredit,
+      totalBalance: balance.value.totalBalance,
+    },
+  };
+  await transactionStore.downloadExcelTransactions(data);
+};
+
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
@@ -184,7 +196,7 @@ onBeforeMount(async () => {
 
   <VCard title="Transactions">
     <VCardText>
-      <VRow class="align-end">
+      <VRow class="align-end dense">
         <VCol
           cols="12"
           md="4"
@@ -209,13 +221,25 @@ onBeforeMount(async () => {
         </VCol>
         <VCol
           cols="12"
-          md="4"
+          md="1"
         >
           <VBtn
             variant="tonal"
             color="primary"
             @click="fetchTransactionsByDateRange"
             >Filter</VBtn
+          >
+        </VCol>
+        <VCol
+          cols="12"
+          md="1"
+        >
+          <VBtn
+            variant="tonal"
+            color="success"
+            :disabled="!transactions.length"
+            @click="downloadExcelTransactions"
+            >Export</VBtn
           >
         </VCol>
       </VRow>
