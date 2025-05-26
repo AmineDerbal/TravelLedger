@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LedgerController;
 use App\Http\Controllers\Api\TransactionMetaController;
+use App\Http\Controllers\Api\TransactionExportController;
 use App\Http\Controllers\Api\TransactionController;
 
 /*
@@ -40,6 +41,8 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::put('transactions/update', 'update')->name('transactions.update');
         Route::delete('transactions/{id}', 'destroy')->name('transactions.destroy');
     });
+
+    Route::post('/export-transactions', [TransactionExportController::class, 'export']);
 
 
 });
