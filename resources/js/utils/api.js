@@ -10,8 +10,16 @@ export const $api = ofetch.create({
   },
 });
 
-export const apiCall = async (url, method = 'GET', data = null) => {
+export const apiCall = async (
+  url,
+  method = 'GET',
+  data = null,
+  responseType = 'json',
+) => {
   try {
+    if (responseType == 'blob') {
+      axios.defaults.responseType = 'blob';
+    }
     const response = await axios({ url, method, data });
     return response;
   } catch (error) {
