@@ -11,6 +11,9 @@ export const $api = ofetch.create({
   },
 });
 
+const axiosCall = async (url, method, data) =>
+  await axios({ url, method, data });
+
 export const apiCall = async (
   url,
   method = 'GET',
@@ -20,9 +23,9 @@ export const apiCall = async (
   try {
     if (responseType == 'blob') {
       axios.defaults.responseType = 'blob';
-      return downloadExcelFile(await axios({ url, method, data }));
+      return downloadExcelFile(await axiosCall(url, method, data));
     }
-    const response = await axios({ url, method, data });
+    const response = await axiosCall(url, method, data);
 
     return response;
   } catch (error) {
