@@ -364,6 +364,7 @@
     "apiCall": true,
     "axios": true,
     "getTodayDate": true,
-    "getYesterdayDate": true
+    "getYesterdayDate": true,
+    "downloadExcelFile": true
   }
 }
