@@ -1,5 +1,6 @@
 import { ofetch } from 'ofetch';
 import axios from '@/utils/axios';
+import { downloadExcelFile } from './excel';
 
 export const $api = ofetch.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -19,8 +20,10 @@ export const apiCall = async (
   try {
     if (responseType == 'blob') {
       axios.defaults.responseType = 'blob';
+      return downloadExcelFile(await axios({ url, method, data }));
     }
     const response = await axios({ url, method, data });
+
     return response;
   } catch (error) {
     throw error;

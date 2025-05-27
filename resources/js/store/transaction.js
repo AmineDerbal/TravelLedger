@@ -64,24 +64,7 @@ export default defineStore('transaction', {
 
     async downloadExcelTransactions(data) {
       return await apiAction(async () => {
-        const response = await apiCall(
-          'export-transactions',
-          'POST',
-          data,
-          'blob',
-        );
-        const blob = new Blob([response.data], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        });
-
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'transactions.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        URL.revokeObjectURL(link.href);
-        return response;
+        return await apiCall('export-transactions', 'POST', data, 'blob');
       }, this);
     },
   },
