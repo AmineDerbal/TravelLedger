@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Carbon\Carbon;
 
 class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAutoSize, WithEvents
 {
@@ -43,7 +44,7 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
                 $row['type']['label'],
                 $row['category']['label'],
                 number_format($row['amount'], 2),
-                $row['date'],
+              Carbon::parse($row['date'])->format('d-m-Y'),
                 $row['description'],
             ];
         }
