@@ -25,6 +25,7 @@ const endDate = ref(getTodayDate());
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
+const loadings = ref([]);
 
 const rangeDateData = computed(() => ({
   start_date: startDate.value,
@@ -127,11 +128,16 @@ const handleTransactionDelete = async (id) => {
   }
 };
 
-const fetchTransactionsByDateRange = async () => {
-  await transactionStore.getTransactionsByDateRange(rangeDateData.value);
+const fetchTransactionsByDateRange = async (i) => {
+  loadings.value[i] = true;
+  const response = await transactionStore.getTransactionsByDateRange(
+    rangeDateData.value,
+  );
+  if (response.status) loadings.value[i] = false;
 };
 
-const downloadExcelTransactions = async () => {
+const downloadExcelTransactions = async (i) => {
+  loadings.value[i] = true;
   const data = {
     transactions: transactions.value,
     balance: {
@@ -140,7 +146,9 @@ const downloadExcelTransactions = async () => {
       totalBalance: balance.value.totalBalance,
     },
   };
-  await transactionStore.downloadExcelTransactions(data);
+
+  const response = await transactionStore.downloadExcelTransactions(data);
+  if (response.status) loadings.value[i] = false;
 };
 
 onBeforeMount(async () => {
@@ -225,8 +233,9 @@ onBeforeMount(async () => {
         >
           <VBtn
             variant="tonal"
+            :loading="loadings[0]"
             color="primary"
-            @click="fetchTransactionsByDateRange"
+            @click="fetchTransactionsByDateRange(0)"
             >Filter</VBtn
           >
         </VCol>
@@ -236,9 +245,10 @@ onBeforeMount(async () => {
         >
           <VBtn
             variant="tonal"
+            :loading="loadings[1]"
             color="success"
-            :disabled="!transactions.length"
-            @click="downloadExcelTransactions"
+            :disabled="!transactions.length || loadings[1]"
+            @click="downloadExcelTransactions(1)"
             >Export</VBtn
           >
         </VCol>
