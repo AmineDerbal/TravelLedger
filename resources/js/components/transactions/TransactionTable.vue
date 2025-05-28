@@ -1,4 +1,5 @@
 <script setup>
+import { formatDateToDdMmYyyy } from '@/utils/dates';
 const props = defineProps({
   transactions: {
     type: Array,
@@ -87,7 +88,7 @@ const resolveCategoryLabel = (categoryMSG) => {
       <template #item="{ item }">
         <tr>
           <td>{{ item.user.name }}</td>
-          <td>{{ item.date }}</td>
+          <td>{{ formatDateToDdMmYyyy(item.date) }}</td>
           <td>{{ item.description }}</td>
           <td>{{ item.amount }} DZD</td>
           <td>
