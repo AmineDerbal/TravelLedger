@@ -8,4 +8,12 @@ const getYesterdayDate = () => {
   return today.toISOString().split('T')[0];
 };
 
+export const formatDateToDdMmYyyy = (date) => {
+  return new Date(date).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+};
+
 export { getTodayDate, getYesterdayDate };
