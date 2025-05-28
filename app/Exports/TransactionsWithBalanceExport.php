@@ -26,7 +26,7 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
         return [
             ['Transactions'], // Title row (merged)
             [
-                'ID', 'User', 'Ledger', 'Type',
+                 'User', 'Ledger', 'Type',
                 'Category', 'Amount', 'Date', 'Description'
             ]
         ];
@@ -38,7 +38,6 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
 
         foreach ($this->transactions as $row) {
             $rows[] = [
-                $row['id'],
                 $row['user']['name'],
                 $row['ledger']['name'],
                 $row['type']['label'],
@@ -66,7 +65,7 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
                 $sheet = $event->sheet->getDelegate();
 
                 // Header formatting
-                $sheet->getStyle('A2:H2')->applyFromArray([
+                $sheet->getStyle('A2:G2')->applyFromArray([
                     'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                     'fill' => [
                         'fillType' => Fill::FILL_SOLID,
@@ -79,22 +78,24 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
 
                 // Auto table formatting
                 $lastDataRow = 2 + count($this->transactions);
-                $sheet->getStyle("A3:H{$lastDataRow}")->applyFromArray([
+                $sheet->getStyle("A3:G{$lastDataRow}")->applyFromArray([
                     'borders' => [
                         'allBorders' => ['borderStyle' => Border::BORDER_THIN],
                     ],
                 ]);
 
                 // Bold for summary
-                $summaryStart = $lastDataRow + 2;
+                $summaryStart = $lastDataRow + 1;
                 $sheet->getStyle("A{$summaryStart}:B" . ($summaryStart + 3))->applyFromArray([
                     'font' => ['bold' => true],
+                    'alignment' => ['horizontal' => 'center'],
                 ]);
 
                 // Merge title row
-                $sheet->mergeCells('A1:H1');
+                $sheet->mergeCells('A1:g1');
                 $sheet->getStyle('A1')->applyFromArray([
                     'font' => ['bold' => true, 'size' => 14],
+                    'alignment' => ['horizontal' => 'center'],
                 ]);
             }
         ];
