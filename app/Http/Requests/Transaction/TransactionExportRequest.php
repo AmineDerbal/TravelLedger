@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Transaction;
 
-
 use App\Enums\TransactionType;
 use Illuminate\Validation\Rule;
 
@@ -16,17 +15,22 @@ class TransactionExportRequest extends BaseTransactionRequest
         return true;
     }
 
-     protected function prepareForValidation(): void
+    protected function prepareForValidation(): void
     {
         $balance = $this->input('balance');
+        $exportDate = $this->input('exportDate');
 
-        if (is_array($balance)) {
+        if (is_array($balance) && is_array($exportDate)) {
             $this->merge([
                 'balance' => [
                     'totalCredit' => str_replace(',', '', $balance['totalCredit'] ?? 0),
                     'totalDebit' => str_replace(',', '', $balance['totalDebit'] ?? 0),
                     'totalBalance' => str_replace(',', '', $balance['totalBalance'] ?? 0),
-                ]
+                ],
+                'exportDate' => [
+                    'start_date' => $exportDate['start_date'] ?? null,
+                    'end_date' => $exportDate['end_date'] ?? null,
+                ],
             ]);
         }
     }
@@ -57,7 +61,11 @@ class TransactionExportRequest extends BaseTransactionRequest
             'balance.totalCredit' => 'required|numeric|gte:0',
             'balance.totalDebit' => 'required|numeric|gte:0',
             'balance.totalBalance' => 'required|numeric',
-            
+
+            'exportDate' => 'required|array',
+            'exportDate.start_date' => 'required|date|date_format:Y-m-d|before_or_equal:exportDate.end_date|before_or_equal:today',
+            'exportDate.end_date' => 'required|date|date_format:Y-m-d|after_or_equal:exportDate.start_date|before_or_equal:today',
+
         ];
     }
 }
