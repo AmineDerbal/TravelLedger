@@ -145,6 +145,10 @@ const downloadExcelTransactions = async (i) => {
       totalCredit: balance.value.totalCredit,
       totalBalance: balance.value.totalBalance,
     },
+    exportDate: {
+      start_date: startDate.value,
+      end_date: endDate.value,
+    },
   };
 
   const response = await transactionStore.downloadExcelTransactions(data);
