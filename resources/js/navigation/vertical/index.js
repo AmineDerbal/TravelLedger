@@ -12,11 +12,11 @@ export default [
   {
     title: 'Transactions',
     icon: { icon: 'tabler-transaction-euro' },
-    children: [
-      {
-        title: 'List',
-        to: { name: 'transaction' },
-      },
-    ],
+    to: { name: 'transaction' },
+  },
+  {
+    title: 'Parameters',
+    icon: { icon: 'tabler-settings' },
+    to: { name: 'parameters-ledger' },
   },
 ];
