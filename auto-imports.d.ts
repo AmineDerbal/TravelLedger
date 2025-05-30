@@ -53,6 +53,7 @@ declare global {
   const emailValidator: typeof import('./resources/js/@core/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const formatDate: typeof import('./resources/js/@core/utils/formatters.js')['formatDate']
+  const formatDateToDdMmYyyy: typeof import('./resources/js/utils/dates.js')['formatDateToDdMmYyyy']
   const formatDateToMonthShort: typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
@@ -418,6 +419,7 @@ declare module 'vue' {
     readonly emailValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly formatDate: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['formatDate']>
+    readonly formatDateToDdMmYyyy: UnwrapRef<typeof import('./resources/js/utils/dates.js')['formatDateToDdMmYyyy']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>

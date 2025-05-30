@@ -365,6 +365,7 @@
     "axios": true,
     "getTodayDate": true,
     "getYesterdayDate": true,
-    "downloadExcelFile": true
+    "downloadExcelFile": true,
+    "formatDateToDdMmYyyy": true
   }
 }
