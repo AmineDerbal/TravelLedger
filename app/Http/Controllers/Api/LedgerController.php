@@ -8,17 +8,22 @@ use App\Models\Ledger;
 
 class LedgerController extends Controller
 {
-   public function getFirstLedger()
-   {
-       $ledger = Ledger::first();
-       return response()->json($ledger);
-   }
+    public function index()
+    {
+        $ledgers = Ledger::all();
+        return response()->json($ledgers);
+    }
+    public function getFirstLedger()
+    {
+        $ledger = Ledger::first();
+        return response()->json($ledger);
+    }
 
-   public function getLedgerAmount($id)
-   {
-       $ledger = Ledger::find($id);
-       return response()->json($ledger->amount);
-   }
+    public function getLedgerAmount($id)
+    {
+        $ledger = Ledger::find($id);
+        return response()->json($ledger->amount);
+    }
 
 
 }
