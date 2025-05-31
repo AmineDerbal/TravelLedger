@@ -17,6 +17,13 @@ export default [
   {
     title: 'Parameters',
     icon: { icon: 'tabler-settings' },
-    to: { name: 'parameters-ledger' },
+
+    children: [
+      {
+        title: 'Ledger',
+        to: { name: 'parameters-ledger' },
+        icon: { icon: 'tabler-currency-dollar' },
+      },
+    ],
   },
 ];
