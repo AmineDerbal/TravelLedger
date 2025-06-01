@@ -5,18 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ledger;
+use App\Http\Resources\Ledger\BasicLedgerResource;
 
 class LedgerController extends Controller
 {
     public function index()
     {
         $ledgers = Ledger::all();
-        return response()->json($ledgers);
+        return response()->json(BasicLedgerResource::collection($ledgers));
     }
     public function getFirstLedger()
     {
         $ledger = Ledger::first();
-        return response()->json($ledger);
+        return response()->json(new BasicLedgerResource($ledger));
     }
 
     public function getLedgerAmount($id)
