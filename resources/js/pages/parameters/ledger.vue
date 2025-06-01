@@ -1,5 +1,3 @@
-<template></template>
-
 <script setup>
 import useLedgerStore from '@/store/ledger';
 definePage({
@@ -20,3 +18,10 @@ onBeforeMount(async () => {
   await ledgerStore.getLedgers();
 });
 </script>
+
+<template>
+  <LedgerTable
+    :ledgers="ledgers"
+    :headers="headers"
+  />
+</template>
