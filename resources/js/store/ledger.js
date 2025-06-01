@@ -14,6 +14,13 @@ export default defineStore('ledger', {
   }),
   persist: ['ledger'],
   actions: {
+    async getLedgers() {
+      return await apiAction(
+        () => apiCall('ledgers'),
+        this,
+        (data) => (this.ledgers = data),
+      );
+    },
     async getFirstLedger() {
       return await apiAction(
         () => apiCall('ledgers/first-entry'),
