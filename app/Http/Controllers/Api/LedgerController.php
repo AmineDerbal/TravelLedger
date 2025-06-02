@@ -20,10 +20,16 @@ class LedgerController extends Controller
         return response()->json(new BasicLedgerResource($ledger));
     }
 
+    public function forSelect()
+    {
+        $ledgers = Ledger::select('id', 'name')->get();
+        return response()->json($ledgers);
+    }
+
     public function getLedgerAmount($id)
     {
         $ledger = Ledger::find($id);
-        return response()->json($ledger->amount);
+        return response()->json(new BasicLedgerResource($ledger));
     }
 
 
