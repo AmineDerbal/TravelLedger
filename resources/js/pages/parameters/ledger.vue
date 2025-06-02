@@ -12,6 +12,7 @@ const ledgers = computed(() => ledgerStore.ledgers);
 const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Amount', key: 'amount' },
+  { title: 'Actions', key: 'actions' },
 ];
 
 onBeforeMount(async () => {
@@ -20,8 +21,10 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <LedgerTable
-    :ledgers="ledgers"
-    :headers="headers"
-  />
+  <VCard>
+    <LedgerTable
+      :ledgers="ledgers"
+      :headers="headers"
+    />
+  </VCard>
 </template>

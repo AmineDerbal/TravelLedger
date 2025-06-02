@@ -22,6 +22,16 @@ const props = defineProps({
         <tr>
           <td>{{ item.name }}</td>
           <td>{{ item.amount }} DZD</td>
+          <td>
+            <div class="d-flex gap-1">
+              <IconBtn>
+                <VIcon icon="tabler-edit" />
+              </IconBtn>
+              <IconBtn>
+                <VIcon icon="tabler-trash" />
+              </IconBtn>
+            </div>
+          </td>
         </tr>
       </template>
     </VDataTable>
