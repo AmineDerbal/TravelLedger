@@ -18,12 +18,20 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
-        DB::table('ledgers')->insert([
+        DB::table('ledgers')->insert([ 
+        [
+            'name' => 'office',
+            'amount' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
             'name' => 'RTW',
             'amount' => 0,
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ]
+    ]);
     }
 
     /**
