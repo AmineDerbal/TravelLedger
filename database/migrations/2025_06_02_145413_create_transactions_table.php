@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->id();
+            $table->decimal('amount', 10, 2);
+            $table->date('date');
+            $table->string('description');
             $table->decimal('profit', 10, 2)->nullable();
+            $table->foreignId('ledger_category_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('profit');
-        });
+        Schema::dropIfExists('transactions');
     }
 };

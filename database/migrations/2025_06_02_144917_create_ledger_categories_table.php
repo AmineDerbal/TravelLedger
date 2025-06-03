@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->string('description');
+        Schema::create('ledger_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->unsignedTinyInteger('type');
+            $table->foreignId('ledger_id')->constrained();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('description');
-        });
+        Schema::dropIfExists('ledger_categories');
     }
 };
