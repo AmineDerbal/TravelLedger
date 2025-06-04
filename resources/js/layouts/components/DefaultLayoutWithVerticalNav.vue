@@ -24,7 +24,9 @@ const ledger = computed(() => ledgerStore.ledger);
 onBeforeMount(async () => {
   if (!ledger.value.name && !ledger.value.id && !ledger.value.amount) {
     await ledgerStore.getFirstLedger();
+    return;
   }
+  await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
 });
 </script>
 
