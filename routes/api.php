@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LedgerController;
+use App\Http\Controllers\Api\LedgerCategoryController;
 use App\Http\Controllers\Api\TransactionMetaController;
 use App\Http\Controllers\Api\TransactionExportController;
 use App\Http\Controllers\Api\TransactionController;
@@ -44,7 +45,14 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::delete('transactions/{id}', 'destroy')->name('transactions.destroy');
     });
 
+    Route::controller(LedgerCategoryController::class)->group(function () {
+        Route::get('/ledger-categories', 'index')->name('ledger-categories.index');
+        Route::get('/ledger-categories/ledger-categories-options', 'ledgerCategoriesOptions')->name('ledger-categories.ledger-categories-options');
+        Route::post('/ledger-categories/store', 'store')->name('ledger-categories.store');
+    });
+
     Route::post('/export-transactions', [TransactionExportController::class, 'export']);
+    
 
 
 });
