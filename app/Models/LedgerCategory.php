@@ -16,23 +16,18 @@ class LedgerCategory extends Model
         'ledger_id',
     ];
 
-     protected $casts = [
-        'type' => TransactionType::class,
-    ];
-
-    
-    public function getTypeAttribute($value)
-{
-    $enum = TransactionType::from($value);
-    
-    return [
-        'value' => $enum->value,
-        'label' => $enum->label(),
-    ];
-}
+  
 
     public function ledger() {
         return $this->belongsTo(Ledger::class);
     }
+
+    public function getTypeAttribute($value)
+{
+    return [
+        'value' => $value,
+        'label' => TransactionType::labelFromValue($value),
+    ];
+}
     
 }

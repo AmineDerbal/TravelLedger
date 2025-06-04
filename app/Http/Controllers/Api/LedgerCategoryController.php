@@ -11,7 +11,7 @@ use App\Http\Requests\LedgerCategory\storeLedgerCategoryRequest;
 class LedgerCategoryController extends Controller
 {
     public function index() {
-        $ledgerCategories = LedgerCategory::all();
+        $ledgerCategories = LedgerCategory::with('ledger')->get();
         return response()->json($ledgerCategories);
     }
 
