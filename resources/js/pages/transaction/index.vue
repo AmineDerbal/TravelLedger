@@ -19,6 +19,7 @@ const transactions = computed(() => transactionStore.transactions);
 const balance = computed(() => transactionStore.balance);
 const transactionCategories = computed(() => transactionStore.categories);
 const transactionTypes = computed(() => transactionStore.types);
+const ledgerSelectOptions = computed(() => ledgerStore.ledgersForSelect);
 
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
@@ -158,6 +159,7 @@ const downloadExcelTransactions = async (i) => {
 onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
+  await ledgerStore.getLedgersForSelect();
 });
 </script>
 
@@ -167,6 +169,7 @@ onBeforeMount(async () => {
     :transactionTypes="transactionTypes"
     :transactionCategories="transactionCategories"
     :initialData="initialData"
+    :ledgerOptions="ledgerSelectOptions"
     :isEdit="isEdit"
     @submit="handleTranactionSubmit"
     @closeEditDialog="resetDialog"

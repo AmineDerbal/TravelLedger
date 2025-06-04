@@ -9,10 +9,19 @@ export default defineStore('ledger', {
       amount: null,
     },
     ledgers: [],
+    ledgersForSelect: [],
+    ledgerCategoryTypes: [],
+    ledgerCategories: [],
     hasError: false,
     errors: {},
   }),
-  persist: ['ledger'],
+  persist: [
+    'ledger',
+    'ledgers',
+    'ledgersForSelect',
+    'ledgerCategoryTypes',
+    'ledgerCategories',
+  ],
   actions: {
     async getLedgers() {
       return await apiAction(
@@ -33,7 +42,19 @@ export default defineStore('ledger', {
       return await apiAction(
         () => apiCall(`ledgers/${id}/amount`),
         this,
-        (data) => (this.ledger.amount = Number(data)),
+        (data) => {
+          if (id === data.id && this.ledger.name !== data.name)
+            this.ledger.name = data.name;
+          this.ledger.amount = Number(data.amount);
+        },
+      );
+    },
+
+    async getLedgersForSelect() {
+      return await apiAction(
+        () => apiCall('ledgers/for-select'),
+        this,
+        (data) => (this.ledgersForSelect = data),
       );
     },
   },

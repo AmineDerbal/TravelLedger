@@ -18,6 +18,11 @@ const props = defineProps({
     required: true,
   },
 
+  ledgerOptions: {
+    type: Array,
+    required: true,
+  },
+
   isEdit: {
     type: Boolean,
     required: false,
@@ -122,6 +127,51 @@ watch(
       <VCardText>
         <VRow>
           <VCol cols="12">
+            <AppSelect
+              v-model="form.ledger"
+              :hint="form.ledger?.name"
+              label="Ledger"
+              :items="ledgerOptions"
+              item-title="name"
+              item-value="id"
+              persistent-hint
+              return-object
+              single-line
+              placeholder="Select Ledger"
+            />
+          </VCol>
+          <VCol cols="12">
+            <AppSelect
+              v-model="form.type"
+              :hint="form.type?.label"
+              label="Type"
+              :items="transactionTypes"
+              item-title="label"
+              item-value="value"
+              persistent-hint
+              return-object
+              single-line
+              placeholder="Select Type"
+            />
+          </VCol>
+          <VCol
+            cols="12"
+            v-if="form.type"
+          >
+            <AppSelect
+              v-model="form.category"
+              :hint="form.category?.label"
+              label="Category"
+              :items="filteredCategories"
+              item-title="label"
+              item-value="value"
+              persistent-hint
+              return-object
+              single-line
+              placeholder="Select Category"
+            />
+          </VCol>
+          <VCol cols="12">
             <AppTextField
               v-model="form.amount"
               type="number"
@@ -155,37 +205,6 @@ watch(
                   v.length <= 80 ||
                   'Description must be less than 80 characters',
               ]"
-            />
-          </VCol>
-          <VCol cols="12">
-            <AppSelect
-              v-model="form.type"
-              :hint="form.type?.label"
-              label="Type"
-              :items="transactionTypes"
-              item-title="label"
-              item-value="value"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Type"
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            v-if="form.type"
-          >
-            <AppSelect
-              v-model="form.category"
-              :hint="form.category?.label"
-              label="Category"
-              :items="filteredCategories"
-              item-title="label"
-              item-value="value"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Category"
             />
           </VCol>
         </VRow>
