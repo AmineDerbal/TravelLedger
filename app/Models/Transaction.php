@@ -11,10 +11,9 @@ class Transaction extends Model
 
     protected $fillable = [
         'user_id',
-        'ledger_id',
+        'ledger_category_id',
         'amount',
-        'type',
-        'category',
+        'profit',
         'date',
         'description',
     ];
