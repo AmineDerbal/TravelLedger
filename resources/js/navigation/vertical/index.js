@@ -24,6 +24,11 @@ export default [
         to: { name: 'parameters-ledger' },
         icon: { icon: 'tabler-currency-dollar' },
       },
+      {
+        title: 'Ledger Category',
+        to: { name: 'parameters-ledger-category' },
+        icon: { icon: 'tabler-category' },
+      },
     ],
   },
 ];
