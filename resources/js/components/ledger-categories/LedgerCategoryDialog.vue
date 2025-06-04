@@ -21,17 +21,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isDialogVisible', 'submit']);
 
-const onSubmit = () => {
-  console.log(form);
-  let payload = {
-    ...form,
-    ledger_id: form.ledger_id.id,
-    type: form.type.value,
-  };
-
-  emit('submit', payload);
-};
-
 const dialogModelValueUpdate = (val) => {
   emit('update:isDialogVisible', val);
 };
@@ -42,10 +31,22 @@ const isVisible = computed({
 });
 
 const form = reactive({ ...props.formData });
+const isLoading = ref(false);
 
 const isFormValid = computed(() => {
   return form.ledger_id && form.type && form.name ? true : false;
 });
+
+const onSubmit = () => {
+  isLoading.value = true;
+  let payload = {
+    ...form,
+    ledger_id: form.ledger_id.id,
+    type: form.type.value,
+  };
+
+  emit('submit', payload);
+};
 </script>
 
 <template>
@@ -108,6 +109,7 @@ const isFormValid = computed(() => {
         <VBtn
           variant="tonal"
           :disabled="!isFormValid"
+          :loading="isLoading"
           @click="onSubmit"
           >Save</VBtn
         >
