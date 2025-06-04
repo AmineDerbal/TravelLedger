@@ -22,7 +22,7 @@ export default defineStore('ledgerCategory', {
 
     async storeLedgerCategory(data) {
       return await apiAction(
-        () => apiCall('ledger-categories', 'POST', data),
+        () => apiCall('ledger-categories/store', 'POST', data),
         this,
       );
     },
