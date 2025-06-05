@@ -12,8 +12,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      $this->call([
-        LedgerCategorySeeder::class,
+        $this->call([
+          LedgerSeeder::class,
+          LedgerCategorySeeder::class,
     ]);
     }
 }
