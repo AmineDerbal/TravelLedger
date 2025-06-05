@@ -11,8 +11,11 @@ const ledgerCategoryStore = useLedgerCategoryStore();
 
 const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
 const typeOptions = computed(() => ledgerCategoryStore.typeOptions);
+const errors = computed(() => ledgerCategoryStore.errors);
 
 const isDialogVisible = ref(false);
+const dialogSubmitLoading = ref(false);
+const dialogKey = ref(0);
 const defaultFormData = {
   name: '',
   ledger_id: null,
@@ -28,12 +31,24 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ];
 
+const increaseDialogKey = () => {
+  dialogKey.value += 1;
+};
+const resetDialog = () => {
+  isDialogVisible.value = false;
+  formData.value = { ...defaultFormData };
+  increaseDialogKey();
+};
 const handleSubmit = async (data) => {
+  dialogSubmitLoading.value = true;
   const response = await ledgerCategoryStore.storeLedgerCategory(data);
   const expectedStatus = 201;
 
   if (response.status === expectedStatus) {
-    isDialogVisible.value = false;
+    resetDialog();
+  } else {
+    dialogSubmitLoading.value = false;
+    console.log(errors.value);
   }
 };
 
@@ -48,7 +63,10 @@ onBeforeMount(async () => {
     :ledgerOptions="ledgerOptions"
     :typeOptions="typeOptions"
     :formData="formData"
+    :dialogSubmitLoading="dialogSubmitLoading"
+    :errors="errors"
     @submit="handleSubmit"
+    :key="dialogKey"
   />
   <VCard title="Categories">
     <VCardText>

@@ -17,6 +17,15 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  errors: {
+    type: Object,
+    required: true,
+  },
+  dialogSubmitLoading: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:isDialogVisible', 'submit']);
@@ -25,20 +34,29 @@ const dialogModelValueUpdate = (val) => {
   emit('update:isDialogVisible', val);
 };
 
+const nameRules = [
+  (value) => value.length <= 20 || 'Name must be less than 20 characters.',
+  (value) => !!value || 'Name is required.',
+];
+
 const isVisible = computed({
   get: () => props.isDialogVisible,
   set: (val) => dialogModelValueUpdate(val),
 });
 
 const form = reactive({ ...props.formData });
-const isLoading = ref(false);
 
 const isFormValid = computed(() => {
   return form.ledger_id && form.type && form.name ? true : false;
 });
 
+const formatName = () => {
+  if (!form.name) return;
+  form.name =
+    form.name.charAt(0).toUpperCase() + form.name.slice(1).toLowerCase();
+};
+
 const onSubmit = () => {
-  isLoading.value = true;
   let payload = {
     ...form,
     ledger_id: form.ledger_id.id,
@@ -72,6 +90,12 @@ const onSubmit = () => {
               single-line
               placeholder="Select Ledger"
             />
+            <div
+              class="mt-2 text-error"
+              v-if="errors.ledger_id"
+            >
+              {{ errors.ledger_id[0] }}
+            </div>
           </VCol>
 
           <VCol cols="12">
@@ -87,13 +111,28 @@ const onSubmit = () => {
               single-line
               placeholder="Select Type"
             />
+            <div
+              class="mt-2 text-error"
+              v-if="errors.type"
+            >
+              {{ errors.type[0] }}
+            </div>
           </VCol>
 
           <VCol cols="12">
             <VTextField
               v-model="form.name"
               label="Name"
+              placeholder="Name"
+              :rules="nameRules"
+              @input="formatName"
             />
+            <div
+              class="mt-2 text-error"
+              v-if="errors.name"
+            >
+              {{ errors.name[0] }}
+            </div>
           </VCol>
         </VRow>
       </VCardText>
@@ -109,7 +148,7 @@ const onSubmit = () => {
         <VBtn
           variant="tonal"
           :disabled="!isFormValid"
-          :loading="isLoading"
+          :loading="props.dialogSubmitLoading"
           @click="onSubmit"
           >Save</VBtn
         >
