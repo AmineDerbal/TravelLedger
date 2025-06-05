@@ -9,6 +9,7 @@ definePage({
 
 const ledgerCategoryStore = useLedgerCategoryStore();
 
+const ledgerCategories = computed(() => ledgerCategoryStore.ledgerCategories);
 const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
 const typeOptions = computed(() => ledgerCategoryStore.typeOptions);
 const errors = computed(() => ledgerCategoryStore.errors);
@@ -53,6 +54,7 @@ const handleSubmit = async (data) => {
 };
 
 onBeforeMount(async () => {
+  await ledgerCategoryStore.getLedgerCategories();
   await ledgerCategoryStore.getLedgerCategoryOptions();
 });
 </script>
@@ -84,5 +86,10 @@ onBeforeMount(async () => {
         </VCol>
       </VRow>
     </VCardText>
+    <VDivider />
+    <LedgerCategoryTable
+      :ledgerCategories="ledgerCategories"
+      :headers="headers"
+    />
   </VCard>
 </template>
