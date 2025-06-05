@@ -16,6 +16,15 @@ class basicLedgerCategoryRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        if ($this->has('name')) {
+            $this->merge([
+                'name' => ucfirst(strtolower($this->name)),
+            ]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,19 +32,19 @@ class basicLedgerCategoryRequest extends FormRequest
      */
     public function baseRules(): array
     {
-       return [
-        'ledger_id' => 'required|exists:ledgers,id',
-        'type' => ['required', Rule::in(TransactionType::valueList())],
-        'name' => [
-            'required',
-            'string',
-            'max:20',
-            Rule::unique('ledger_categories')
-                ->where(function ($query) {
-                    return $query->where('ledger_id', $this->ledger_id)
-                                 ->where('type', $this->type);
-                }),
-        ],
+        return [
+         'ledger_id' => 'required|exists:ledgers,id',
+         'type' => ['required', Rule::in(TransactionType::valueList())],
+         'name' => [
+             'required',
+             'string',
+             'max:20',
+             Rule::unique('ledger_categories')
+                 ->where(function ($query) {
+                     return $query->where('ledger_id', $this->ledger_id)
+                                  ->where('type', $this->type);
+                 }),
+         ],
     ];
     }
 }
