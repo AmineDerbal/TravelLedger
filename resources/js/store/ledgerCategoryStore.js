@@ -1,10 +1,9 @@
-import { store } from '@/plugins/2.pinia';
-
 export default defineStore('ledgerCategory', {
   state: () => ({
     ledgerCategories: [],
     LedgerOptions: [],
     typeOptions: [],
+    errors: {},
   }),
   persist: ['ledgerCategories', 'LedgerOptions', 'typeOptions'],
 
