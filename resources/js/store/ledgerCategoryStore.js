@@ -1,3 +1,5 @@
+import { get } from '@vueuse/core';
+
 export default defineStore('ledgerCategory', {
   state: () => ({
     ledgerCategories: [],
@@ -8,6 +10,13 @@ export default defineStore('ledgerCategory', {
   persist: ['ledgerCategories', 'LedgerOptions', 'typeOptions'],
 
   actions: {
+    async getLedgerCategories() {
+      return await apiAction(
+        () => apiCall('ledger-categories'),
+        this,
+        (data) => (this.ledgerCategories = data),
+      );
+    },
     async getLedgerCategoryOptions() {
       return await apiAction(
         () => apiCall('ledger-categories/ledger-categories-options'),
