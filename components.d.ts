@@ -46,6 +46,7 @@ declare module 'vue' {
     ErrorHeader: typeof import('./resources/js/components/ErrorHeader.vue')['default']
     I18n: typeof import('./resources/js/@core/components/I18n.vue')['default']
     LedgerCategoryDialog: typeof import('./resources/js/components/ledger-categories/LedgerCategoryDialog.vue')['default']
+    LedgerCategoryTable: typeof import('./resources/js/components/ledger-categories/LedgerCategoryTable.vue')['default']
     LedgerTable: typeof import('./resources/js/components/ledgers/LedgerTable.vue')['default']
     MoreBtn: typeof import('./resources/js/@core/components/MoreBtn.vue')['default']
     Notifications: typeof import('./resources/js/@core/components/Notifications.vue')['default']
