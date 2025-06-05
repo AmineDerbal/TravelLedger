@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,23 +14,10 @@ return new class extends Migration
         Schema::create('ledgers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('amount', 10, 2);
+            $table->decimal('balance', 10, 2)->default(0);
             $table->timestamps();
         });
-        DB::table('ledgers')->insert([ 
-        [
-            'name' => 'office',
-            'amount' => 0,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ],
-        [
-            'name' => 'RTW',
-            'amount' => 0,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]
-    ]);
+
     }
 
     /**
@@ -42,5 +28,5 @@ return new class extends Migration
         Schema::dropIfExists('ledgers');
     }
 
-   
+
 };
