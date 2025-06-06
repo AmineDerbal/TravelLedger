@@ -34,5 +34,20 @@ export default defineStore('ledgerCategory', {
         this,
       );
     },
+
+    async updateLedgerCategory(data) {
+      const id = data.id;
+      return await apiAction(
+        () => apiCall(`ledger-categories/update/${id}`, 'PUT', data),
+        this,
+      );
+    },
+
+    async deleteLedgerCategory(id) {
+      return await apiAction(
+        () => apiCall(`ledger-categories/${id}`, 'DELETE'),
+        this,
+      );
+    },
   },
 });
