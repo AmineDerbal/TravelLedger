@@ -49,10 +49,12 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::get('/ledger-categories', 'index')->name('ledger-categories.index');
         Route::get('/ledger-categories/ledger-categories-options', 'ledgerCategoriesOptions')->name('ledger-categories.ledger-categories-options');
         Route::post('/ledger-categories/store', 'store')->name('ledger-categories.store');
+        Route::put('/ledger-categories/update/{id}', 'update')->name('ledger-categories.update');
+        Route::delete('/ledger-categories/{id}', 'destroy')->name('ledger-categories.destroy');
     });
 
     Route::post('/export-transactions', [TransactionExportController::class, 'export']);
-    
+
 
 
 });
