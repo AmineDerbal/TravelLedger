@@ -7,6 +7,7 @@ use App\Models\LedgerCategory;
 use App\Models\Ledger;
 use App\Enums\TransactionType;
 use App\Http\Requests\LedgerCategory\storeLedgerCategoryRequest;
+use App\Http\Requests\LedgerCategory\updateLedgerCategoryRequest;
 use App\Http\Resources\LedgerCategory\BasicLedgerCategoryResource;
 
 class LedgerCategoryController extends Controller
@@ -27,11 +28,33 @@ class LedgerCategoryController extends Controller
     public function store(storeLedgerCategoryRequest $request)
     {
         $data = $request->validated();
-        $ledgerCategory = LedgerCategory::create($data);
-        if (!$ledgerCategory) {
-            return response()->json(['message' => 'Ledger category creation failed'], 500);
+        try {
+            LedgerCategory::create($data);
+            return response()->json(['message' => 'Ledger category created successfully'], 201);
+        } catch (\Exception) {
+            return response()->json(['message' => 'Something went wrong'], 500);
         }
-        return response()->json(['message' => 'Ledger category created successfully'], 201);
-
     }
+
+    public function update(updateLedgerCategoryRequest $request, $id)
+    {
+        $data = $request->validated();
+        try {
+            LedgerCategory::find($id)->update($data);
+            return response()->json(['message' => 'Ledger category updated successfully'], 200);
+        } catch (\Exception) {
+            return response()->json(['message' => 'Something went wrong'], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            LedgerCategory::find($id)->delete();
+            return response()->json(['message' => 'Ledger category deleted successfully'], 200);
+        } catch (\Exception) {
+            return response()->json(['message' => 'Something went wrong'], 500);
+        }
+    }
+
 }
