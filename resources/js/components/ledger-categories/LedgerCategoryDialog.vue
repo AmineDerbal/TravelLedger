@@ -26,6 +26,12 @@ const props = defineProps({
     required: true,
     default: false,
   },
+
+  isEdit: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:isDialogVisible', 'submit']);
@@ -63,7 +69,7 @@ const onSubmit = () => {
     type: form.type.value,
   };
 
-  emit('submit', payload);
+  emit('submit', payload, props.isEdit);
 };
 </script>
 
@@ -74,7 +80,7 @@ const onSubmit = () => {
   >
     <DialogCloseBtn @click="dialogModelValueUpdate(false)" />
 
-    <VCard title="Add Category">
+    <VCard title="Ledger Category">
       <VCardText>
         <VRow>
           <VCol cols="12">

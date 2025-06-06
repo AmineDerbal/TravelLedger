@@ -14,6 +14,7 @@ const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
 const typeOptions = computed(() => ledgerCategoryStore.typeOptions);
 const errors = computed(() => ledgerCategoryStore.errors);
 
+const isEdit = ref(false);
 const isDialogVisible = ref(false);
 const dialogSubmitLoading = ref(false);
 const dialogKey = ref(0);
@@ -37,20 +38,43 @@ const increaseDialogKey = () => {
 };
 const resetDialog = () => {
   isDialogVisible.value = false;
+  isEdit.value = false;
   formData.value = { ...defaultFormData };
   increaseDialogKey();
 };
-const handleSubmit = async (data) => {
+
+const openEditDialog = (ledgerCategory) => {
+  formData.value = {
+    id: ledgerCategory.id,
+    name: ledgerCategory.name,
+    ledger_id: ledgerCategory.ledger,
+    type: ledgerCategory.type,
+  };
+
+  isEdit.value = true;
+  isDialogVisible.value = true;
+  increaseDialogKey();
+};
+const handleSubmit = async (data, isUpdating) => {
   dialogSubmitLoading.value = true;
-  const response = await ledgerCategoryStore.storeLedgerCategory(data);
-  const expectedStatus = 201;
+
+  const response = isUpdating
+    ? await ledgerCategoryStore.updateLedgerCategory(data)
+    : await ledgerCategoryStore.storeLedgerCategory(data);
+
+  const expectedStatus = isUpdating ? 200 : 201;
+
+  dialogSubmitLoading.value = false;
 
   if (response.status === expectedStatus) {
+    await ledgerCategoryStore.getLedgerCategories();
     resetDialog();
-  } else {
-    dialogSubmitLoading.value = false;
-    console.log(errors.value);
   }
+};
+
+const handleDelete = async (id) => {
+  await ledgerCategoryStore.deleteLedgerCategory(id);
+  await ledgerCategoryStore.getLedgerCategories();
 };
 
 onBeforeMount(async () => {
@@ -67,6 +91,7 @@ onBeforeMount(async () => {
     :formData="formData"
     :dialogSubmitLoading="dialogSubmitLoading"
     :errors="errors"
+    :isEdit="isEdit"
     @submit="handleSubmit"
     :key="dialogKey"
   />
@@ -90,6 +115,8 @@ onBeforeMount(async () => {
     <LedgerCategoryTable
       :ledgerCategories="ledgerCategories"
       :headers="headers"
+      @openEditDialog="openEditDialog"
+      @deleteLedgerCategory="handleDelete"
     />
   </VCard>
 </template>
