@@ -1,6 +1,6 @@
 <script setup>
 import useTransactionStore from '@/store/transaction';
-import useLedgerStore from '@/store/ledger';
+import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/user';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
 

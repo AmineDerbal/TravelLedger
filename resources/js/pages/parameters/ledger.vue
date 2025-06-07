@@ -1,5 +1,5 @@
 <script setup>
-import useLedgerStore from '@/store/ledger';
+import useLedgerStore from '@/store/ledgerStore';
 definePage({
   meta: {
     requiresAuth: true,
