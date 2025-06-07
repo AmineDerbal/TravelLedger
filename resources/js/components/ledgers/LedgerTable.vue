@@ -21,7 +21,7 @@ const props = defineProps({
       <template #item="{ item }">
         <tr>
           <td>{{ item.name }}</td>
-          <td>{{ item.amount }} DZD</td>
+          <td>{{ item.balance }} DZD</td>
           <td>
             <div class="d-flex gap-1">
               <IconBtn>

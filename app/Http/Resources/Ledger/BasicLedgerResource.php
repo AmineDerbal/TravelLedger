@@ -14,10 +14,10 @@ class BasicLedgerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-       return [
-        'id' => $this->id,
-        'name' => $this->name,
-        'amount' => $this->amount
-       ];
+        return [
+         'id' => $this->id,
+         'name' => $this->name,
+         'balance' => $this->balance
+        ];
     }
 }

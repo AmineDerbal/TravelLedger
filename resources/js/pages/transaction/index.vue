@@ -114,7 +114,7 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
   const expectedStatus = isUpdating ? 200 : 201;
 
   if (response.status === expectedStatus) {
-    await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
+    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
     if (isUpdating)
       await transactionStore.getTransactionsByDateRange(rangeDateData.value);
     resetDialog();
@@ -124,7 +124,7 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
 const handleTransactionDelete = async (id) => {
   const response = await transactionStore.deleteTransaction(id);
   if (response.status === 200) {
-    await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
+    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
     await transactionStore.getTransactionsByDateRange(rangeDateData.value);
   }
 };
