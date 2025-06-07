@@ -12,7 +12,7 @@ import NavBarI18n from '@core/components/I18n.vue';
 import { VerticalNavLayout } from '@layouts';
 
 // stores
-import useLedgerStore from '@/store/ledger';
+import useLedgerStore from '@/store/ledgerStore';
 
 const ledgerItem = {
   color: 'success',
@@ -21,12 +21,21 @@ const ledgerItem = {
 
 const ledgerStore = useLedgerStore();
 const ledger = computed(() => ledgerStore.ledger);
+const ledgerOptions = computed(() => ledgerStore.ledgersForSelect);
+
+const switchLedger = async (id) => {
+  if (id === ledger.value.id) return;
+
+  await ledgerStore.getLedger(id);
+};
+
 onBeforeMount(async () => {
-  if (!ledger.value.name && !ledger.value.id && !ledger.value.amount) {
+  if (!ledger.value.name || !ledger.value.id || !ledger.value.balance) {
     await ledgerStore.getFirstLedger();
     return;
   }
-  await ledgerStore.UpdateLedgerAmount(ledgerStore.ledger.id);
+  await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
+  await ledgerStore.getLedgersForSelect();
 });
 </script>
 
@@ -58,28 +67,52 @@ onBeforeMount(async () => {
           :languages="themeConfig.app.i18n.langConfig"
         />
         <VSpacer />
+
         <VCardText>
           <VRow>
             <VCol
               cols="6"
               md="3"
             >
-              <div class="d-flex gap-x-4 align-center">
-                <VAvatar
-                  :color="ledgerItem.color"
-                  variant="tonal"
-                  size="40"
-                  rounded
-                >
-                  <VIcon :icon="ledgerItem.icon" />
-                </VAvatar>
+              <div class="d-flex gap-x-4 align-center cursor-pointer">
                 <div
-                  class="d-flex flex-column"
-                  :key="ledger.amount"
+                  class="d-flex align-center"
+                  style="cursor: pointer"
                 >
-                  <h5 class="text-h5 d-flex">{{ ledger.name }}</h5>
-                  <div class="text-body-2">{{ ledger.amount }}&nbsp;DZD</div>
+                  <VAvatar
+                    :color="ledgerItem.color"
+                    variant="tonal"
+                    size="40"
+                    rounded
+                  >
+                    <VIcon :icon="ledgerItem.icon" />
+                  </VAvatar>
+                  <div class="d-flex flex-column ms-3">
+                    <h5 class="text-h5">{{ ledger.name }}</h5>
+                    <div class="text-body-2 d-inline-flex align-center">
+                      {{ ledger.balance }} <span class="ms-1">DZD</span>
+                    </div>
+                  </div>
                 </div>
+
+                <VMenu
+                  activator="parent"
+                  width="230"
+                  location="bottom end"
+                  offset="10px"
+                >
+                  <VList>
+                    <VListItem
+                      v-for="item in ledgerOptions"
+                      class="cursor-pointer"
+                      :key="item.id"
+                      @click="switchLedger(item.id)"
+                      link
+                    >
+                      <VListItemTitle>{{ item.name }}</VListItemTitle>
+                    </VListItem>
+                  </VList>
+                </VMenu>
               </div>
             </VCol>
           </VRow>
