@@ -30,6 +30,14 @@ export default defineStore('ledger', {
         (data) => (this.ledgers = data),
       );
     },
+
+    async getLedger(id) {
+      return await apiAction(
+        () => apiCall(`ledgers/${id}`),
+        this,
+        (data) => (this.ledger = data),
+      );
+    },
     async getFirstLedger() {
       return await apiAction(
         () => apiCall('ledgers/first-entry'),
@@ -38,14 +46,14 @@ export default defineStore('ledger', {
       );
     },
 
-    async UpdateLedgerAmount(id) {
+    async UpdateLedgerBalance(id) {
       return await apiAction(
-        () => apiCall(`ledgers/${id}/amount`),
+        () => apiCall(`ledgers/${id}/balance`),
         this,
         (data) => {
           if (id === data.id && this.ledger.name !== data.name)
             this.ledger.name = data.name;
-          this.ledger.amount = Number(data.amount);
+          this.ledger.balance = data.balance;
         },
       );
     },
