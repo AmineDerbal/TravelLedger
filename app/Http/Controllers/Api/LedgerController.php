@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Ledger;
 use App\Http\Resources\Ledger\BasicLedgerResource;
 
@@ -13,6 +12,12 @@ class LedgerController extends Controller
     {
         $ledgers = Ledger::all();
         return response()->json(BasicLedgerResource::collection($ledgers));
+    }
+
+    public function show($id)
+    {
+        $ledger = Ledger::find($id);
+        return response()->json(new BasicLedgerResource($ledger));
     }
     public function getFirstLedger()
     {
@@ -26,7 +31,7 @@ class LedgerController extends Controller
         return response()->json($ledgers);
     }
 
-    public function getLedgerAmount($id)
+    public function getLedgerBalance($id)
     {
         $ledger = Ledger::find($id);
         return response()->json(new BasicLedgerResource($ledger));
