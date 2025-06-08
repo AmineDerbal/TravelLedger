@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Ledger;
 use App\Http\Resources\Ledger\BasicLedgerResource;
+use App\Http\Resources\Ledger\LegderWithCategoriesResource;
 
 class LedgerController extends Controller
 {
@@ -30,6 +31,14 @@ class LedgerController extends Controller
         $ledgers = Ledger::select('id', 'name')->get();
         return response()->json($ledgers);
     }
+
+    public function withCategories()
+    {
+
+        $ledgers = Ledger::with('categories')->get();
+        return response()->json(LegderWithCategoriesResource::collection($ledgers));
+    }
+
 
     public function getLedgerBalance($id)
     {

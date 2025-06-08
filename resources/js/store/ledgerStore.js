@@ -10,18 +10,11 @@ export default defineStore('ledger', {
     },
     ledgers: [],
     ledgersForSelect: [],
-    ledgerCategoryTypes: [],
-    ledgerCategories: [],
+    ledgersWithCategories: [],
     hasError: false,
     errors: {},
   }),
-  persist: [
-    'ledger',
-    'ledgers',
-    'ledgersForSelect',
-    'ledgerCategoryTypes',
-    'ledgerCategories',
-  ],
+  persist: ['ledger', 'ledgers', 'ledgersForSelect', 'ledgersWithCategories'],
   actions: {
     async getLedgers() {
       return await apiAction(
@@ -63,6 +56,14 @@ export default defineStore('ledger', {
         () => apiCall('ledgers/for-select'),
         this,
         (data) => (this.ledgersForSelect = data),
+      );
+    },
+
+    async getLedgersWithCategories() {
+      return await apiAction(
+        () => apiCall('ledgers-with-categories'),
+        this,
+        (data) => (this.ledgersWithCategories = data),
       );
     },
   },

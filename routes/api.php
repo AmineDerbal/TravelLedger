@@ -30,6 +30,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::get('ledgers', 'index')->name('ledgers.index');
         Route::get('ledgers/first-entry', 'getFirstLedger')->name('ledgers.first-entry');
         Route::get('ledgers/for-select', 'forSelect')->name('ledgers.for-select');
+        Route::get('ledgers-with-categories', 'withCategories')->name('ledgers.categories');
         Route::get('ledgers/{id}', 'show')->name('ledgers.show');
         Route::get('ledgers/{id}/balance', 'getLedgerBalance')->name('ledgers.balance');
     });
