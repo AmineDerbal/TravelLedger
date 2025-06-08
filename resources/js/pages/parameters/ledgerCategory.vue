@@ -93,6 +93,7 @@ onBeforeMount(async () => {
     :errors="errors"
     :isEdit="isEdit"
     @submit="handleSubmit"
+    @closeEditDialog="resetDialog"
     :key="dialogKey"
   />
   <VCard title="Categories">

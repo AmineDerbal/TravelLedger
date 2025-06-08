@@ -34,10 +34,22 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:isDialogVisible', 'submit']);
+const emit = defineEmits([
+  'update:isDialogVisible',
+  'submit',
+  'closeEditDialog',
+]);
 
-const dialogModelValueUpdate = (val) => {
+const SetDialogVisible = (val) => {
   emit('update:isDialogVisible', val);
+};
+
+const closeEditDialog = () => {
+  emit('closeEditDialog');
+};
+
+const closeDialog = () => {
+  props.isEdit ? closeEditDialog() : SetDialogVisible(false);
 };
 
 const nameRules = [
@@ -47,7 +59,7 @@ const nameRules = [
 
 const isVisible = computed({
   get: () => props.isDialogVisible,
-  set: (val) => dialogModelValueUpdate(val),
+  set: (val) => SetDialogVisible(val),
 });
 
 const form = reactive({ ...props.formData });
@@ -77,8 +89,9 @@ const onSubmit = () => {
   <VDialog
     v-model="isVisible"
     max-width="600"
+    @click:outside="closeDialog()"
   >
-    <DialogCloseBtn @click="dialogModelValueUpdate(false)" />
+    <DialogCloseBtn @click="closeDialog()" />
 
     <VCard title="Ledger Category">
       <VCardText>
@@ -147,7 +160,7 @@ const onSubmit = () => {
         <VBtn
           variant="tonal"
           color="secondary"
-          @click="dialogModelValueUpdate(false)"
+          @click="closeDialog()"
         >
           Close
         </VBtn>
