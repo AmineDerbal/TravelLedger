@@ -21,7 +21,7 @@ class TransactionService
                 return response()->json(['message' => 'Transaction creation failed'], 500);
             }
 
-            $this->updateLedgerAmount($data['ledger_id'], $data['amount'], $data['type']);
+            $this->UpdateLedgerBalance($data['ledger_id'], $data['amount'], $data['type']);
 
             return $this->jsonSuccess('Transaction created successfully', 201);
         });
@@ -40,7 +40,7 @@ class TransactionService
         $transaction->update($data);
 
         if ($amountDifference !== 0) {
-            $this->updateLedgerAmount($data['ledger_id'], $amountDifference, $data['type']);
+            $this->UpdateLedgerBalance($data['ledger_id'], $amountDifference, $data['type']);
         }
 
         return $this->jsonSuccess('Transaction updated successfully', 200);
@@ -56,7 +56,7 @@ class TransactionService
         $type = $transaction->type;
         $ledgerId = $transaction->ledger_id;
         $transaction->delete();
-        $this->updateLedgerAmount($ledgerId, $amount, $type);
+        $this->UpdateLedgerBalance($ledgerId, $amount, $type);
 
         return $this->jsonSuccess('Transaction deleted successfully', 200);
     }
@@ -64,9 +64,9 @@ class TransactionService
     public function calculateTransactionTotal(Collection $transactions): array
     {
 
-     $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
-$totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum('amount');
-    $totalBalance = $totalCredit - $totalDebit;
+        $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
+        $totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum('amount');
+        $totalBalance = $totalCredit - $totalDebit;
 
         return [
          'totalDebit' => number_format($totalDebit, 2),
@@ -76,9 +76,9 @@ $totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum
 
     }
 
-    
 
-    private function updateLedgerAmount($ledgerId, $amount, $type): void
+
+    private function UpdateLedgerBalance($ledgerId, $amount, $type): void
     {
         $ledger = Ledger::find($ledgerId);
         $ledger->updateAmount($amount, $type);
