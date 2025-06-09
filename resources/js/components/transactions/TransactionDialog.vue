@@ -8,18 +8,14 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  transactionCategories: {
+
+  selectOptions: {
     type: Array,
     required: true,
   },
 
   initialData: {
     type: Object,
-    required: true,
-  },
-
-  ledgerOptions: {
-    type: Array,
     required: true,
   },
 
@@ -40,13 +36,12 @@ const emit = defineEmits([
 const onSubmit = () => {
   let payLoad = {
     ...form,
-    category: form.category.value,
+    ledger_category_id: form.category.id,
     type: form.type.value,
   };
   if (props.isEdit) {
     payLoad = {
       ...payLoad,
-
       ledger_id: form.ledger.id,
       user_id: form.user.id,
     };
@@ -70,36 +65,50 @@ const isVisible = computed({
 
 const form = reactive({ ...props.initialData });
 
-const isFormValid = computed(() => {
-  return form.amount > 0 &&
-    form.date &&
+const baseIsFormValid = () => {
+  return form.ledger &&
     form.type &&
     form.category &&
+    form.amount > 0 &&
+    form.date &&
     form.description &&
     form.description.length <= 80
     ? true
     : false;
+};
+
+const isFormValid = computed(() => {
+  return form.ledger?.name === 'RTW' && form.type?.label === 'Debit'
+    ? baseIsFormValid() && form.profit > 0
+    : baseIsFormValid();
 });
 
 const filteredCategories = computed(() => {
   if (!form.type) return [];
 
-  return props.transactionCategories.filter((category) => {
-    return category.type === form.type.value;
-  });
+  return props.selectOptions
+    .find((ledger) => ledger.id === form.ledger.id)
+    .categories.filter((category) => category.type.value === form.type.value);
 });
 
+watch([() => form.type, () => form.ledger], () => {
+  form.category = null;
+});
+const formatCurrency = (value) => {
+  return Math.abs(value);
+};
+
 watch(
-  () => form.type,
-  () => {
-    form.category = null;
+  () => form.amount,
+  (newValue) => {
+    form.amount = formatCurrency(newValue);
   },
 );
 
 watch(
-  () => form.amount,
-  () => {
-    if (form.amount < 0) form.amount = form.amount * -1;
+  () => form.profit,
+  (newValue) => {
+    form.profit = formatCurrency(newValue);
   },
 );
 </script>
@@ -131,7 +140,7 @@ watch(
               v-model="form.ledger"
               :hint="form.ledger?.name"
               label="Ledger"
-              :items="ledgerOptions"
+              :items="selectOptions"
               item-title="name"
               item-value="id"
               persistent-hint
@@ -152,23 +161,22 @@ watch(
               return-object
               single-line
               placeholder="Select Type"
+              :disabled="!form.ledger"
             />
           </VCol>
-          <VCol
-            cols="12"
-            v-if="form.type"
-          >
+          <VCol cols="12">
             <AppSelect
               v-model="form.category"
               :hint="form.category?.label"
               label="Category"
               :items="filteredCategories"
-              item-title="label"
-              item-value="value"
+              item-title="name"
+              item-value="id"
               persistent-hint
               return-object
               single-line
               placeholder="Select Category"
+              :disabled="!form.type"
             />
           </VCol>
           <VCol cols="12">
@@ -179,6 +187,21 @@ watch(
               min="0"
               label="Amount"
               placeholder="Amount"
+              :disabled="!form.category"
+            />
+          </VCol>
+          <VCol
+            cols="12"
+            v-if="form.ledger?.name === 'RTW' && form.type?.label === 'Debit'"
+          >
+            <AppTextField
+              v-model="form.profit"
+              type="number"
+              suffix="DZD"
+              min="0"
+              label="Profit"
+              placeholder="Profit"
+              :disabled="!form.category"
             />
           </VCol>
           <VCol cols="12">
@@ -191,6 +214,7 @@ watch(
                 altInput: true,
                 maxDate: new Date().toISOString().split('T')[0],
               }"
+              :disabled="!form.category"
             />
           </VCol>
           <VCol cols="12">
@@ -205,6 +229,7 @@ watch(
                   v.length <= 80 ||
                   'Description must be less than 80 characters',
               ]"
+              :disabled="!form.category"
             />
           </VCol>
         </VRow>
