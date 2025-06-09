@@ -72,7 +72,6 @@ const headers = [
 ];
 
 const defaultForm = computed(() => ({
-  ledger_id: ledgerStore.ledger.id,
   user_id: user.value.id,
   date: null,
   description: '',
