@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Transaction;
 use App\Models\Ledger;
+use App\Models\LedgerCategory;
 use App\Enums\TransactionType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,31 @@ class TransactionService
     {
 
         return DB::transaction(function () use ($data) {
+
             $transaction = Transaction::create($data);
 
             if (!$transaction) {
                 return response()->json(['message' => 'Transaction creation failed'], 500);
             }
 
-            $this->UpdateLedgerBalance($data['ledger_id'], $data['amount'], $data['type']);
+            $ledgerCategory = LedgerCategory::with('ledger')->find($data['ledger_category_id']);
+            $ledgerId = $ledgerCategory->ledger['id'];
+            $type = $ledgerCategory->type['value'];
+
+            $this->UpdateLedgerBalance($ledgerId, $type, $data['amount']) ;
+
+            $profit = $data['profit'] ?? null;
+            if($profit !== null && $profit > 0) {
+                $newData = [
+                    'user_id' => $data['user_id'],
+                    'ledger_category_id' => '2',
+                    'amount' => $data['profit'],
+                    'date' => $data['date'],
+                    'description' => $data['description'],
+                ];
+
+               return $this->createTransaction($newData);
+            }
 
             return $this->jsonSuccess('Transaction created successfully', 201);
         });
@@ -40,7 +59,7 @@ class TransactionService
         $transaction->update($data);
 
         if ($amountDifference !== 0) {
-            $this->UpdateLedgerBalance($data['ledger_id'], $amountDifference, $data['type']);
+            $this->UpdateLedgerBalance($data['ledger_id'], $data['type'], $amountDifference);
         }
 
         return $this->jsonSuccess('Transaction updated successfully', 200);
@@ -56,7 +75,7 @@ class TransactionService
         $type = $transaction->type;
         $ledgerId = $transaction->ledger_id;
         $transaction->delete();
-        $this->UpdateLedgerBalance($ledgerId, $amount, $type);
+        $this->UpdateLedgerBalance($ledgerId, $type, $amount);
 
         return $this->jsonSuccess('Transaction deleted successfully', 200);
     }
@@ -78,7 +97,7 @@ class TransactionService
 
 
 
-    private function UpdateLedgerBalance($ledgerId, $amount, $type): void
+    private function UpdateLedgerBalance($ledgerId, $type, $amount): void
     {
         $ledger = Ledger::find($ledgerId);
         $ledger->updateAmount($amount, $type);
