@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('type');
             $table->foreignId('ledger_category_id')->constrained()->onDelete('cascade');
             $table->foreignId('ledger_id')->constrained();
-            $table->foreignId('user_id')->constrained()->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
