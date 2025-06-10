@@ -73,11 +73,11 @@ const headers = [
 
 const defaultForm = computed(() => ({
   user_id: user.value.id,
+  ledger_category_id: null,
   date: null,
   description: '',
   amount: 0,
-  type: null,
-  category: null,
+  profit: null,
 }));
 
 const dateConfig = {
