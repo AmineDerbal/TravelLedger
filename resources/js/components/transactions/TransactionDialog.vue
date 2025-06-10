@@ -34,15 +34,11 @@ const emit = defineEmits([
 ]);
 
 const onSubmit = () => {
-  const { user_id, amount, date, description } = form;
-
   let payLoad = {
+    ...form,
     ledger_category_id: form.category.id,
-    user_id,
-    amount,
+    type: form.type.value,
     profit: form.profit ? form.profit : null,
-    date,
-    description,
   };
 
   if (props.isEdit) {
