@@ -17,8 +17,10 @@ return new class extends Migration
             $table->date('date');
             $table->string('description');
             $table->decimal('profit', 10, 2)->nullable();
-            $table->foreignId('ledger_category_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->string('type');
+            $table->foreignId('ledger_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('ledger_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }
