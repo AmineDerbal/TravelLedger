@@ -4,7 +4,9 @@ namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
+use Illuminate\Validation\Rule;
 use App\Models\LedgerCategory;
+use App\Enums\TransactionType;
 
 abstract class BaseTransactionRequest extends FormRequest
 {
@@ -14,7 +16,9 @@ abstract class BaseTransactionRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
+            'ledger_id' => 'required|exists:ledgers,id',
             'ledger_category_id' => 'required|exists:ledger_categories,id',
+            'type' => ['required', Rule::in(TransactionType::valueList())],
             'amount' => 'required|numeric|gte:0',
             'date' => 'required|date|date_format:Y-m-d',
             'description' => 'required|string|max:80',
@@ -24,17 +28,29 @@ abstract class BaseTransactionRequest extends FormRequest
 
     public function withValidator(Validator $validator): void
 {
+    if ($validator->errors()->isNotEmpty()) {
+        return;
+    }
+
     $validator->after(function ($validator) {
         $profit = $this->input('profit');
         $ledgerCategoryId = $this->input('ledger_category_id');
+        $type = $this->input('type') ;
+        $ledgerId = $this->input('ledger_id');
+
+        $ledgerCategory = LedgerCategory::find($ledgerCategoryId) ?? null;
+        if($ledgerCategory->type['value'] !== $type && $ledgerCategory->ledger_id !== $ledgerId) {
+            $validator->errors()->add(
+                'ledger_category_id',
+                'The ledger category type and ledger must match the transaction type and ledger.'
+            );
+        }
 
         if ($ledgerCategoryId) {
-            $ledgerCategory = LedgerCategory::with('ledger')->find($ledgerCategoryId);
-
-            if ($ledgerCategory) {
+     
                 $isDebitAndRTW = 
-                    $ledgerCategory->type['value'] === 2 &&
-                    optional($ledgerCategory->ledger)->id === 2;
+                    $type === 2 &&
+                    $ledgerId === 2;
 
                 if ($profit !== null && !$isDebitAndRTW) {
                     $validator->errors()->add(
@@ -48,7 +64,7 @@ abstract class BaseTransactionRequest extends FormRequest
                         'profit',
                         'Profit is required when the category is of type Debit and belongs to the RTW ledger.'
                     );
-                }
+                
             }
         }
     });
