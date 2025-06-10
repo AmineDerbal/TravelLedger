@@ -57,6 +57,11 @@ class LedgerCategorySeeder extends Seeder
                 'name' => 'Visa',
               'type' => TransactionType::Debit->value,
               'ledger_id' => 2,
+            ],
+            [
+                'name' => 'Insurance',
+              'type' => TransactionType::Debit->value,
+              'ledger_id' => 2,
             ]
         ];
 
