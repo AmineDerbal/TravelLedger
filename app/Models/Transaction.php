@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\TransactionType;
 
 class Transaction extends Model
 {
@@ -11,7 +12,9 @@ class Transaction extends Model
 
     protected $fillable = [
         'user_id',
+        'ledger_id',
         'ledger_category_id',
+        'type',
         'amount',
         'profit',
         'date',
@@ -23,8 +26,20 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ledgerCategory() {
+        return $this->belongsTo(LedgerCategory::class);
+    }
+
     public function ledger() {
         return $this->belongsTo(Ledger::class);
     }
- 
+
+      public function getTypeAttribute($value)
+{
+    return [
+        'value' => $value,
+        'label' => TransactionType::labelFromValue($value),
+    ];
+}
+
 }
