@@ -15,9 +15,9 @@ class Ledger extends Model
     public function updateAmount($amount, $type)
     {
         if (TransactionType::labelFromValue($type) == 'Credit') {
-            $this->amount += $amount;
+            $this->balance += $amount;
         } else {
-            $this->amount -= $amount;
+            $this->balance -= $amount;
         }
         $this->save();
     }
