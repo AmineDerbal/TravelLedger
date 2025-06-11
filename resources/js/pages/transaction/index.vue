@@ -17,7 +17,6 @@ const userStore = useUserStore();
 const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions);
 const balance = computed(() => transactionStore.balance);
-const transactionCategories = computed(() => transactionStore.categories);
 const transactionTypes = computed(() => transactionStore.types);
 const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
 
@@ -74,6 +73,8 @@ const headers = [
 const defaultForm = computed(() => ({
   user_id: user.value.id,
   ledger_category_id: null,
+  ledger_id: null,
+  type: null,
   date: null,
   description: '',
   amount: 0,
