@@ -30,8 +30,8 @@ class BasicTransactionResource extends JsonResource
                 'label' => TransactionType::labelFromValue($this->type)
             ],
             'category' => [
-                'value' => $this->category,
-                'label' => TransactionCategory::labelFromValue($this->category)
+                'value' => $this->ledgerCategory->id,
+                'label' => $this->ledgerCategory->name,
             ],
             'amount' => $this->amount,
             'date' => $this->date,
