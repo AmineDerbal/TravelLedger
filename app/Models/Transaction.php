@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\TransactionType;
+
 
 class Transaction extends Model
 {
@@ -20,9 +20,6 @@ class Transaction extends Model
         'date',
         'description',
     ];
-
-
-
 
     public function user() {
         return $this->belongsTo(User::class);
