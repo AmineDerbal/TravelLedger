@@ -23,17 +23,15 @@ class TransactionService
                 return response()->json(['message' => 'Transaction creation failed'], 500);
             }
 
-            $ledgerCategory = LedgerCategory::with('ledger')->find($data['ledger_category_id']);
-            $ledgerId = $ledgerCategory->ledger['id'];
-            $type = $ledgerCategory->type['value'];
-
-            $this->UpdateLedgerBalance($ledgerId, $type, $data['amount']) ;
+            $this->UpdateLedgerBalance($data['ledger_id'], $data['type'], $data['amount']) ;
 
             $profit = $data['profit'] ?? null;
             if($profit !== null && $profit > 0) {
                 $newData = [
                     'user_id' => $data['user_id'],
                     'ledger_category_id' => '2',
+                    'ledger_id' => '1',
+                    'type' => '1',
                     'amount' => $data['profit'],
                     'date' => $data['date'],
                     'description' => $data['description'],
@@ -82,8 +80,8 @@ class TransactionService
 
     public function calculateTransactionTotal(Collection $transactions): array
     {
-
-        $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
+    
+      $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
         $totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum('amount');
         $totalBalance = $totalCredit - $totalDebit;
 
