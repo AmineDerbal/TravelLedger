@@ -35,11 +35,12 @@ abstract class BaseTransactionRequest extends FormRequest
     $validator->after(function ($validator) {
         $profit = $this->input('profit');
         $ledgerCategoryId = $this->input('ledger_category_id');
-        $type = $this->input('type') ;
-        $ledgerId = $this->input('ledger_id');
+        $type = (int)$this->input('type') ;
+        $ledgerId = (int)$this->input('ledger_id');
 
-        $ledgerCategory = LedgerCategory::find($ledgerCategoryId) ?? null;
-        if($ledgerCategory->type['value'] !== $type && $ledgerCategory->ledger_id !== $ledgerId) {
+        $ledgerCategory = LedgerCategory::find($ledgerCategoryId);
+
+        if($ledgerCategory->type['value'] !== $type || $ledgerCategory->ledger_id !== $ledgerId) {
             $validator->errors()->add(
                 'ledger_category_id',
                 'The ledger category type and ledger must match the transaction type and ledger.'
