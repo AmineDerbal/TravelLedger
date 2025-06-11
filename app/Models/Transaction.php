@@ -22,6 +22,8 @@ class Transaction extends Model
     ];
 
 
+
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -34,12 +36,7 @@ class Transaction extends Model
         return $this->belongsTo(Ledger::class);
     }
 
-      public function getTypeAttribute($value)
-{
-    return [
-        'value' => $value,
-        'label' => TransactionType::labelFromValue($value),
-    ];
-}
+
+  
 
 }
