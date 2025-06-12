@@ -36,6 +36,7 @@ const emit = defineEmits([
 const onSubmit = () => {
   let payLoad = {
     ...form,
+    ledger_id: form.ledger.id,
     ledger_category_id: form.category.id,
     type: form.type.value,
     profit: form.profit ? form.profit : null,

@@ -75,6 +75,10 @@ const resolveCategoryLabel = (categoryMSG) => {
       color: 'secondary',
     };
   }
+  return {
+    text: categoryMSG,
+    color: 'info',
+  };
 };
 </script>
 
@@ -101,7 +105,7 @@ const resolveCategoryLabel = (categoryMSG) => {
           </td>
           <td>
             <VChip
-              v-bind="resolveCategoryLabel(item.category.label)"
+              v-bind="resolveCategoryLabel(item.category.name)"
               density="comfortable"
               label
               size="small"
