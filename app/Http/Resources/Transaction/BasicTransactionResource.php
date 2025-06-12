@@ -4,9 +4,7 @@ namespace App\Http\Resources\Transaction;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 use App\Enums\TransactionType;
-use App\Enums\TransactionCategory;
 
 class BasicTransactionResource extends JsonResource
 {
@@ -30,10 +28,11 @@ class BasicTransactionResource extends JsonResource
                 'label' => TransactionType::labelFromValue($this->type)
             ],
             'category' => [
-                'value' => $this->ledgerCategory->id,
-                'label' => $this->ledgerCategory->name,
+                'id' => $this->ledgerCategory->id,
+                'name' => $this->ledgerCategory->name,
             ],
             'amount' => $this->amount,
+            'profit' => $this->profit,
             'date' => $this->date,
             'description' => $this->description
         ];
