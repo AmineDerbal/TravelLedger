@@ -3,6 +3,7 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/user';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
+import { ref } from 'vue';
 
 definePage({
   meta: {
@@ -22,6 +23,7 @@ const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
 
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
+const selectedLedger = ref(null);
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
@@ -30,7 +32,7 @@ const loadings = ref([]);
 const rangeDateData = computed(() => ({
   start_date: startDate.value,
   end_date: endDate.value,
-  ledger_id: ledgerStore.ledger.id,
+  ledger_id: selectedLedger.value['id'],
 }));
 
 const balanceData = computed(() => [
@@ -213,7 +215,7 @@ onBeforeMount(async () => {
       <VRow class="align-end dense">
         <VCol
           cols="12"
-          md="4"
+          md="3"
         >
           <AppDateTimePicker
             v-model="startDate"
@@ -224,13 +226,29 @@ onBeforeMount(async () => {
         </VCol>
         <VCol
           cols="12"
-          md="4"
+          md="3"
         >
           <AppDateTimePicker
             v-model="endDate"
             label="End Date"
             placeholder="Select End Date"
             :config="dateConfig"
+          />
+        </VCol>
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <AppSelect
+            v-model="selectedLedger"
+            label="Ledger"
+            :items="selectOptions"
+            item-title="name"
+            item-value="id"
+            persistent-hint
+            return-object
+            single-line
+            placeholder="Select Ledger"
           />
         </VCol>
         <VCol
