@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Transaction;
 use App\Models\Ledger;
-use App\Models\LedgerCategory;
 use App\Enums\TransactionType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +25,9 @@ class TransactionService
             $this->UpdateLedgerBalance($data['ledger_id'], $data['type'], $data['amount']) ;
 
             $profit = $data['profit'] ?? null;
-            if($profit !== null && $profit > 0) {
+            if ($profit !== null && $profit > 0) {
                 $newData = [
+                    'linked_transaction_id' => $transaction->id,
                     'user_id' => $data['user_id'],
                     'ledger_category_id' => '2',
                     'ledger_id' => '1',
@@ -37,7 +37,7 @@ class TransactionService
                     'description' => $data['description'],
                 ];
 
-               return $this->createTransaction($newData);
+                return $this->createTransaction($newData);
             }
 
             return $this->jsonSuccess('Transaction created successfully', 201);
@@ -63,25 +63,30 @@ class TransactionService
         return $this->jsonSuccess('Transaction updated successfully', 200);
     }
 
-    public function destroyTransaction($id)
+    public function destroyTransaction($transaction)
     {
-        $transaction = Transaction::find($id);
-        if (!$transaction) {
-            return $this->jsonError('Transaction not found', 404);
-        }
+
         $amount = -$transaction->amount;
         $type = $transaction->type;
         $ledgerId = $transaction->ledger_id;
+        $linkdedId = null;
+        if ($transaction->linkedTransaction !== null || $transaction->reverseLinkedTransaction !== null) {
+            $linkdedId = $transaction->linkedTransaction->id ?? $transaction->reverseLinkedTransaction->id;
+        }
         $transaction->delete();
         $this->UpdateLedgerBalance($ledgerId, $type, $amount);
+
+        if ($linkdedId !== null) {
+            $this->destroyTransaction(Transaction::find($linkdedId));
+        }
 
         return $this->jsonSuccess('Transaction deleted successfully', 200);
     }
 
     public function calculateTransactionTotal(Collection $transactions): array
     {
-    
-      $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
+
+        $totalDebit = $transactions->where('type', TransactionType::Debit->value)->sum('amount');
         $totalCredit = $transactions->where('type', TransactionType::Credit->value)->sum('amount');
         $totalBalance = $totalCredit - $totalDebit;
 

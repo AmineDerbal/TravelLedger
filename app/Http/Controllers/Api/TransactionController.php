@@ -24,9 +24,9 @@ class TransactionController extends Controller
         $transactions = Transaction::with('ledgerCategory')->where('ledger_id', $data['ledger_id'])
         ->whereBetween('date', [$data['start_date'], $data['end_date']])
         ->get();
-  
+
         $transactionBalance = $this->transactionService->calculateTransactionTotal($transactions);
-        
+
         return response()->json(['transactions' => BasicTransactionResource::collection($transactions), 'balance' => $transactionBalance], 201);
 
     }
@@ -50,7 +50,10 @@ class TransactionController extends Controller
 
     public function destroy($id)
     {
-
-        return $this->transactionService->destroyTransaction($id);
+        $transaction = Transaction::with('linkedTransaction', 'reverseLinkedTransaction')->find($id);
+        if (!$transaction) {
+            return $this->jsonError('Transaction not found', 404);
+        }
+        return $this->transactionService->destroyTransaction($transaction);
     }
 }
