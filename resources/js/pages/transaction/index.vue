@@ -3,7 +3,6 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/user';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
-import { ref } from 'vue';
 
 definePage({
   meta: {
@@ -23,7 +22,7 @@ const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
 
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
-const selectedLedger = ref(null);
+const selectedLedger = ref(selectOptions.value[0]);
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
@@ -69,6 +68,7 @@ const headers = [
   { title: 'Amount', key: 'amount' },
   { title: 'Type', key: 'type.value' },
   { title: 'Category', key: 'category.value' },
+  { title: 'Ledger', key: 'ledger.name' },
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 

@@ -111,6 +111,7 @@ const resolveCategoryLabel = (categoryMSG) => {
               size="small"
             />
           </td>
+          <td>{{ item.ledger.name }}</td>
           <td>
             <div class="d-flex gap-1">
               <IconBtn @click="openEditDialog(item)">
