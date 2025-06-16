@@ -29,10 +29,11 @@ class AuthController extends Controller
              'email' => $request->email,
              'password' => Hash::make($request->password),
          ]);
+         $user->assignRole('user');
  
          return response()->json([
              'message' => 'Registration successful',
-             'user' => $user,
+             'user' => $user,  
          ], 201);
      }
    
@@ -44,7 +45,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         $login = $request->input('login');
-$password = $request->input('password');
+        $password = $request->input('password');
 
 // Determine if login is email or username
 $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
@@ -59,11 +60,17 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         }
         $user = Auth::user();
 
+        $roles = $user->getRoleNames();
+        $permissions = $user->getAllPermissions();
+        \Log::info($roles);
+        \Log::info($permissions);
+
         $userdata = [
             
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            
         ];
 
         $tokenResult = $user->createToken('Personal Access Token');
