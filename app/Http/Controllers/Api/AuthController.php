@@ -8,36 +8,38 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
-
+use App\Http\Resources\Permission\PermissionBasicResource;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
- 
-   
+    public function register(Request $request)
+    {
+
+
         $request->validate([
              'name' => 'required|string|max:255',
              'email' => 'required|string|email|max:255|unique:users',
              'password' => 'required|string|min:8',
              'password_confirmation' => 'required|same:password',
- 
+
          ]);
- 
-     
-         $user = User::create([
-             'name' => $request->name,
-             'email' => $request->email,
-             'password' => Hash::make($request->password),
-         ]);
-         $user->assignRole('user');
- 
-         return response()->json([
-             'message' => 'Registration successful',
-             'user' => $user,  
-         ], 201);
-     }
-   
-     public function login(Request $request){
+
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->assignRole('user');
+
+        return response()->json([
+            'message' => 'Registration successful',
+            'user' => $user,
+        ], 201);
+    }
+
+    public function login(Request $request)
+    {
         // login with name or email and with password
 
         $request->validate([
@@ -47,8 +49,8 @@ class AuthController extends Controller
         $login = $request->input('login');
         $password = $request->input('password');
 
-// Determine if login is email or username
-$fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        // Determine if login is email or username
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         if (!Auth::attempt([$fieldType => $login, 'password' => $password])) {
             return response()->json([
@@ -59,19 +61,19 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
             ], 422);
         }
         $user = Auth::user();
-      
+
         $role = $user->getRoleNames()->first();
-        $permissions = $user->getAllPermissions()->toArray();
-  
+        $permissions = $user->getAllPermissions();
+
 
         $userdata = [
-            
+
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
             'role' => $role,
-            'permissions' => $permissions
-            
+            'permissions' => PermissionBasicResource::collection($permissions),
+
         ];
 
         $tokenResult = $user->createToken('Personal Access Token');
@@ -86,14 +88,15 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
             true,
             true,
         );
-        
+
 
     }
 
-    public function logout(Request $request){
-    
+    public function logout(Request $request)
+    {
+
         $request->user()->currentAccessToken()->delete();
-     
+
         return response()->json([
             'message' => 'Logout successful',
         ], 200)->withCookie(Cookie::forget('access_token'))->withCookie(Cookie::forget('user_data'));
