@@ -59,17 +59,18 @@ $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
             ], 422);
         }
         $user = Auth::user();
-
-        $roles = $user->getRoleNames();
-        $permissions = $user->getAllPermissions();
-        \Log::info($roles);
-        \Log::info($permissions);
+      
+        $role = $user->getRoleNames()->first();
+        $permissions = $user->getAllPermissions()->toArray();
+  
 
         $userdata = [
             
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'role' => $role,
+            'permissions' => $permissions
             
         ];
 
