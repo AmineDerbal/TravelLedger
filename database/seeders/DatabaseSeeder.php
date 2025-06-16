@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
           LedgerSeeder::class,
           LedgerCategorySeeder::class,
+          PermissionSeeder::class
     ]);
     }
 }

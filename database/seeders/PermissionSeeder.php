@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PermissionSeeder extends Seeder
 {
@@ -14,33 +16,44 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = Role::create(['name' => 'admin']);
-        $user = Role::create(['name' => 'user']);
+        $adminRole = Role::create(['name' => 'admin']);
+        $userRole = Role::create(['name' => 'user']);
 
         $permissions = [
-            ['name' => 'transactions.create','group' => 'transactions'],
-            ['name' => 'transactions.edit','group' => 'transactions'],
-            ['name' => 'transactions.edit.own','group' => 'transactions'],
-            ['name' => 'transactions.destroy','group' => 'transactions'],
-            ['name' => 'transactions.destroy.own','group' => 'transactions'],
-            ['name' => 'ledgers.view', 'group' => 'ledgers'],
-            ['name' => 'ledgers.manage', 'group' => 'ledgers'],
-            ['name' => 'users.manage', 'group' => 'users'],
+            ['name' => 'transactions.create'],
+            ['name' => 'transactions.edit'],
+            ['name' => 'transactions.edit.own'],
+            ['name' => 'transactions.destroy'],
+            ['name' => 'transactions.destroy.own'],
+            ['name' => 'ledgers.view'],
+            ['name' => 'ledgers.manage'],
+            ['name' => 'users.manage'],
 
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission['name'], 'group' => $permission['group']]);
+            Permission::create(['name' => $permission['name']]);
         }
 
-        $admin->givePermissionTo('*');
+        $adminRole->syncPermissions(Permission::all());
 
-        $user->givePermissionTo([
+        $userRole->givePermissionTo([
             'transactions.create',
             'transactions.edit.own',
             'transactions.destroy.own',
 
         ]);
+
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@localhost',
+            'password' => Hash::make('admin'),
+            
+        ]);
+
+        $admin->assignRole('admin');
+
+
 
 
     }
