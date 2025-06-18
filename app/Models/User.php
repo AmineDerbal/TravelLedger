@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Traits\HasSingleRole;
 
-
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -47,4 +46,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getPermissionForCASL()
+    {
+        if ($this->hasRole('admin')) {
+            return [['action' => 'manage','subject' => 'all']];
+        }
+
+        return $this->getAllPermissions()->mapToCASL();
+    }
 }
