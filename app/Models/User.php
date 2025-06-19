@@ -53,6 +53,6 @@ class User extends Authenticatable
             return [['action' => 'manage','subject' => 'all']];
         }
 
-        return $this->getAllPermissions()->mapToCASL();
+        return $this->getAllPermissions()->mapToCASL($this->id)->toArray();
     }
 }

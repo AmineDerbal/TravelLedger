@@ -12,9 +12,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Collection::macro('mapToCasl', function () {
-            return $this->map(function ($permission) {
-                return match ($permission->name) {
+
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Collection::macro('mapToCASL', function ($userId = null) {
+            return $this->map(function ($permission) use ($userId) {
+                $mapping = [
                     'transactions.create' => [
                         'action' => 'create',
                         'subject' => 'Transaction'
@@ -26,16 +34,16 @@ class AppServiceProvider extends ServiceProvider
                     'transactions.edit.own' => [
                         'action' => 'update',
                         'subject' => 'Transaction',
-                        'conditions' => ['user_id' => $this->id]
+                        'conditions' => ['user_id' => $userId]
                     ],
                     'transactions.destroy' => [
-                        'action' => 'delete',
+                        'action' => 'destroy',
                         'subject' => 'Transaction'
                     ],
                     'transactions.destroy.own' => [
-                        'action' => 'delete',
+                        'action' => 'destroy',
                         'subject' => 'Transaction',
-                        'conditions' => ['user_id' => $this->id]
+                        'conditions' => ['user_id' => $userId]
                     ],
                     'ledgers.view' => [
                         'action' => 'view',
@@ -45,20 +53,18 @@ class AppServiceProvider extends ServiceProvider
                         'action' => 'manage',
                         'subject' => 'Ledger'
                     ],
-                     default => [
+                    'users.manage' => [
+                        'action' => 'manage',
+                        'subject' => 'User'
+                    ],
+
+                ];
+
+                return $mapping[$permission->name] ?? [
                     'action' => explode('.', $permission->name)[0],
                     'subject' => explode('.', $permission->name)[1] ?? 'all'
-                ]
-                };
+                ];
             });
         });
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        
     }
 }
