@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LedgerCategoryController;
 use App\Http\Controllers\Api\TransactionMetaController;
 use App\Http\Controllers\Api\TransactionExportController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,12 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::post('/ledger-categories/store', 'store')->name('ledger-categories.store');
         Route::put('/ledger-categories/update/{id}', 'update')->name('ledger-categories.update');
         Route::delete('/ledger-categories/{id}', 'destroy')->name('ledger-categories.destroy');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+
+        Route::get('/users/{id}/permissions', 'getPermissions')->name('users.permissions');
+
     });
 
     Route::post('/export-transactions', [TransactionExportController::class, 'export']);

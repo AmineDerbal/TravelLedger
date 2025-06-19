@@ -12,4 +12,13 @@ class UserController extends Controller
     {
         return User::all();
     }
+
+    public function getPermissions($id)
+    {
+
+        $user = User::find($id);
+        $permissions = $user->getPermissionForCASL();
+
+        return response()->json($permissions);
+    }
 }
