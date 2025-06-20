@@ -49,9 +49,6 @@ class User extends Authenticatable
 
     public function getPermissionForCASL()
     {
-        if ($this->hasRole('admin')) {
-            return [['action' => 'manage','subject' => 'all']];
-        }
 
         return $this->getAllPermissions()->mapToCASL($this->id)->toArray();
     }
