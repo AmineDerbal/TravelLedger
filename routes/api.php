@@ -58,7 +58,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
 
     Route::controller(UserController::class)->group(function () {
 
-        Route::get('/users/{id}/permissions', 'getPermissions')->name('users.permissions');
+        Route::get('/users/{id}/permissions', 'getPermissions')->name('users.permissions')->middleware('validate.user');
 
     });
 
