@@ -19,9 +19,16 @@ class ValidateUserPermission
         $user = $request->user();
         $id = $request->route('id') ?? null;
 
-        if ($user->id !== $id) {
+        $userId = (int)$user->id;
+        $routeId = (int)$id;
+
+
+
+        if ($userId !== $routeId) {
+
             abort(403, 'Access denied');
         }
+
 
         return $next($request);
     }
