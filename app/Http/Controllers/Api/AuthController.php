@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
-use App\Http\Resources\Permission\PermissionBasicResource;
 
 class AuthController extends Controller
 {
@@ -63,7 +62,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $role = $user->getRoleNames()->first();
-        $permissions = $user->getAllPermissions();
+        $permissions = $user->getPermissionForCASL();
+        \Log::info(json_encode($permissions));
 
 
         $userdata = [
@@ -71,8 +71,6 @@ class AuthController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'role' => $role,
-            'permissions' => PermissionBasicResource::collection($permissions),
 
         ];
 
@@ -87,6 +85,14 @@ class AuthController extends Controller
             null,
             true,
             true,
+        )->cookie(
+            'userAbilityRules',
+            json_encode($permissions),
+            60 * 24 * 30,
+            '/',
+            null,
+            false,
+            false
         );
 
 
