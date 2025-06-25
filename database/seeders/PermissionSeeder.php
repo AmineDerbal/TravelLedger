@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -16,10 +15,12 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $userRole = Role::firstOrCreate(['name' => 'user']);
 
         $permissions = [
+            ['name' => 'dashboard.view'],
+            ['name' => 'transactions.view'],
             ['name' => 'transactions.create'],
             ['name' => 'transactions.edit'],
             ['name' => 'transactions.edit.own'],
@@ -32,24 +33,27 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission['name']]);
+            Permission::firstOrCreate(['name' => $permission['name']]);
         }
 
         $adminRole->syncPermissions(Permission::all());
 
         $userRole->givePermissionTo([
+            'dashboard.view',
+            'transactions.view',
             'transactions.create',
             'transactions.edit.own',
             'transactions.destroy.own',
 
         ]);
 
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@localhost',
-            'password' => Hash::make('admin'),
-            
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@localhost'], // Only used to look up the user
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('admin'),
+            ]
+        );
 
         $admin->assignRole('admin');
 
