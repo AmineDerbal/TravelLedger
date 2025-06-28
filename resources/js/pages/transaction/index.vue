@@ -1,7 +1,7 @@
 <script setup>
 import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
-import useUserStore from '@/store/user';
+import useUserStore from '@/store/userStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
 
 definePage({
