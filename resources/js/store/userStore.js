@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import { apiCall, apiAction } from '@/utils/api';
 
 export default defineStore('user', {
@@ -6,6 +7,7 @@ export default defineStore('user', {
     userData: null,
     isAuthenticated: false,
     hasError: false,
+    permissions: [],
     errors: {},
   }),
   persist: ['isAuthenticated', 'userData'],
@@ -33,6 +35,10 @@ export default defineStore('user', {
       );
       if (response.status === 200) this.clearUserData();
       return response;
+    },
+
+    async getUserPermissions(id) {
+      await apiAction(() => apiCall(`users/${id}/permissions`), this);
     },
   },
 });

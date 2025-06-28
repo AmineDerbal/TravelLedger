@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import useUserStore from '@/store/user';
+import useUserStore from '@/store/userStore';
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png';

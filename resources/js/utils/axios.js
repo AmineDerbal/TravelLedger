@@ -1,5 +1,5 @@
 import axios from 'axios';
-import useUSerStore from '@/store/user';
+import useUSerStore from '@/store/userStore';
 
 const configureAxios = () => {
   axios.defaults.withCredentials = true;

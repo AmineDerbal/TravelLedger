@@ -1,4 +1,4 @@
-import useUserStore from '@/store/user';
+import useUserStore from '@/store/userStore';
 export const setupGuards = (router) => {
   // 👉 router.beforeEach
   // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
