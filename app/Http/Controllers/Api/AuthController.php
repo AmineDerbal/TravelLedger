@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -63,8 +64,6 @@ class AuthController extends Controller
 
         $role = $user->getRoleNames()->first();
         $permissions = $user->getPermissionForCASL();
-        \Log::info(json_encode($permissions));
-
 
         $userdata = [
 
@@ -101,10 +100,19 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
 
-        $request->user()->currentAccessToken()->delete();
+        $accessToken = $request->cookie('access_token');
+
+        if ($accessToken) {
+            $tokenId = explode('|', $accessToken)[0]; // Token format is usually id|token
+            $token = PersonalAccessToken::find($tokenId);
+
+            if ($token) {
+                $token->delete();
+            }
+        }
 
         return response()->json([
             'message' => 'Logout successful',
-        ], 200)->withCookie(Cookie::forget('access_token'))->withCookie(Cookie::forget('user_data'));
+        ], 200)->withCookie(Cookie::forget('access_token'))->withCookie(Cookie::forget('userAbilityRules'));
     }
 }
