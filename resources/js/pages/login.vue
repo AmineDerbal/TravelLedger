@@ -39,9 +39,6 @@ const router = useRouter();
 const login = async () => {
   const response = await userStore.login(form.value);
   if (response.status === 200) {
-    const userAbilityRules = useCookie('userAbilityRules').value;
-    const ability = useAbility();
-    ability.update(userAbilityRules);
     userStore.setIsAuthenticated(true);
     router.push({ path: '/' });
   }

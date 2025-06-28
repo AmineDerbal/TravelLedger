@@ -40,4 +40,7 @@ definePage({
     requiresAuth: true,
   },
 });
+const userAbilityRules = useCookie('userAbilityRules').value;
+const ability = useAbility();
+ability.update(userAbilityRules);
 </script>
