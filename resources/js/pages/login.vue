@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ability } from '@/plugins/casl/ability';
 import useUserStore from '@/store/userStore';
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
@@ -39,6 +40,8 @@ const router = useRouter();
 const login = async () => {
   const response = await userStore.login(form.value);
   if (response.status === 200) {
+    const userAbilityRules = useCookie('userAbilityRules').value;
+    ability.update(userAbilityRules);
     userStore.setIsAuthenticated(true);
     router.push({ path: '/' });
   }
