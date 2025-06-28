@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
         Collection::macro('mapToCASL', function ($userId = null) {
             return $this->map(function ($permission) use ($userId) {
                 $mapping = [
+                    'transactions.view' => [
+                        'action' => 'view',
+                        'subject' => 'Transaction'
+                    ],
                     'transactions.create' => [
                         'action' => 'create',
                         'subject' => 'Transaction'
@@ -56,6 +60,10 @@ class AppServiceProvider extends ServiceProvider
                     'users.manage' => [
                         'action' => 'manage',
                         'subject' => 'User'
+                    ],
+                    'dashboard.view' => [
+                        'action' => 'view',
+                        'subject' => 'Dashboard'
                     ],
 
                 ];

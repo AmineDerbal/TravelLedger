@@ -3,6 +3,8 @@ export default [
     title: 'Home',
     to: { name: 'root' },
     icon: { icon: 'tabler-smart-home' },
+    subject: 'Dashboard',
+    action: 'view',
   },
   {
     title: 'Second page',
@@ -13,6 +15,8 @@ export default [
     title: 'Transactions',
     icon: { icon: 'tabler-transaction-euro' },
     to: { name: 'transaction' },
+    subject: 'Transaction',
+    action: 'view',
   },
   {
     title: 'Parameters',
