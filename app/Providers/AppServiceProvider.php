@@ -65,6 +65,10 @@ class AppServiceProvider extends ServiceProvider
                         'action' => 'view',
                         'subject' => 'Dashboard'
                     ],
+                    'parameters.view' => [
+                        'action' => 'view',
+                        'subject' => 'Parameter'
+                    ],
 
                 ];
 

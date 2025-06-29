@@ -26,6 +26,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'transactions.edit.own'],
             ['name' => 'transactions.destroy'],
             ['name' => 'transactions.destroy.own'],
+            ['name' => 'parameters.view'],
             ['name' => 'ledgers.view'],
             ['name' => 'ledgers.manage'],
             ['name' => 'users.manage'],
