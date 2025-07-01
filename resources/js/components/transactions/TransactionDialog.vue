@@ -1,4 +1,6 @@
 <script setup>
+import { useAbility } from '@/plugins/casl/composables/useAbility';
+
 const props = defineProps({
   isDialogVisible: {
     type: Boolean,
@@ -32,6 +34,8 @@ const emit = defineEmits([
   'update',
   'closeEditDialog',
 ]);
+
+const ability = useAbility();
 
 const onSubmit = () => {
   let payLoad = {
@@ -126,6 +130,7 @@ watch(
   >
     <template #activator="{ props }">
       <VBtn
+        v-if="ability.can('create', 'Transaction')"
         v-bind="props"
         variant="tonal"
         class="mb-2"
