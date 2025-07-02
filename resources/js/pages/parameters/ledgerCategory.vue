@@ -1,4 +1,5 @@
 <script setup>
+import { useAbility } from '@/plugins/casl/composables/useAbility';
 import useLedgerCategoryStore from '@/store/ledgerCategoryStore';
 
 definePage({
@@ -8,6 +9,7 @@ definePage({
 });
 
 const ledgerCategoryStore = useLedgerCategoryStore();
+const ability = useAbility();
 
 const ledgerCategories = computed(() => ledgerCategoryStore.ledgerCategories);
 const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
@@ -104,6 +106,7 @@ onBeforeMount(async () => {
           md="4"
         >
           <VBtn
+            v-if="ability.can('manage', 'Ledger')"
             variant="tonal"
             color="primary"
             @click="isDialogVisible = true"
