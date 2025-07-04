@@ -19,17 +19,17 @@ class PermissionSeeder extends Seeder
         $userRole = Role::firstOrCreate(['name' => 'user']);
 
         $permissions = [
-            ['name' => 'dashboard.view'],
-            ['name' => 'transactions.view'],
-            ['name' => 'transactions.create'],
-            ['name' => 'transactions.edit'],
-            ['name' => 'transactions.edit.own'],
-            ['name' => 'transactions.destroy'],
-            ['name' => 'transactions.destroy.own'],
-            ['name' => 'parameters.view'],
-            ['name' => 'ledgers.view'],
-            ['name' => 'ledgers.manage'],
-            ['name' => 'users.manage'],
+            ['name' => 'view Dashboard'],
+            ['name' => 'view Transaction'],
+            ['name' => 'create Transaction'],
+            ['name' => 'edit Transaction'],
+            ['name' => 'edit Transaction own'],
+            ['name' => 'destroy Transaction'],
+            ['name' => 'destroy Transaction own'],
+            ['name' => 'view Parameter'],
+            ['name' => 'view Ledger'],
+            ['name' => 'manage Ledger'],
+            ['name' => 'manage User'],
 
         ];
 
@@ -40,11 +40,11 @@ class PermissionSeeder extends Seeder
         $adminRole->syncPermissions(Permission::all());
 
         $userRole->givePermissionTo([
-            'dashboard.view',
-            'transactions.view',
-            'transactions.create',
-            'transactions.edit.own',
-            'transactions.destroy.own',
+            'view Dashboard',
+            'view Transaction',
+            'create Transaction',
+            'edit Transaction own',
+            'destroy Transaction own',
 
         ]);
 

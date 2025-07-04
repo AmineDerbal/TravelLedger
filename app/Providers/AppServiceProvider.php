@@ -22,60 +22,23 @@ class AppServiceProvider extends ServiceProvider
     {
         Collection::macro('mapToCASL', function ($userId = null) {
             return $this->map(function ($permission) use ($userId) {
-                $mapping = [
-                    'transactions.view' => [
-                        'action' => 'view',
-                        'subject' => 'Transaction'
-                    ],
-                    'transactions.create' => [
-                        'action' => 'create',
-                        'subject' => 'Transaction'
-                    ],
-                    'transactions.edit' => [
-                        'action' => 'update',
-                        'subject' => 'Transaction'
-                    ],
-                    'transactions.edit.own' => [
-                        'action' => 'update',
-                        'subject' => 'Transaction',
-                        'conditions' => ['user_id' => $userId]
-                    ],
-                    'transactions.destroy' => [
-                        'action' => 'destroy',
-                        'subject' => 'Transaction'
-                    ],
-                    'transactions.destroy.own' => [
-                        'action' => 'destroy',
-                        'subject' => 'Transaction',
-                        'conditions' => ['user_id' => $userId]
-                    ],
-                    'ledgers.view' => [
-                        'action' => 'view',
-                        'subject' => 'Ledger'
-                    ],
-                    'ledgers.manage' => [
-                        'action' => 'manage',
-                        'subject' => 'Ledger'
-                    ],
-                    'users.manage' => [
-                        'action' => 'manage',
-                        'subject' => 'User'
-                    ],
-                    'dashboard.view' => [
-                        'action' => 'view',
-                        'subject' => 'Dashboard'
-                    ],
-                    'parameters.view' => [
-                        'action' => 'view',
-                        'subject' => 'Parameter'
-                    ],
 
-                ];
+                $splitPermission = explode(' ', $permission->name);
+                \Log::info($splitPermission);
+                $action = $splitPermission[0];
+                $subject = $splitPermission[1];
+                $ownership = $splitPermission[2] ?? null;
 
-                return $mapping[$permission->name] ?? [
-                    'action' => explode('.', $permission->name)[0],
-                    'subject' => explode('.', $permission->name)[1] ?? 'all'
-                ];
+                $rule = [
+                'action' => $action,
+                'subject' => $subject,
+            ];
+
+                if ($ownership === 'own' && $userId !== null) {
+                    $rule['conditions'] = ['user_id' => $userId];
+                }
+
+                return $rule;
             });
         });
     }
