@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
             return $this->map(function ($permission) use ($userId) {
 
                 $splitPermission = explode(' ', $permission->name);
-                \Log::info($splitPermission);
                 $action = $splitPermission[0];
                 $subject = $splitPermission[1];
                 $ownership = $splitPermission[2] ?? null;
