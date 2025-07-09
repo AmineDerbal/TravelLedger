@@ -67,9 +67,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'token.cookie' => \App\Http\Middleware\SetTokenFromCookie::class,
         'validate.user' => \App\Http\Middleware\ValidateUserPermission::class,
-           'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-    'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-    'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'check.permission' => \App\Http\Middleware\CheckPermission::class,
+        'check.ownership' => \App\Http\Middleware\CheckOwnershipPermission::class,
     ];
 
     protected $middlewarePriority = [
