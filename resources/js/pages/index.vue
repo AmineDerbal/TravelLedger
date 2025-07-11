@@ -38,6 +38,8 @@ import { definePage } from 'vue-router/auto';
 definePage({
   meta: {
     requiresAuth: true,
+    action: 'view',
+    subject: 'Dashboard',
   },
 });
 </script>

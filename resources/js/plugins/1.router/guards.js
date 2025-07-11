@@ -1,3 +1,4 @@
+import { canNavigate } from '@/@layouts/plugins/casl';
 import useUserStore from '@/store/userStore';
 export const setupGuards = (router) => {
   // 👉 router.beforeEach
@@ -23,6 +24,7 @@ export const setupGuards = (router) => {
     // If user is not logged in, redirect to login page.
 
     if (!isLoggedIn && to.meta.requiresAuth) return '/login';
+    if (!canNavigate(to) && isLoggedIn) return 'non-authorized';
 
     return;
   });
