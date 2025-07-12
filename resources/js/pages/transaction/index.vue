@@ -7,6 +7,8 @@ import { getTodayDate, getYesterdayDate } from '@/utils/dates';
 definePage({
   meta: {
     requiresAuth: true,
+    action: 'view',
+    subject: 'Transaction',
   },
 });
 
