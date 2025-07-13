@@ -6,6 +6,9 @@ import { useRouter } from 'vue-router';
 const userStore = useUserStore();
 const router = useRouter();
 
+const userData = computed(() => userStore.userData);
+const { name, role } = toRefs(userData.value);
+
 const logout = async () => {
   const response = await userStore.logout(userStore.userData);
   if (response.status === 200) {
@@ -60,9 +63,9 @@ const logout = async () => {
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ name }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>{{ role }}</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
