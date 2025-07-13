@@ -161,6 +161,7 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
+  const updateAbility: typeof import('./resources/js/utils/ability.js')['updateAbility']
   const urlValidator: typeof import('./resources/js/@core/utils/validators.js')['urlValidator']
   const useAbility: typeof import('./resources/js/plugins/casl/composables/useAbility.js')['useAbility']
   const useAbs: typeof import('@vueuse/math')['useAbs']
@@ -528,6 +529,7 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateAbility: UnwrapRef<typeof import('./resources/js/utils/ability.js')['updateAbility']>
     readonly urlValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['urlValidator']>
     readonly useAbility: UnwrapRef<typeof import('./resources/js/plugins/casl/composables/useAbility.js')['useAbility']>
     readonly useAbs: UnwrapRef<typeof import('@vueuse/math')['useAbs']>

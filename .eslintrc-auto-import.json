@@ -367,6 +367,7 @@
     "getTodayDate": true,
     "getYesterdayDate": true,
     "downloadExcelFile": true,
-    "formatDateToDdMmYyyy": true
+    "formatDateToDdMmYyyy": true,
+    "updateAbility": true
   }
 }
