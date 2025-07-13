@@ -23,9 +23,9 @@ class PermissionSeeder extends Seeder
             ['name' => 'view Transaction'],
             ['name' => 'create Transaction'],
             ['name' => 'edit Transaction'],
-            ['name' => 'edit Transaction own'],
+            ['name' => 'edit_own Transaction'],
             ['name' => 'destroy Transaction'],
-            ['name' => 'destroy Transaction own'],
+            ['name' => 'destroy_own Transaction'],
             ['name' => 'view Parameter'],
             ['name' => 'view Ledger'],
             ['name' => 'manage Ledger'],
@@ -43,8 +43,8 @@ class PermissionSeeder extends Seeder
             'view Dashboard',
             'view Transaction',
             'create Transaction',
-            'edit Transaction own',
-            'destroy Transaction own',
+            'edit_own Transaction',
+            'destroy_own Transaction',
 
         ]);
 

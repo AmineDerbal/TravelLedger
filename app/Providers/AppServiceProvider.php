@@ -26,16 +26,11 @@ class AppServiceProvider extends ServiceProvider
                 $splitPermission = explode(' ', $permission->name);
                 $action = $splitPermission[0];
                 $subject = $splitPermission[1];
-                $ownership = $splitPermission[2] ?? null;
-
+           
                 $rule = [
                 'action' => $action,
                 'subject' => $subject,
             ];
-
-                if ($ownership === 'own' && $userId !== null) {
-                    $rule['conditions'] = ['user_id' => $userId];
-                }
 
                 return $rule;
             });
