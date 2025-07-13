@@ -42,4 +42,8 @@ definePage({
     subject: 'Dashboard',
   },
 });
+const ability = useAbility();
+const userAbilityRules = useCookie('userAbilityRules').value;
+
+updateAbility(ability, userAbilityRules);
 </script>
