@@ -1,5 +1,6 @@
 <script setup>
 import { formatDateToDdMmYyyy } from '@/utils/dates';
+import { useAbility } from '@/plugins/casl/composables/useAbility';
 const props = defineProps({
   transactions: {
     type: Array,
@@ -9,7 +10,13 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  user: {
+    type: Object,
+    required: true,
+  },
 });
+
+const ability = useAbility();
 
 const emit = defineEmits([
   'openEditDialog',
@@ -114,7 +121,14 @@ const resolveCategoryLabel = (categoryMSG) => {
           <td>{{ item.ledger.name }}</td>
           <td>
             <div class="d-flex gap-1">
-              <IconBtn @click="openEditDialog(item)">
+              <IconBtn
+                @click="openEditDialog(item)"
+                v-if="
+                  (ability.can('edit_own', 'Transaction') &&
+                    item.user.id === props.user.id) ||
+                  ability.can('edit', 'Transaction')
+                "
+              >
                 <VIcon icon="tabler-edit" />
               </IconBtn>
               <IconBtn @click="handleDelete(item.id)">

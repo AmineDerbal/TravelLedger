@@ -285,6 +285,7 @@ onBeforeMount(async () => {
     <TransactionTable
       :transactions="transactions"
       :headers="headers"
+      :user="user"
       @openEditDialog="openEditDialog"
       @deleteTransaction="handleTransactionDelete"
     />
