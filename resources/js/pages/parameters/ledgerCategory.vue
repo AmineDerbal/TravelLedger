@@ -5,6 +5,8 @@ import useLedgerCategoryStore from '@/store/ledgerCategoryStore';
 definePage({
   meta: {
     requiresAuth: true,
+    action: 'view',
+    subject: 'Ledger',
   },
 });
 

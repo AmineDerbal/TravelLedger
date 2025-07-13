@@ -3,6 +3,8 @@ import useLedgerStore from '@/store/ledgerStore';
 definePage({
   meta: {
     requiresAuth: true,
+    action: 'view',
+    subject: 'Ledger',
   },
 });
 
