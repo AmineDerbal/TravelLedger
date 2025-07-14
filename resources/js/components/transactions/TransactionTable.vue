@@ -1,6 +1,7 @@
 <script setup>
 import { formatDateToDdMmYyyy } from '@/utils/dates';
 import { useAbility } from '@/plugins/casl/composables/useAbility';
+
 const props = defineProps({
   transactions: {
     type: Array,
@@ -124,14 +125,29 @@ const resolveCategoryLabel = (categoryMSG) => {
               <IconBtn
                 @click="openEditDialog(item)"
                 v-if="
-                  (ability.can('edit_own', 'Transaction') &&
-                    item.user.id === props.user.id) ||
-                  ability.can('edit', 'Transaction')
+                  canEditOrDestroy(
+                    'edit_own',
+                    'Transaction',
+                    item,
+                    user,
+                    ability,
+                  )
                 "
               >
                 <VIcon icon="tabler-edit" />
               </IconBtn>
-              <IconBtn @click="handleDelete(item.id)">
+              <IconBtn
+                @click="handleDelete(item.id)"
+                v-if="
+                  canEditOrDestroy(
+                    'destroy_own',
+                    'Transaction',
+                    item,
+                    user,
+                    ability,
+                  )
+                "
+              >
                 <VIcon icon="tabler-trash" />
               </IconBtn>
             </div>
