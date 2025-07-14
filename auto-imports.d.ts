@@ -19,6 +19,7 @@ declare global {
   const avatarText: typeof import('./resources/js/@core/utils/formatters.js')['avatarText']
   const axios: typeof import('./resources/js/utils/axios.js')['default']
   const betweenValidator: typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']
+  const canEditOrDestroy: typeof import('./resources/js/utils/ability.js')['canEditOrDestroy']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -387,6 +388,7 @@ declare module 'vue' {
     readonly avatarText: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['avatarText']>
     readonly axios: UnwrapRef<typeof import('./resources/js/utils/axios.js')['default']>
     readonly betweenValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['betweenValidator']>
+    readonly canEditOrDestroy: UnwrapRef<typeof import('./resources/js/utils/ability.js')['canEditOrDestroy']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
