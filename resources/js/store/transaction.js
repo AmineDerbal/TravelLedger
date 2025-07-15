@@ -50,7 +50,7 @@ export default defineStore('transaction', {
 
     async updateTransaction(data) {
       return await apiAction(
-        () => apiCall('transactions/update', 'PUT', data),
+        () => apiCall(`transactions/${data.id}/update`, 'PUT', data),
         this,
       );
     },

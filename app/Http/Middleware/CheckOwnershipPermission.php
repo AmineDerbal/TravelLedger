@@ -23,14 +23,17 @@ class CheckOwnershipPermission
 
         $role = $user->roles()->first();
 
-        if($role->name == 'admin') {
+        if ($role->name == 'admin' && $role->hasPermissionTo($permission)) {
            return $next($request);
          }
 
          // Check for ownership permission
-        $ownPermission = $permission . ' own';
-        if ($user->hasPermissionTo($ownPermission) || $role->hasPermissionTo($permission)) {
-            
+        $splitPermission = explode(' ', $permission);
+        $splitPermission[0] = $splitPermission[0].'_own';
+        $ownPermission = implode(' ', $splitPermission);
+  
+        if ($role->hasPermissionTo($ownPermission) && $user->id == $request->user_id) {
+            return $next($request);
         }
 
            abort(403, 'Forbidden - Missing permission: '.$permission);
