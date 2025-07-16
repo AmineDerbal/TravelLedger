@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Resources\User\BasicUserResource;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return User::all();
+       $user = User::all();
+       return response()->json(BasicUserResource::collection($user));
     }
 
     public function getPermissions($id)
