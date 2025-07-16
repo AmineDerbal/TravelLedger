@@ -46,7 +46,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
             Route::post('transactions/store', 'store')->name('transactions.store');
     });
      
-        Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
+    Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
   
         Route::middleware(['check.ownership:edit Transaction'])->group(function () {
             Route::put('transactions/{id}/update', 'update')->name('transactions.update');
@@ -66,15 +66,13 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
     });
 
     Route::controller(UserController::class)->group(function () {
-
+        Route::get('/users', 'index')->name('users.index');
         Route::get('/users/{id}/permissions', 'getPermissions')->name('users.permissions')->middleware('validate.user');
 
     });
 
     Route::post('/export-transactions', [TransactionExportController::class, 'export']);
  
-
-
 });
 
 
