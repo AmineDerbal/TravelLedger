@@ -5,6 +5,7 @@ import { apiCall, apiAction } from '@/utils/api';
 export default defineStore('user', {
   state: () => ({
     userData: null,
+    users: [],
     isAuthenticated: false,
     hasError: false,
     permissions: [],
@@ -20,6 +21,15 @@ export default defineStore('user', {
     setIsAuthenticated(value) {
       this.isAuthenticated = value;
     },
+
+    async getUsers() {
+      return await apiAction(
+        () => apiCall('users'),
+        this,
+        (data) => (this.users = data),
+      );
+    },
+
     async login(data) {
       return await apiAction(
         () => apiCall('auth/login', 'POST', data),
