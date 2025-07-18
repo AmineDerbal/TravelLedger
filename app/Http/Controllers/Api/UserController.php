@@ -10,8 +10,8 @@ class UserController extends Controller
 {
     public function index()
     {
-       $user = User::all();
-       return response()->json(BasicUserResource::collection($user));
+        $users = User::all();
+        return response()->json(BasicUserResource::collection($users));
     }
 
     public function getPermissions($id)

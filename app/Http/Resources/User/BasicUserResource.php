@@ -18,7 +18,8 @@ class BasicUserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->roles->first()->name
+            'role' => $this->roles->first()->name,
+            'is_active' => $this->is_active == 1 ? true : false,
         ];
     }
 }
