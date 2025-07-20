@@ -40,7 +40,7 @@ class TransactionService
                 return $this->createTransaction($newData);
             }
 
-            return $this->jsonSuccess('Transaction created successfully', 201);
+            return $this->jsonResponse('Transaction created successfully', 201);
         });
     }
 
@@ -48,9 +48,8 @@ class TransactionService
     {
         $transaction = Transaction::find($data['id']);
         if (!$transaction) {
-            return $this->jsonError('Transaction not found', 404);
+            return $this->jsonResponse('Transaction not found', 404);
         }
-
 
 
         $amountDifference = $data['amount'] - $transaction->amount;
@@ -60,7 +59,7 @@ class TransactionService
             $this->UpdateLedgerBalance($data['ledger_id'], $data['type'], $amountDifference);
         }
 
-        return $this->jsonSuccess('Transaction updated successfully', 200);
+        return $this->jsonResponse('Transaction updated successfully', 200);
     }
 
     public function destroyTransaction($transaction)
@@ -69,10 +68,8 @@ class TransactionService
         $amount = -$transaction->amount;
         $type = $transaction->type;
         $ledgerId = $transaction->ledger_id;
-        $linkdedId = null;
-        if ($transaction->linkedTransaction !== null || $transaction->reverseLinkedTransaction !== null) {
-            $linkdedId = $transaction->linkedTransaction->id ?? $transaction->reverseLinkedTransaction->id;
-        }
+        $linkdedId = $this->getLinkedTransaction($transaction);
+
         $transaction->delete();
         $this->UpdateLedgerBalance($ledgerId, $type, $amount);
 
@@ -80,7 +77,25 @@ class TransactionService
             $this->destroyTransaction(Transaction::find($linkdedId));
         }
 
-        return $this->jsonSuccess('Transaction deleted successfully', 200);
+        return $this->jsonResponse('Transaction deleted successfully', 200);
+    }
+
+    public function deactivateTranscation($transaction)
+    {
+        $amount = -$transaction->amount;
+        $type = $transaction->type;
+        $ledgerId = $transaction->ledger_id;
+        $linkdedId = $this->getLinkedTransaction($transaction);
+
+        $transaction->update(['is_active' => 0]);
+        $this->UpdateLedgerBalance($ledgerId, $type, $amount);
+
+        if ($linkdedId !== null) {
+            $this->deactivateTranscation(Transaction::find($linkdedId));
+        }
+
+        return $this->jsonResponse('Transaction deactivated successfully', 200);
+
     }
 
     public function calculateTransactionTotal(Collection $transactions): array
@@ -106,12 +121,19 @@ class TransactionService
         $ledger->updateAmount($amount, $type);
     }
 
-    private function jsonSuccess(string $message, int $satus = 200): JsonResponse
+    private function getLinkedTransaction($transaction): ?int
+    {
+        $linkdedId = null;
+        if ($transaction->linkedTransaction !== null || $transaction->reverseLinkedTransaction !== null) {
+            $linkdedId = $transaction->linkedTransaction->id ?? $transaction->reverseLinkedTransaction->id;
+        }
+
+        return $linkdedId;
+    }
+
+    private function jsonResponse(string $message, int $satus = 200): JsonResponse
     {
         return response()->json(['message' => $message], $satus);
     }
-    private function jsonError(string $message, int $status): JsonResponse
-    {
-        return response()->json(['message' => $message], $status);
-    }
+
 }
