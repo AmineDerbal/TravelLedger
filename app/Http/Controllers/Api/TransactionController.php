@@ -21,7 +21,7 @@ class TransactionController extends Controller
     public function getTransactionsByDateRange(GetTransactionsByDateRangeRequest $request)
     {
         $data = $request->validated();
-        $transactions = Transaction::with('ledgerCategory')->where('ledger_id', $data['ledger_id'])
+        $transactions = Transaction::with('ledgerCategory')->where('ledger_id', $data['ledger_id'])->where('is_active', 1)
         ->whereBetween('date', [$data['start_date'], $data['end_date']])
         ->get();
 
