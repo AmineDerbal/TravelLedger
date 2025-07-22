@@ -66,13 +66,8 @@ class TransactionService
     public function destroyTransaction($transaction)
     {
 
-        $amount = -$transaction->amount;
-        $type = $transaction->type;
-        $ledgerId = $transaction->ledger_id;
         $linkedId = $this->getLinkedTransaction($transaction);
-
         $transaction->delete();
-        $this->updateLedgerBalance($ledgerId, $type, $amount);
 
         if ($linkedId !== null) {
             $this->destroyTransaction(Transaction::find($linkedId));
@@ -83,10 +78,8 @@ class TransactionService
 
     public function deactivateTranscation($transaction)
     {
-        $amount = -$transaction->amount;
-        $type = $transaction->type;
-        $ledgerId = $transaction->ledger_id;
-        $linkedId = $this->getLinkedTransaction($transaction);
+        ['amount' => $amount, 'type' => $type, 'ledgerId' => $ledgerId, 'linked' => $linkedId] =
+    $this->extractTransactionDetails($transaction);
 
         $transaction->update(['is_active' => 0]);
         $this->updateLedgerBalance($ledgerId, $type, $amount);
@@ -135,6 +128,16 @@ class TransactionService
     private function jsonResponse(string $message, int $status = 200): JsonResponse
     {
         return response()->json(['message' => $message], $status);
+    }
+
+    private function extractTransactionDetails(Transaction $transaction): array
+    {
+        return [
+            'amount'   => -$transaction->amount,
+            'type'     => $transaction->type,
+            'ledgerId' => $transaction->ledger_id,
+            'linked'   => $this->getLinkedTransaction($transaction),
+        ];
     }
 
 }

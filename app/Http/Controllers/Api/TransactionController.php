@@ -52,8 +52,17 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::with('linkedTransaction', 'reverseLinkedTransaction')->find($id);
         if (!$transaction) {
-            return $this->jsonError('Transaction not found', 404);
+            return response()->json(['message' => 'Transaction not found'], 404);
         }
         return $this->transactionService->destroyTransaction($transaction);
+    }
+
+    public function deactivate($id)
+    {
+        $transaction = Transaction::with('linkedTransaction', 'reverseLinkedTransaction')->find($id);
+        if (!$transaction) {
+            return $this->jsonError('Transaction not found', 404);
+        }
+        return $this->transactionService->deactivateTranscation($transaction);
     }
 }
