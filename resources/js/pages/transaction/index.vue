@@ -3,6 +3,7 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
+import { displayToast } from '@/utils/toast';
 
 definePage({
   meta: {
@@ -116,6 +117,7 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
     ? await transactionStore.updateTransaction(data)
     : await transactionStore.storeTransaction(data);
   const expectedStatus = isUpdating ? 200 : 201;
+  displayToast(expectedStatus, response.status, response.data.message);
 
   if (response.status === expectedStatus) {
     await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
@@ -127,7 +129,9 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
 
 const handleTransactionDelete = async (id) => {
   const response = await transactionStore.deleteTransaction(id);
-  if (response.status === 200) {
+  const expectedStatus = 200;
+  displayToast(expectedStatus, response.status, response.data.message);
+  if (response.status === expectedStatus) {
     await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
     await transactionStore.getTransactionsByDateRange(rangeDateData.value);
   }
