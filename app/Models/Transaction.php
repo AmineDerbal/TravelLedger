@@ -19,6 +19,7 @@ class Transaction extends Model
         'profit',
         'date',
         'description',
+        'is_active'
     ];
 
     public function user()
