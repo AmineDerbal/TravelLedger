@@ -369,6 +369,7 @@
     "downloadExcelFile": true,
     "formatDateToDdMmYyyy": true,
     "updateAbility": true,
-    "canEditOrDestroy": true
+    "canEditOrDestroy": true,
+    "displayToast": true
   }
 }
