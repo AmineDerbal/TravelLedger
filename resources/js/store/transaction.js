@@ -62,6 +62,13 @@ export default defineStore('transaction', {
       );
     },
 
+    async deactivateTransaction(id) {
+      return await apiAction(
+        () => apiCall(`transactions/${id}/deactivate`, 'PUT'),
+        this,
+      );
+    },
+
     async downloadExcelTransactions(data) {
       return await apiAction(async () => {
         return await apiCall('export-transactions', 'POST', data, 'blob');

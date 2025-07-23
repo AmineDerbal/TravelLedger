@@ -41,17 +41,18 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::get('transaction-types', 'types')->name('transaction-types');
     });
 
-   Route::controller(TransactionController::class)->group(function () {
+    Route::controller(TransactionController::class)->group(function () {
         Route::middleware(['check.permission:create Transaction'])->group(function () {
             Route::post('transactions/store', 'store')->name('transactions.store');
-    });
-     
-    Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
-  
+        });
+
+        Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
+
         Route::middleware(['check.ownership:edit Transaction'])->group(function () {
             Route::put('transactions/{id}/update', 'update')->name('transactions.update');
+            Route::put('transactions/{id}/deactivate', 'deactivate')->name('transactions.deactivate');
             Route::delete('transactions/{id}', 'destroy')->name('transactions.destroy');
-        }); 
+        });
     });
 
     Route::controller(LedgerCategoryController::class)->group(function () {
@@ -62,7 +63,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
             Route::post('/ledger-categories/store', 'store')->name('ledger-categories.store');
             Route::put('/ledger-categories/update/{id}', 'update')->name('ledger-categories.update');
             Route::delete('/ledger-categories/{id}', 'destroy')->name('ledger-categories.destroy');
-        });   
+        });
     });
 
     Route::controller(UserController::class)->group(function () {
@@ -72,7 +73,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
     });
 
     Route::post('/export-transactions', [TransactionExportController::class, 'export']);
- 
+
 });
 
 

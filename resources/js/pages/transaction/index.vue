@@ -128,7 +128,7 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
 };
 
 const handleTransactionDelete = async (id) => {
-  const response = await transactionStore.deleteTransaction(id);
+  const response = await transactionStore.deactivateTransaction(id);
   const expectedStatus = 200;
   displayToast(expectedStatus, response.status, response.data.message);
   if (response.status === expectedStatus) {
