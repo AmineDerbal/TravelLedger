@@ -88,7 +88,7 @@ class TransactionService
             $this->deactivateTranscation(Transaction::find($linkedId));
         }
 
-        return $this->jsonResponse('Transaction deactivated successfully', 200);
+        return $this->jsonResponse('Transaction deleted successfully', 200);
 
     }
 
