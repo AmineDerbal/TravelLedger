@@ -16,7 +16,6 @@ class Transaction extends Model
         'linked_transaction_id',
         'type',
         'amount',
-        'profit',
         'date',
         'description',
         'is_active'

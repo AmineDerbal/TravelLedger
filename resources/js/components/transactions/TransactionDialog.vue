@@ -43,7 +43,6 @@ const onSubmit = () => {
     ledger_id: form.ledger.id,
     ledger_category_id: form.category.id,
     type: form.type.value,
-    profit: form.profit ? form.profit : null,
   };
 
   if (props.isEdit) {
@@ -85,9 +84,7 @@ const baseIsFormValid = () => {
 };
 
 const isFormValid = computed(() => {
-  return form.ledger?.name === 'RTW' && form.type?.label === 'Debit'
-    ? baseIsFormValid() && form.profit > 0
-    : baseIsFormValid();
+  return baseIsFormValid();
 });
 
 const filteredCategories = computed(() => {
@@ -198,20 +195,7 @@ watch(
               :disabled="!form.category"
             />
           </VCol>
-          <VCol
-            cols="12"
-            v-if="form.ledger?.name === 'RTW' && form.type?.label === 'Debit'"
-          >
-            <AppTextField
-              v-model="form.profit"
-              type="number"
-              suffix="DZD"
-              min="0"
-              label="Profit"
-              placeholder="Profit"
-              :disabled="!form.category"
-            />
-          </VCol>
+
           <VCol cols="12">
             <AppDateTimePicker
               v-model="form.date"
