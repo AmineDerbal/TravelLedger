@@ -49,13 +49,7 @@ class TransactionService
     public function destroyTransaction($transaction)
     {
 
-        $linkedId = $this->getLinkedTransaction($transaction);
         $transaction->delete();
-
-        if ($linkedId !== null) {
-            $this->destroyTransaction(Transaction::find($linkedId));
-        }
-
         return $this->jsonResponse('Transaction deleted successfully', 200);
     }
 
