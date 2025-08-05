@@ -25,6 +25,7 @@ declare module 'vue-router/auto-routes' {
     'parameters-ledger': RouteRecordInfo<'parameters-ledger', '/parameters/ledger', Record<never, never>, Record<never, never>>,
     'parameters-ledger-category': RouteRecordInfo<'parameters-ledger-category', '/parameters/ledgerCategory', Record<never, never>, Record<never, never>>,
     'parameters-user': RouteRecordInfo<'parameters-user', '/parameters/user', Record<never, never>, Record<never, never>>,
+    'parameters-user-create': RouteRecordInfo<'parameters-user-create', '/parameters/user-create', Record<never, never>, Record<never, never>>,
     'second-page': RouteRecordInfo<'second-page', '/second-page', Record<never, never>, Record<never, never>>,
     'transaction': RouteRecordInfo<'transaction', '/transaction', Record<never, never>, Record<never, never>>,
   }

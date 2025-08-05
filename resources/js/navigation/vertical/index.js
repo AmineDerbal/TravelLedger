@@ -24,18 +24,38 @@ export default [
 
     children: [
       {
-        title: 'Ledger',
+        title: 'Ledgers',
         to: { name: 'parameters-ledger' },
         icon: { icon: 'tabler-currency-dollar' },
         subject: 'Ledger',
         action: 'view',
       },
       {
-        title: 'Ledger Category',
+        title: 'Ledger Categories',
         to: { name: 'parameters-ledger-category' },
         icon: { icon: 'tabler-category' },
         subject: 'Ledger',
         action: 'view',
+      },
+      {
+        title: 'users',
+        icon: { icon: 'tabler-users' },
+        children: [
+          {
+            title: 'Users list',
+            to: { name: 'parameters-user' },
+            icon: { icon: 'tabler-users' },
+            subject: 'User',
+            action: 'manage',
+          },
+          {
+            title: 'Add User',
+            to: { name: 'parameters-user-create' },
+            icon: { icon: 'tabler-user-plus' },
+            subject: 'User',
+            action: 'manage',
+          },
+        ],
       },
     ],
   },
