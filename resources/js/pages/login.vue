@@ -12,6 +12,7 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png';
 import authV2MaskLight from '@images/pages/misc-mask-light.png';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
 import { themeConfig } from '@themeConfig';
+
 definePage({
   meta: {
     layout: 'blank',
@@ -37,11 +38,19 @@ const authThemeImg = useGenerateImageVariant(
 );
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark);
 const router = useRouter();
+
+const loginSuccess = async () => {
+  const userAbilityRules = useCookie('userAbilityRules').value;
+  ability.update(userAbilityRules);
+  userStore.setIsAuthenticated(true);
+
+  await router.push({ path: '/' });
+};
 const login = async () => {
   const response = await userStore.login(form.value);
+
   if (response.status === 200) {
-    userStore.setIsAuthenticated(true);
-    router.push({ path: '/' });
+    await loginSuccess();
   }
 };
 </script>
