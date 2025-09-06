@@ -66,6 +66,7 @@ declare module 'vue' {
     TransactionDialog: typeof import('./resources/js/components/transactions/TransactionDialog.vue')['default']
     TransactionTable: typeof import('./resources/js/components/transactions/TransactionTable.vue')['default']
     TwoFactorAuthDialog: typeof import('./resources/js/components/dialogs/TwoFactorAuthDialog.vue')['default']
+    UserDialog: typeof import('./resources/js/components/users/UserDialog.vue')['default']
     UserInfoEditDialog: typeof import('./resources/js/components/dialogs/UserInfoEditDialog.vue')['default']
     UserTable: typeof import('./resources/js/components/users/UserTable.vue')['default']
     UserUpgradePlanDialog: typeof import('./resources/js/components/dialogs/UserUpgradePlanDialog.vue')['default']
