@@ -48,13 +48,6 @@ export default [
             subject: 'User',
             action: 'manage',
           },
-          {
-            title: 'Add User',
-            to: { name: 'parameters-user-create' },
-            icon: { icon: 'tabler-user-plus' },
-            subject: 'User',
-            action: 'manage',
-          },
         ],
       },
     ],

@@ -42,8 +42,10 @@ const router = useRouter();
 const loginSuccess = async () => {
   const userAbilityRules = useCookie('userAbilityRules').value;
   ability.update(userAbilityRules);
+  console.log(userAbilityRules);
   userStore.setIsAuthenticated(true);
 
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   await router.push({ path: '/' });
 };
 const login = async () => {
