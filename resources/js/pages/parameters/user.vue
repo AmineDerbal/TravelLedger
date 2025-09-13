@@ -27,7 +27,25 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <VCard>
+  <VCard title="Users">
+    <VCardText>
+      <VRow class="align-end">
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <VBtn
+            v-if="ability.can('manage', 'User')"
+            variant="tonal"
+            color="primary"
+            @click="isDialogVisible = true"
+          >
+            Add User
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VCardText>
+    <VDivider />
     <UserTable
       :users="users"
       :headers="headers"
