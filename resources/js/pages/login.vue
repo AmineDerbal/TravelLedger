@@ -42,11 +42,9 @@ const router = useRouter();
 const loginSuccess = async () => {
   const userAbilityRules = useCookie('userAbilityRules').value;
   ability.update(userAbilityRules);
-  console.log(userAbilityRules);
   userStore.setIsAuthenticated(true);
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  await router.push({ path: '/' });
+  window.location.href = '/';
 };
 const login = async () => {
   const response = await userStore.login(form.value);
