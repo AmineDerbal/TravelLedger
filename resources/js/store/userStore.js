@@ -9,6 +9,7 @@ export default defineStore('user', {
     isAuthenticated: false,
     hasError: false,
     permissions: [],
+    roles: [],
     errors: {},
   }),
   persist: ['isAuthenticated', 'userData'],
@@ -49,6 +50,14 @@ export default defineStore('user', {
 
     async getUserPermissions(id) {
       await apiAction(() => apiCall(`users/${id}/permissions`), this);
+    },
+
+    async getUserRoles() {
+      await apiAction(
+        () => apiCall('users/roles'),
+        this,
+        (data) => (this.roles = data),
+      );
     },
   },
 });

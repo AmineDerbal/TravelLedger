@@ -1,5 +1,6 @@
 <script setup>
 import useUserStore from '@/store/userStore';
+import { useAbility } from '@/plugins/casl/composables/useAbility';
 
 definePage({
   meta: {
@@ -10,7 +11,12 @@ definePage({
 });
 
 const userStore = useUserStore();
+const ability = useAbility();
+
 const users = computed(() => userStore.users);
+const userRoles = computed(() => userStore.roles);
+
+const isDialogVisible = ref(false);
 
 const headers = [
   { title: 'Name', key: 'name' },
@@ -22,11 +28,12 @@ const headers = [
 
 onBeforeMount(async () => {
   await userStore.getUsers();
-  console.log(users.value);
+  await userStore.getUserRoles();
 });
 </script>
 
 <template>
+  <UserDialog />
   <VCard title="Users">
     <VCardText>
       <VRow class="align-end">
