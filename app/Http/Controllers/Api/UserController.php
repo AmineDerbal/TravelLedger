@@ -22,4 +22,9 @@ class UserController extends Controller
 
         return response()->json($permissions);
     }
+
+    public function getUserRoles()
+    {
+        return response()->json(['user','admin']);
+    }
 }
