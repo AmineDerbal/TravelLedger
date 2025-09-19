@@ -1,5 +1,4 @@
 <script setup>
-import { useRouter } from 'vue-router';
 import { ability } from '@/plugins/casl/ability';
 import useUserStore from '@/store/userStore';
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue';
@@ -37,7 +36,6 @@ const authThemeImg = useGenerateImageVariant(
   true,
 );
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark);
-const router = useRouter();
 
 const loginSuccess = async () => {
   const userAbilityRules = useCookie('userAbilityRules').value;
