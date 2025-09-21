@@ -28,4 +28,9 @@ const props = defineProps({
     default: false,
   },
 });
+
+const emit = defineEmits(['update:isDialogVisible']);
+const SetDialogVisible = (val) => {
+  emit('update:isDialogVisible', val);
+};
 </script>

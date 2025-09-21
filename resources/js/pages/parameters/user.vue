@@ -14,9 +14,19 @@ const userStore = useUserStore();
 const ability = useAbility();
 
 const users = computed(() => userStore.users);
-const userRoles = computed(() => userStore.roles);
+const userRoleOptions = computed(() => userStore.roles);
+const errors = computed(() => userStore.errors);
 
 const isDialogVisible = ref(false);
+const defaultFormat = {
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+  role: null,
+};
+
+const formData = ref({ ...defaultFormat });
 
 const headers = [
   { title: 'Name', key: 'name' },
@@ -33,7 +43,11 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <UserDialog />
+  <UserDialog
+    v-model:isDialogVisibble="isDialogVisible"
+    :roleOptions="userRoleOptions"
+    :formData="formData"
+  />
   <VCard title="Users">
     <VCardText>
       <VRow class="align-end">
