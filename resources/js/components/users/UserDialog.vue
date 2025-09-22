@@ -29,8 +29,33 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:isDialogVisible']);
-const SetDialogVisible = (val) => {
+const emit = defineEmits([
+  'update:isDialogVisible',
+  'submit',
+  'closeEditDialog',
+]);
+
+const setDialogVisible = (val) => {
   emit('update:isDialogVisible', val);
 };
+
+const closeDialog = () => {
+  setDialogVisible(false);
+};
+
+const isVisible = computed({
+  get: () => props.isDialogVisible,
+  set: (val) => setDialogVisible(val),
+});
 </script>
+
+<template>
+  <VDialog
+    v-model="isVisible"
+    max-width="600"
+    @click:outside="closeDialog()"
+  >
+    <DialogCloseBtn @click="closeDialog()" />
+    <VCard></VCard>
+  </VDialog>
+</template>
