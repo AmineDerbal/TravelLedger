@@ -17,7 +17,6 @@ const users = computed(() => userStore.users);
 const userRoleOptions = computed(() => userStore.roles);
 const errors = computed(() => userStore.errors);
 
-const isDialogVisible = ref(false);
 const defaultFormat = {
   name: '',
   email: '',
@@ -26,6 +25,9 @@ const defaultFormat = {
   role: null,
 };
 
+const isDialogVisible = ref(false);
+const dialogSubmitLoading = ref(false);
+const dialogKey = ref(0);
 const formData = ref({ ...defaultFormat });
 
 const headers = [
@@ -35,6 +37,12 @@ const headers = [
   { title: 'Is Active', key: 'is_active' },
   { title: 'Actions', key: 'actions' },
 ];
+
+const increaseDialogKey = () => {
+  dialogKey.value += 1;
+};
+
+const handleSubmit = async () => {};
 
 onBeforeMount(async () => {
   await userStore.getUsers();
@@ -47,6 +55,9 @@ onBeforeMount(async () => {
     v-model:isDialogVisibble="isDialogVisible"
     :roleOptions="userRoleOptions"
     :formData="formData"
+    :errors="errors"
+    :dialogSubmitLoading="dialogSubmitLoading"
+    :key="dialogKey"
   />
   <VCard title="Users">
     <VCardText>
