@@ -47,6 +47,8 @@ const isVisible = computed({
   get: () => props.isDialogVisible,
   set: (val) => setDialogVisible(val),
 });
+
+const form = reactive({ ...props.formData });
 </script>
 
 <template>
@@ -56,6 +58,23 @@ const isVisible = computed({
     @click:outside="closeDialog()"
   >
     <DialogCloseBtn @click="closeDialog()" />
-    <VCard></VCard>
+    <VCard title="User">
+      <VCardText>
+        <VRow>
+          <VCol cols="12">
+            <VTextField
+              v-model="form.name"
+              label="Name"
+            />
+            <div
+              class="mt-2 text-error"
+              v-if="errors.name"
+            >
+              {{ errors.name[0] }}
+            </div>
+          </VCol>
+        </VRow>
+      </VCardText>
+    </VCard>
   </VDialog>
 </template>
