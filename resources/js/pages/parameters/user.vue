@@ -52,7 +52,7 @@ onBeforeMount(async () => {
 
 <template>
   <UserDialog
-    v-model:isDialogVisibble="isDialogVisible"
+    v-model:isDialogVisible="isDialogVisible"
     :roleOptions="userRoleOptions"
     :formData="formData"
     :errors="errors"
