@@ -39,6 +39,12 @@ const setDialogVisible = (val) => {
   emit('update:isDialogVisible', val);
 };
 
+const isPasswordVisible = ref([false, false]);
+
+const togglePasswordVisibility = (index) => {
+  isPasswordVisible.value[index] = !isPasswordVisible.value[index];
+};
+
 const closeDialog = () => {
   setDialogVisible(false);
 };
@@ -49,6 +55,10 @@ const isVisible = computed({
 });
 
 const form = reactive({ ...props.formData });
+
+const onSubmit = () => {
+  console.log(form);
+};
 </script>
 
 <template>
@@ -91,7 +101,11 @@ const form = reactive({ ...props.formData });
             <VTextField
               v-model="form.password"
               label="Password"
-              type="password"
+              :type="isPasswordVisible[0] ? 'text' : 'password'"
+              :append-inner-icon="
+                isPasswordVisible[0] ? 'tabler-eye-off' : 'tabler-eye'
+              "
+              @click:append-inner="togglePasswordVisibility(0)"
             />
             <div
               class="mt-2 text-error"
@@ -105,7 +119,11 @@ const form = reactive({ ...props.formData });
             <VTextField
               v-model="form.password_confirmation"
               label="Confirm Password"
-              type="password"
+              :type="isPasswordVisible[1] ? 'text' : 'password'"
+              :append-inner-icon="
+                isPasswordVisible[1] ? 'tabler-eye-off' : 'tabler-eye'
+              "
+              @click:append-inner="togglePasswordVisibility(1)"
             />
             <div
               class="mt-2 text-error"
@@ -137,6 +155,22 @@ const form = reactive({ ...props.formData });
           </VCol>
         </VRow>
       </VCardText>
+
+      <VCardActions>
+        <VBtn
+          color="secondary"
+          @click="closeDialog()"
+        >
+          Close
+        </VBtn>
+        <VBtn
+          color="primary"
+          :loading="dialogSubmitLoading"
+          @click="onSubmit"
+        >
+          Submit
+        </VBtn>
+      </VCardActions>
     </VCard>
   </VDialog>
 </template>
