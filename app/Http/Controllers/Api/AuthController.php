@@ -3,34 +3,32 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Laravel\Sanctum\PersonalAccessToken;
-use App\Models\User;
+use App\Http\Requests\User\StoreUserRequest;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
 
 
-        $request->validate([
-             'name' => 'required|string|max:255',
-             'email' => 'required|string|email|max:255|unique:users',
-             'password' => 'required|string|min:8',
-             'password_confirmation' => 'required|same:password',
 
-         ]);
+        $data = $request->validated();
 
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $data->name,
+            'email' => $data->email,
+            'password' => Hash::make($data->password),
+            'role' => $data->role
         ]);
-        $user->assignRole('user');
+
+        $user->assignRole($data->role);
 
         return response()->json([
             'message' => 'Registration successful',
