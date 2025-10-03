@@ -56,8 +56,19 @@ const isVisible = computed({
 
 const form = reactive({ ...props.formData });
 
+const isFormValid = computed(() => {
+  return (
+    form.name &&
+    form.email &&
+    (form.role === 'user' || form.role === 'admin') &&
+    form.password &&
+    form.password_confirmation &&
+    form.password === form.password_confirmation
+  );
+});
+
 const onSubmit = () => {
-  console.log(form);
+  emit('submit', form);
 };
 </script>
 
@@ -158,17 +169,20 @@ const onSubmit = () => {
 
       <VCardActions>
         <VBtn
+          variant="tonal"
           color="secondary"
           @click="closeDialog()"
         >
           Close
         </VBtn>
         <VBtn
+          variant="tonal"
           color="primary"
+          :disabled="!isFormValid"
           :loading="dialogSubmitLoading"
           @click="onSubmit"
         >
-          Submit
+          Add
         </VBtn>
       </VCardActions>
     </VCard>

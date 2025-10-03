@@ -31,12 +31,16 @@ export default defineStore('user', {
       );
     },
 
-    async login(data) {
+    async register(data) {
       return await apiAction(
-        () => apiCall('auth/login', 'POST', data),
+        () => apiCall('auth/register', 'POST', data),
         this,
         (data) => (this.userData = data),
       );
+    },
+
+    async login(data) {
+      return await apiAction(() => apiCall('auth/login', 'POST', data), this);
     },
 
     async logout(data) {

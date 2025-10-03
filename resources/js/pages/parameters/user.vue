@@ -42,7 +42,22 @@ const increaseDialogKey = () => {
   dialogKey.value += 1;
 };
 
-const handleSubmit = async () => {};
+const resetDialog = () => {
+  isDialogVisible.value = false;
+  formData.value = { ...defaultFormat };
+  increaseDialogKey();
+};
+
+const handleSubmit = async (data) => {
+  dialogSubmitLoading.value = true;
+  const response = await userStore.register(data);
+  const expectedStatus = 201;
+  dialogSubmitLoading.value = false;
+  if (response.status === expectedStatus) {
+    await userStore.getUsers();
+    resetDialog();
+  }
+};
 
 onBeforeMount(async () => {
   await userStore.getUsers();
@@ -57,6 +72,7 @@ onBeforeMount(async () => {
     :formData="formData"
     :errors="errors"
     :dialogSubmitLoading="dialogSubmitLoading"
+    @submit="handleSubmit"
     :key="dialogKey"
   />
   <VCard title="Users">

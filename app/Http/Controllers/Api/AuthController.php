@@ -16,19 +16,16 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
 
-
-
         $data = $request->validated();
 
-
         $user = User::create([
-            'name' => $data->name,
-            'email' => $data->email,
-            'password' => Hash::make($data->password),
-            'role' => $data->role
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
         ]);
 
-        $user->assignRole($data->role);
+        $user->assignRole($data['role']);
 
         return response()->json([
             'message' => 'Registration successful',
