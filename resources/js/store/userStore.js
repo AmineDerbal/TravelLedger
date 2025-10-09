@@ -18,6 +18,8 @@ export default defineStore('user', {
     clearUserData() {
       this.userData = null;
       this.isAuthenticated = false;
+      this.users = [];
+      this.roles = [];
     },
     setIsAuthenticated(value) {
       this.isAuthenticated = value;
@@ -40,7 +42,11 @@ export default defineStore('user', {
     },
 
     async login(data) {
-      return await apiAction(() => apiCall('auth/login', 'POST', data), this);
+      return await apiAction(
+        () => apiCall('auth/login', 'POST', data),
+        this,
+        (data) => (this.userData = data),
+      );
     },
 
     async logout(data) {
