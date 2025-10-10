@@ -18,6 +18,13 @@ class TransactionController extends Controller
     {
         $this->transactionService = $transactionService;
     }
+
+    public function index()
+    {
+        $transactions = Transaction::with('ledgerCategory')->get();
+        $transactionBalance = $this->transactionService->calculateTransactionTotal($transactions);
+        return response()->json(['transactions' => BasicTransactionResource::collection($transactions), 'balance' => $transactionBalance], 201);
+    }
     public function getTransactionsByDateRange(GetTransactionsByDateRangeRequest $request)
     {
         $data = $request->validated();

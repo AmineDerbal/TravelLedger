@@ -49,6 +49,7 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
         Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
 
         Route::middleware(['check.ownership:edit Transaction'])->group(function () {
+            Route::get('transactions', 'index')->name('transactions.index');
             Route::put('transactions/{id}/update', 'update')->name('transactions.update');
             Route::put('transactions/{id}/deactivate', 'deactivate')->name('transactions.deactivate');
             Route::delete('transactions/{id}', 'destroy')->name('transactions.destroy');
