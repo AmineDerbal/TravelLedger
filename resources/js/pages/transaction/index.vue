@@ -3,6 +3,7 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
+import { getBalanceData } from '@/utils/transactionMeta';
 import { displayToast } from '@/utils/toast';
 
 definePage({
@@ -37,32 +38,9 @@ const rangeDateData = computed(() => ({
   ledger_id: selectedLedger.value['id'],
 }));
 
-const balanceData = computed(() => [
-  {
-    name: 'Transactions',
-    value: transactions.value.length,
-    color: 'primary',
-    icon: 'tabler-exchange',
-  },
-  {
-    name: 'Debit',
-    value: balance.value.totalDebit,
-    color: 'error',
-    icon: 'tabler-arrow-down',
-  },
-  {
-    name: 'Credit',
-    value: balance.value.totalCredit,
-    color: 'success',
-    icon: 'tabler-arrow-up',
-  },
-  {
-    name: 'Balance',
-    value: balance.value.totalBalance,
-    color: 'warning',
-    icon: 'tabler-currency-dollar',
-  },
-]);
+const balanceData = computed(() =>
+  getBalanceData(transactions.value, balance.value),
+);
 
 const headers = [
   { title: 'User', key: 'user.name' },
@@ -113,6 +91,7 @@ const openEditDialog = (transaction) => {
 };
 
 const handleTranactionSubmit = async (data, isUpdating = false) => {
+  console.log(data);
   const response = isUpdating
     ? await transactionStore.updateTransaction(data)
     : await transactionStore.storeTransaction(data);
