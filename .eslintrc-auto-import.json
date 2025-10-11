@@ -370,6 +370,7 @@
     "formatDateToDdMmYyyy": true,
     "updateAbility": true,
     "canEditOrDestroy": true,
-    "displayToast": true
+    "displayToast": true,
+    "getBalanceData": true
   }
 }

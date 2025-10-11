@@ -58,6 +58,7 @@ declare global {
   const formatDateToDdMmYyyy: typeof import('./resources/js/utils/dates.js')['formatDateToDdMmYyyy']
   const formatDateToMonthShort: typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']
   const getActivePinia: typeof import('pinia')['getActivePinia']
+  const getBalanceData: typeof import('./resources/js/utils/transactionMeta.js')['getBalanceData']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getTodayDate: typeof import('./resources/js/utils/dates.js')['getTodayDate']
@@ -428,6 +429,7 @@ declare module 'vue' {
     readonly formatDateToDdMmYyyy: UnwrapRef<typeof import('./resources/js/utils/dates.js')['formatDateToDdMmYyyy']>
     readonly formatDateToMonthShort: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['formatDateToMonthShort']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getBalanceData: UnwrapRef<typeof import('./resources/js/utils/transactionMeta.js')['getBalanceData']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getTodayDate: UnwrapRef<typeof import('./resources/js/utils/dates.js')['getTodayDate']>
