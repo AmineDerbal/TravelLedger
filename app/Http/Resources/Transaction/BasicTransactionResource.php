@@ -34,7 +34,8 @@ class BasicTransactionResource extends JsonResource
             'amount' => $this->amount,
             'profit' => $this->profit,
             'date' => $this->date,
-            'description' => $this->description
+            'description' => $this->description,
+            'is_active' => $this->is_active
         ];
     }
 }
