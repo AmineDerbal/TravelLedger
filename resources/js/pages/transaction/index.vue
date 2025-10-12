@@ -3,7 +3,7 @@ import useTransactionStore from '@/store/transaction';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
-import { getBalanceData } from '@/utils/transactionMeta';
+import { getBalanceData, getTableHeaders } from '@/utils/transactionMeta';
 import { displayToast } from '@/utils/toast';
 
 definePage({
@@ -42,16 +42,7 @@ const balanceData = computed(() =>
   getBalanceData(transactions.value, balance.value),
 );
 
-const headers = [
-  { title: 'User', key: 'user.name' },
-  { title: 'Date', key: 'date' },
-  { title: 'Description', key: 'description', sortable: false },
-  { title: 'Amount', key: 'amount' },
-  { title: 'Type', key: 'type.value' },
-  { title: 'Category', key: 'category.value' },
-  { title: 'Ledger', key: 'ledger.name' },
-  { title: 'Actions', key: 'actions', sortable: false },
-];
+const headers = getTableHeaders();
 
 const defaultForm = computed(() => ({
   user_id: user.value.id,

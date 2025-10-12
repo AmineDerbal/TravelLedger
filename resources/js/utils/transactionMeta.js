@@ -26,3 +26,16 @@ export const getBalanceData = (transactions, balance) => {
     },
   ];
 };
+
+export const getTableHeaders = () => {
+  return [
+    { title: 'User', key: 'user.name' },
+    { title: 'Date', key: 'date' },
+    { title: 'Description', key: 'description', sortable: false },
+    { title: 'Amount', key: 'amount' },
+    { title: 'Type', key: 'type.value' },
+    { title: 'Category', key: 'category.value' },
+    { title: 'Ledger', key: 'ledger.name' },
+    { title: 'Actions', key: 'actions', sortable: false },
+  ];
+};
