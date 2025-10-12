@@ -37,6 +37,17 @@ export default defineStore('transaction', {
       );
     },
 
+    async getAllTransactions() {
+      return await apiAction(
+        () => apiCall('transactions'),
+        this,
+        (data) => {
+          this.transactions = data.transactions;
+          this.balance = data.balance;
+        },
+      );
+    },
+
     async getTransactionsByDateRange(data) {
       return await apiAction(
         () => apiCall('transactions/date-range', 'POST', data),
