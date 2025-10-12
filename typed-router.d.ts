@@ -24,6 +24,7 @@ declare module 'vue-router/auto-routes' {
     'not-authorized': RouteRecordInfo<'not-authorized', '/not-authorized', Record<never, never>, Record<never, never>>,
     'parameters-ledger': RouteRecordInfo<'parameters-ledger', '/parameters/ledger', Record<never, never>, Record<never, never>>,
     'parameters-ledger-category': RouteRecordInfo<'parameters-ledger-category', '/parameters/ledgerCategory', Record<never, never>, Record<never, never>>,
+    'parameters-transaction': RouteRecordInfo<'parameters-transaction', '/parameters/transaction', Record<never, never>, Record<never, never>>,
     'parameters-user': RouteRecordInfo<'parameters-user', '/parameters/user', Record<never, never>, Record<never, never>>,
     'second-page': RouteRecordInfo<'second-page', '/second-page', Record<never, never>, Record<never, never>>,
     'transaction': RouteRecordInfo<'transaction', '/transaction', Record<never, never>, Record<never, never>>,
