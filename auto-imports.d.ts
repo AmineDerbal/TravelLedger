@@ -61,6 +61,7 @@ declare global {
   const getBalanceData: typeof import('./resources/js/utils/transactionMeta.js')['getBalanceData']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getTableHeaders: typeof import('./resources/js/utils/transactionMeta.js')['getTableHeaders']
   const getTodayDate: typeof import('./resources/js/utils/dates.js')['getTodayDate']
   const getYesterdayDate: typeof import('./resources/js/utils/dates.js')['getYesterdayDate']
   const h: typeof import('vue')['h']
@@ -432,6 +433,7 @@ declare module 'vue' {
     readonly getBalanceData: UnwrapRef<typeof import('./resources/js/utils/transactionMeta.js')['getBalanceData']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getTableHeaders: UnwrapRef<typeof import('./resources/js/utils/transactionMeta.js')['getTableHeaders']>
     readonly getTodayDate: UnwrapRef<typeof import('./resources/js/utils/dates.js')['getTodayDate']>
     readonly getYesterdayDate: UnwrapRef<typeof import('./resources/js/utils/dates.js')['getYesterdayDate']>
     readonly h: UnwrapRef<typeof import('vue')['h']>

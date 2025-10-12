@@ -371,6 +371,7 @@
     "updateAbility": true,
     "canEditOrDestroy": true,
     "displayToast": true,
-    "getBalanceData": true
+    "getBalanceData": true,
+    "getTableHeaders": true
   }
 }
