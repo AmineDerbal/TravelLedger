@@ -50,6 +50,13 @@ export default [
           },
         ],
       },
+      {
+        title: 'Transactions',
+        to: { name: 'parameters-transaction' },
+        icon: { icon: 'tabler-transaction-euro' },
+        subject: 'Transaction',
+        action: 'edit',
+      },
     ],
   },
 ];
