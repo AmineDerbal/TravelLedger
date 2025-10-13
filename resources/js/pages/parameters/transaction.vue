@@ -76,6 +76,7 @@ onBeforeMount(async () => {
       :transactions="transactions"
       :headers="headers"
       :user="user"
+      :isAdmin="true"
     />
   </VCard>
 </template>

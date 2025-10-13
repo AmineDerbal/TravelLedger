@@ -15,6 +15,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const ability = useAbility();
@@ -120,6 +124,9 @@ const resolveCategoryLabel = (categoryMSG) => {
             />
           </td>
           <td>{{ item.ledger.name }}</td>
+          <td v-if="props.isAdmin">
+            <VSwitch v-model="item.is_active" />
+          </td>
           <td>
             <div class="d-flex gap-1">
               <IconBtn
