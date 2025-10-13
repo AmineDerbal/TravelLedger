@@ -35,7 +35,7 @@ class BasicTransactionResource extends JsonResource
             'profit' => $this->profit,
             'date' => $this->date,
             'description' => $this->description,
-            'is_active' => $this->is_active
+            'is_active' => $this->is_active == 1 ? true : false,
         ];
     }
 }
