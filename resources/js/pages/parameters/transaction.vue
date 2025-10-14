@@ -17,8 +17,8 @@ const transactionStore = useTransactionStore();
 const userStore = useUserStore();
 
 const user = computed(() => userStore.userData);
-const transactions = computed(() => transactionStore.transactions);
-const balance = computed(() => transactionStore.balance);
+const transactions = computed(() => transactionStore.transactions || []);
+const balance = computed(() => transactionStore.balance || {});
 
 const balanceData = computed(() =>
   getBalanceData(transactions.value, balance.value),
@@ -29,8 +29,6 @@ const headers = [
   { title: 'Is Active', key: 'is_active' },
   getTableHeaders().slice(-1)[0],
 ];
-
-console.log(headers);
 
 onBeforeMount(async () => {
   await transactionStore.getAllTransactions();
