@@ -37,6 +37,20 @@ class TransactionController extends Controller
         return response()->json(['transactions' => BasicTransactionResource::collection($transactions), 'balance' => $transactionBalance], 201);
 
     }
+
+    public function toggleTransactionStatus($id)
+    {
+        $transaction = Transaction::find($id);
+        if (!$transaction) {
+            return $this->jsonError('Transaction not found', 404);
+        }
+        $transactionStatus = $transaction['is_active'];
+        $transaction->update(['is_active' => !$transactionStatus]);
+
+        return $this->jsonResponse('Transaction status updated successfully', 200);
+
+
+    }
     public function store(StoreTransactionRequest $request)
     {
         $data = $request->validated();
