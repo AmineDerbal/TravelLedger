@@ -22,7 +22,7 @@ class TransactionService
                 return response()->json(['message' => 'Transaction creation failed'], 500);
             }
 
-            $this->updateLedgerBalance($data['ledger_id'], $data['type'], $data['amount']) ;
+            $this->applyTransactionBalance($data['ledger_id'], $data['type'], $data['amount']) ;
             return $this->jsonResponse('Transaction created successfully', 201);
         });
     }
@@ -56,10 +56,11 @@ class TransactionService
     public function deactivateTranscation($transaction)
     {
         ['amount' => $amount, 'type' => $type, 'ledgerId' => $ledgerId] =
-    $this->extractTransactionDetails($transaction);
+        $this->extractTransactionDetails($transaction);
 
         $transaction->update(['is_active' => 0]);
-        $this->updateLedgerBalance($ledgerId, $type, $amount);
+        $this->revertTransactionBalance($ledgerId, $type, $amount);
+
 
         return $this->jsonResponse('Transaction deleted successfully', 200);
 
@@ -80,7 +81,22 @@ class TransactionService
 
     }
 
+    private function fetchLedger($id)
+    {
+        return Ledger::find($id);
+    }
 
+    private function applyTransactionBalance($ledgerId, $type, $amount): void
+    {
+        $ledger = $this->fetchLedger($ledgerId);
+        $ledger->applyTransaction($amount, $type);
+    }
+
+    private function revertTransactionBalance($ledgerId, $type, $amount): void
+    {
+        $ledger = $this->fetchLedger($ledgerId);
+        $ledger->revertTransaction($amount, $type);
+    }
 
     private function updateLedgerBalance($ledgerId, $type, $amount): void
     {
@@ -96,7 +112,7 @@ class TransactionService
     private function extractTransactionDetails(Transaction $transaction): array
     {
         return [
-            'amount'   => -$transaction->amount,
+            'amount'   => $transaction->amount,
             'type'     => $transaction->type,
             'ledgerId' => $transaction->ledger_id,
 
