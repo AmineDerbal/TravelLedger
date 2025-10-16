@@ -47,6 +47,7 @@ class TransactionController extends Controller
         $transactionStatus = $transaction['is_active'];
         $transaction->update(['is_active' => !$transactionStatus]);
 
+
         return $this->jsonResponse('Transaction status updated successfully', 200);
 
 
@@ -71,7 +72,7 @@ class TransactionController extends Controller
 
     public function destroy($id)
     {
-        $transaction = Transaction::with('linkedTransaction', 'reverseLinkedTransaction')->find($id);
+        $transaction = Transaction::find($id);
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
         }
@@ -80,7 +81,7 @@ class TransactionController extends Controller
 
     public function deactivate($id)
     {
-        $transaction = Transaction::with('linkedTransaction', 'reverseLinkedTransaction')->find($id);
+        $transaction = Transaction::find($id);
         if (!$transaction) {
             return $this->jsonError('Transaction not found', 404);
         }
