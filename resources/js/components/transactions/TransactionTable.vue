@@ -125,7 +125,10 @@ const resolveCategoryLabel = (categoryMSG) => {
           </td>
           <td>{{ item.ledger.name }}</td>
           <td v-if="props.isAdmin">
-            <VSwitch v-model="item.is_active" />
+            <VSwitch
+              v-model="item.is_active"
+              @click.stop.prevent
+            />
           </td>
           <td>
             <div class="d-flex gap-1">
