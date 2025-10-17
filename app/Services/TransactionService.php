@@ -49,7 +49,9 @@ class TransactionService
 
     public function destroyTransaction($transaction)
     {
-
+        if ($transaction['is_active'] == 1) {
+            $this->updateTransactionBalance($transaction['ledger_id'], $transaction['type'], $transaction['amount'], 'revert');
+        }
         $transaction->delete();
         return $this->jsonResponse('Transaction deleted successfully', 200);
     }
