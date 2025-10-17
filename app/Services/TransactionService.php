@@ -22,7 +22,7 @@ class TransactionService
                 return response()->json(['message' => 'Transaction creation failed'], 500);
             }
 
-            $this->applyTransactionBalance($data['ledger_id'], $data['type'], $data['amount']) ;
+            $this->updateTransactionBalance($data['ledger_id'], $data['type'], $data['amount'], 'apply') ;
             return $this->jsonResponse('Transaction created successfully', 201);
         });
     }
@@ -35,12 +35,13 @@ class TransactionService
             return $this->jsonResponse('Transaction not found', 404);
         }
 
-
-        $amountDifference = $data['amount'] - $transaction->amount;
+        ['amount' => $amount, 'type' => $type, 'ledgerId' => $ledgerId] =
+        $this->extractTransactionDetails($transaction);
         $transaction->update($data);
 
-        if ($amountDifference !== 0) {
-            $this->updateLedgerBalance($data['ledger_id'], $data['type'], $amountDifference);
+        if ($amount !== $data['amount'] || $type !== $data['type'] || $ledgerId !== $data['ledger_id']) {
+            $this->updateTransactionBalance($ledgerId, $type, $amount, 'revert');
+            $this->updateTransactionBalance($data['ledger_id'], $data['type'], $data['amount'], 'apply');
         }
 
         return $this->jsonResponse('Transaction updated successfully', 200);
@@ -59,7 +60,7 @@ class TransactionService
         $this->extractTransactionDetails($transaction);
 
         $transaction->update(['is_active' => 0]);
-        $this->revertTransactionBalance($ledgerId, $type, $amount);
+        $this->updateTransactionBalance($ledgerId, $type, $amount, 'revert');
 
 
         return $this->jsonResponse('Transaction deleted successfully', 200);
@@ -86,22 +87,18 @@ class TransactionService
         return Ledger::find($id);
     }
 
-    private function applyTransactionBalance($ledgerId, $type, $amount): void
+
+    private function updateTransactionBalance($ledgerId, $type, $amount, $operation): void
     {
         $ledger = $this->fetchLedger($ledgerId);
-        $ledger->applyTransaction($amount, $type);
-    }
-
-    private function revertTransactionBalance($ledgerId, $type, $amount): void
-    {
-        $ledger = $this->fetchLedger($ledgerId);
-        $ledger->revertTransaction($amount, $type);
-    }
-
-    private function updateLedgerBalance($ledgerId, $type, $amount): void
-    {
-        $ledger = Ledger::find($ledgerId);
-        $ledger->updateAmount($amount, $type);
+        switch ($operation) {
+            case 'apply':
+                $ledger->applyTransaction($amount, $type);
+                break;
+            case 'revert':
+                $ledger->revertTransaction($amount, $type);
+                break;
+        }
     }
 
     private function jsonResponse(string $message, int $status = 200): JsonResponse
