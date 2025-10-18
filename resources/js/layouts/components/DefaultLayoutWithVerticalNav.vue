@@ -87,7 +87,10 @@ onBeforeMount(async () => {
                   >
                     <VIcon :icon="ledgerItem.icon" />
                   </VAvatar>
-                  <div class="d-flex flex-column ms-3">
+                  <div
+                    class="d-flex flex-column ms-3"
+                    :key="ledger.balance"
+                  >
                     <h5 class="text-h5">{{ ledger.name }}</h5>
                     <div class="text-body-2 d-inline-flex align-center">
                       {{ ledger.balance }} <span class="ms-1">DZD</span>
