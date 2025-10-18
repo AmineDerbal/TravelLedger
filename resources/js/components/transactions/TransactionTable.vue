@@ -27,6 +27,7 @@ const emit = defineEmits([
   'openEditDialog',
   'closeDialog',
   'deleteTransaction',
+  'toggleTransactionStatus',
 ]);
 
 const handleDelete = (id) => {
@@ -35,6 +36,10 @@ const handleDelete = (id) => {
 
 const openEditDialog = (transaction) => {
   emit('openEditDialog', transaction);
+};
+
+const toggleTransactionStatus = (id) => {
+  emit('toggleTransactionStatus', id);
 };
 
 const resolveTypeLabel = (typeMSG) => {
@@ -128,6 +133,7 @@ const resolveCategoryLabel = (categoryMSG) => {
             <VSwitch
               v-model="item.is_active"
               @click.stop.prevent
+              @click="toggleTransactionStatus(item.id)"
             />
           </td>
           <td>

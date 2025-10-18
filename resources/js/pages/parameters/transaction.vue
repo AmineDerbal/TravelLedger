@@ -1,6 +1,6 @@
 <script setup>
 import useTransactionStore from '@/store/transaction';
-
+import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getBalanceData, getTableHeaders } from '@/utils/transactionMeta';
 import { onBeforeMount } from 'vue';
@@ -15,6 +15,7 @@ definePage({
 
 const transactionStore = useTransactionStore();
 const userStore = useUserStore();
+const ledgerStore = useLedgerStore();
 
 const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions || []);
@@ -29,6 +30,13 @@ const headers = [
   { title: 'Is Active', key: 'is_active' },
   getTableHeaders().slice(-1)[0],
 ];
+
+const toggleTransactionStatus = async (id) => {
+  const response = await transactionStore.toggleTransactionStatus(id);
+  if (response.status === 200) {
+    await transactionStore.getAllTransactions();
+  }
+};
 
 onBeforeMount(async () => {
   await transactionStore.getAllTransactions();
@@ -75,6 +83,8 @@ onBeforeMount(async () => {
       :headers="headers"
       :user="user"
       :isAdmin="true"
+      @toggleTransactionStatus="toggleTransactionStatus"
+      :key="transactions"
     />
   </VCard>
 </template>
