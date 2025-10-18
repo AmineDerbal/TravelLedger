@@ -38,18 +38,10 @@ class TransactionController extends Controller
 
     }
 
-    public function toggleTransactionStatus($id)
+    public function toggleStatus($id)
     {
         $transaction = Transaction::find($id);
-        if (!$transaction) {
-            return $this->jsonError('Transaction not found', 404);
-        }
-        $transactionStatus = $transaction['is_active'];
-        $transaction->update(['is_active' => !$transactionStatus]);
-
-
-        return $this->jsonResponse('Transaction status updated successfully', 200);
-
+        return $this->transactionService->toggleTransactionStatus($transaction);
 
     }
     public function store(StoreTransactionRequest $request)
@@ -76,6 +68,7 @@ class TransactionController extends Controller
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
         }
+
         return $this->transactionService->destroyTransaction($transaction);
     }
 

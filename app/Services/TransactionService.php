@@ -69,6 +69,18 @@ class TransactionService
 
     }
 
+    public function toggleTransactionStatus($transaction)
+    {
+        $transactionStatus = $transaction['is_active'];
+        $transaction->update(['is_active' => !$transactionStatus]);
+        if ($transactionStatus) {
+            $this->updateTransactionBalance($transaction['ledger_id'], $transaction['type'], $transaction['amount'], 'revert');
+        } else {
+            $this->updateTransactionBalance($transaction['ledger_id'], $transaction['type'], $transaction['amount'], 'apply');
+        }
+        return $this->jsonResponse('Transaction status updated successfully', 200);
+
+    }
     public function calculateTransactionTotal(Collection $transactions): array
     {
 
