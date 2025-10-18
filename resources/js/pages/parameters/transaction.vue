@@ -35,6 +35,7 @@ const toggleTransactionStatus = async (id) => {
   const response = await transactionStore.toggleTransactionStatus(id);
   if (response.status === 200) {
     await transactionStore.getAllTransactions();
+    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
   }
 };
 
