@@ -73,6 +73,13 @@ export default defineStore('transaction', {
       );
     },
 
+    async toggleTransactionStatus(id) {
+      return await apiAction(
+        () => apiCall(`transactions/${id}/toggle-status`, 'PUT'),
+        this,
+      );
+    },
+
     async deactivateTransaction(id) {
       return await apiAction(
         () => apiCall(`transactions/${id}/deactivate`, 'PUT'),
