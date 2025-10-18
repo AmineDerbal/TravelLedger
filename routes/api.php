@@ -46,6 +46,10 @@ Route::middleware(['token.cookie','auth:sanctum'])->group(function () {
             Route::post('transactions/store', 'store')->name('transactions.store');
         });
 
+        Route::middleware(['check.permission:edit Transaction'])->group(function () {
+            Route::put('transactions/{id}/toggle-status', 'toggleStatus')->name('transaction.toggle');
+        });
+
         Route::post('transactions/date-range', 'getTransactionsByDateRange')->name('transactions.date-range')->middleware('check.permission:view Transaction');
 
         Route::middleware(['check.ownership:edit Transaction'])->group(function () {
