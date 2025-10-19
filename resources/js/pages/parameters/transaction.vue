@@ -1,5 +1,5 @@
 <script setup>
-import useTransactionStore from '@/store/transaction';
+import useTransactionStore from '@/store/transactionStore';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getBalanceData, getTableHeaders } from '@/utils/transactionMeta';
