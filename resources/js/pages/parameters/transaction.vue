@@ -31,11 +31,13 @@ const headers = [
   getTableHeaders().slice(-1)[0],
 ];
 
-const toggleTransactionStatus = async (id) => {
+const toggleTransactionStatus = async (id, ledgerId) => {
   const response = await transactionStore.toggleTransactionStatus(id);
   if (response.status === 200) {
     await transactionStore.getAllTransactions();
-    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
+    if (ledgerId === ledgerStore.ledger.id) {
+      await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
+    }
   }
 };
 

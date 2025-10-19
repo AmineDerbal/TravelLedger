@@ -38,8 +38,8 @@ const openEditDialog = (transaction) => {
   emit('openEditDialog', transaction);
 };
 
-const toggleTransactionStatus = (id) => {
-  emit('toggleTransactionStatus', id);
+const toggleTransactionStatus = (id, ledgerId) => {
+  emit('toggleTransactionStatus', id, ledgerId);
 };
 
 const resolveTypeLabel = (typeMSG) => {
@@ -133,7 +133,7 @@ const resolveCategoryLabel = (categoryMSG) => {
             <VSwitch
               v-model="item.is_active"
               @click.stop.prevent
-              @click="toggleTransactionStatus(item.id)"
+              @click="toggleTransactionStatus(item.id, item.ledger.id)"
             />
           </td>
           <td>
