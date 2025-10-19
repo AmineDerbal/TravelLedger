@@ -15,6 +15,14 @@ export default defineStore('transaction', {
     errors: {},
   }),
   actions: {
+    clearTransactionData() {
+      this.transactions = [];
+      this.balance = {
+        totalDebit: 0,
+        totalCredit: 0,
+        totalBalance: 0,
+      };
+    },
     async getTransactionCategories() {
       return await apiAction(
         () => apiCall('transaction-categories'),

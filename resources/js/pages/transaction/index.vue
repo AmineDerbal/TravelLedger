@@ -135,6 +135,7 @@ const downloadExcelTransactions = async (i) => {
 };
 
 onBeforeMount(async () => {
+  transactionStore.clearTransactionData();
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
   await ledgerStore.getLedgersWithCategories();
