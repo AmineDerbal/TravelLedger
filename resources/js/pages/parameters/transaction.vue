@@ -24,7 +24,6 @@ const transactionTypes = computed(() => transactionStore.types);
 const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
 
 const isDialogVisible = ref(false);
-const isEdit = ref(true);
 
 const balanceData = computed(() =>
   getBalanceData(transactions.value, balance.value),
@@ -93,7 +92,7 @@ onBeforeMount(async () => {
     :transactionTypes="transactionTypes"
     :initialData="initialData"
     :selectOptions="selectOptions"
-    :isEdit="isEdit"
+    :isEdit="true"
     @submit="handleTranactionSubmit"
     @closeEditDialog="resetDialog"
     :key="dialogKey"
