@@ -20,6 +20,10 @@ const ledgerStore = useLedgerStore();
 const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions || []);
 const balance = computed(() => transactionStore.balance || {});
+const transactionTypes = computed(() => transactionStore.types);
+const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
+
+const isDialogVisible = ref(false);
 
 const balanceData = computed(() =>
   getBalanceData(transactions.value, balance.value),
@@ -30,6 +34,42 @@ const headers = [
   { title: 'Is Active', key: 'is_active' },
   getTableHeaders().slice(-1)[0],
 ];
+
+const defaultForm = computed(() => ({
+  ledger_category_id: null,
+  ledger_id: null,
+  type: null,
+  date: null,
+  description: '',
+  amount: 0,
+  profit: null,
+}));
+
+const dateConfig = {
+  altFormat: 'F j, Y',
+  altInput: true,
+  maxDate: getTodayDate(),
+};
+
+const initialData = ref({ ...defaultForm.value });
+
+const increaseDialogKey = () => {
+  dialogKey.value += 1;
+};
+
+const resetDialog = () => {
+  isDialogVisible.value = false;
+  isEdit.value = false;
+  initialData.value = { ...defaultForm.value };
+  increaseDialogKey();
+};
+
+const openEditDialog = (transaction) => {
+  initialData.value = { ...transaction };
+  isEdit.value = true;
+  isDialogVisible.value = true;
+  increaseDialogKey();
+};
 
 const toggleTransactionStatus = async (id, ledgerId) => {
   const response = await transactionStore.toggleTransactionStatus(id);
@@ -47,6 +87,16 @@ onBeforeMount(async () => {
 </script>
 
 <template>
+  <TransactionDialog
+    v-model:isDialogVisible="isDialogVisible"
+    :transactionTypes="transactionTypes"
+    :initialData="initialData"
+    :selectOptions="selectOptions"
+    :isEdit="true"
+    @submit="handleTranactionSubmit"
+    @closeEditDialog="resetDialog"
+    :key="dialogKey"
+  />
   <VRow class="mb-2 mt-2 match-height">
     <VCol
       v-for="(item, index) in balanceData"

@@ -88,9 +88,9 @@ export default defineStore('transaction', {
       );
     },
 
-    async deactivateTransaction(id) {
+    async deactivateTransaction(id, data) {
       return await apiAction(
-        () => apiCall(`transactions/${id}/deactivate`, 'PUT'),
+        () => apiCall(`transactions/${id}/deactivate`, 'PUT', data),
         this,
       );
     },
