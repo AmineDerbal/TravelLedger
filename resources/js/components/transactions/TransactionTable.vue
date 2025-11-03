@@ -30,8 +30,9 @@ const emit = defineEmits([
   'toggleTransactionStatus',
 ]);
 
-const handleDelete = (id) => {
-  emit('deleteTransaction', id);
+const handleDelete = (id, userID) => {
+  const data = { user_id: userID };
+  emit('deleteTransaction', id, data);
 };
 
 const openEditDialog = (transaction) => {
@@ -153,7 +154,7 @@ const resolveCategoryLabel = (categoryMSG) => {
                 <VIcon icon="tabler-edit" />
               </IconBtn>
               <IconBtn
-                @click="handleDelete(item.id)"
+                @click="handleDelete(item.id, item.user.id)"
                 v-if="
                   canEditOrDestroy(
                     'destroy_own',
