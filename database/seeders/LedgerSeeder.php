@@ -16,14 +16,11 @@ class LedgerSeeder extends Seeder
         $rows = [
             [
                 'name' => 'Office',
+            ],
 
-            ],
-            [
-                'name' => 'RTW',
-            ],
         ];
         foreach ($rows as $row) {
-            Ledger::create($row);
+            Ledger::firstOrCreate($row);
         }
     }
 }
