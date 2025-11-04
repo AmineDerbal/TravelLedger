@@ -14,6 +14,9 @@ import { VerticalNavLayout } from '@layouts';
 // stores
 import useLedgerStore from '@/store/ledgerStore';
 
+// utils functions
+import { formatNumber } from '@/utils/Numbers';
+
 const ledgerItem = {
   color: 'success',
   icon: 'tabler-currency-dollar',
@@ -93,7 +96,8 @@ onBeforeMount(async () => {
                   >
                     <h5 class="text-h5">{{ ledger.name }}</h5>
                     <div class="text-body-2 d-inline-flex align-center">
-                      {{ ledger.balance }} <span class="ms-1">DZD</span>
+                      {{ formatNumber(ledger.balance) }}
+                      <span class="ms-1">DZD</span>
                     </div>
                   </div>
                 </div>

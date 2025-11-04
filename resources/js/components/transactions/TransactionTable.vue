@@ -1,6 +1,7 @@
 <script setup>
 import { formatDateToDdMmYyyy } from '@/utils/dates';
 import { useAbility } from '@/plugins/casl/composables/useAbility';
+import { formatNumber } from '@/utils/Numbers';
 
 const props = defineProps({
   transactions: {
@@ -112,7 +113,7 @@ const resolveCategoryLabel = (categoryMSG) => {
           <td>{{ item.user.name }}</td>
           <td>{{ formatDateToDdMmYyyy(item.date) }}</td>
           <td>{{ item.description }}</td>
-          <td>{{ item.amount }} DZD</td>
+          <td>{{ formatNumber(item.amount) }} DZD</td>
           <td>
             <VChip
               v-bind="resolveTypeLabel(item.type.label)"
