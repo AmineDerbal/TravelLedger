@@ -31,7 +31,7 @@ class BasicTransactionResource extends JsonResource
                 'id' => $this->ledgerCategory->id,
                 'name' => $this->ledgerCategory->name,
             ],
-            'amount' => $this->amount,
+            'amount' => number_format($this->amount),
             'profit' => $this->profit,
             'date' => $this->date,
             'description' => $this->description,

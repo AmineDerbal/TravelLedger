@@ -93,7 +93,8 @@ onBeforeMount(async () => {
                   >
                     <h5 class="text-h5">{{ ledger.name }}</h5>
                     <div class="text-body-2 d-inline-flex align-center">
-                      {{ ledger.balance }} <span class="ms-1">DZD</span>
+                      {{ ledger.balance }}
+                      <span class="ms-1">DZD</span>
                     </div>
                   </div>
                 </div>
