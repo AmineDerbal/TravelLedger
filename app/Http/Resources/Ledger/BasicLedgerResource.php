@@ -17,7 +17,7 @@ class BasicLedgerResource extends JsonResource
         return [
          'id' => $this->id,
          'name' => $this->name,
-         'balance' => $this->balance
+         'balance' => number_format($this->balance, 2)
         ];
     }
 }
