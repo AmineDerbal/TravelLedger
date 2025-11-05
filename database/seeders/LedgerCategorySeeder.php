@@ -33,40 +33,11 @@ class LedgerCategorySeeder extends Seeder
               'type' => TransactionType::Debit->value,
               'ledger_id' => 1,
             ],
-            [
-                 'name' => 'Rechargement',
-              'type' => TransactionType::Credit->value,
-              'ledger_id' => 2,
-            ],
-            [
-               'name' => 'Refund',
-              'type' => TransactionType::Credit->value,
-              'ledger_id' => 2,
-            ],
-            [
-                 'name' => 'Flight',
-              'type' => TransactionType::Debit->value,
-              'ledger_id' => 2,
-            ],
-            [
-                   'name' => 'Hotel',
-              'type' => TransactionType::Debit->value,
-              'ledger_id' => 2,
-            ],
-            [
-                'name' => 'Visa',
-              'type' => TransactionType::Debit->value,
-              'ledger_id' => 2,
-            ],
-            [
-                'name' => 'Insurance',
-              'type' => TransactionType::Debit->value,
-              'ledger_id' => 2,
-            ]
+
         ];
 
         foreach ($rows as $row) {
-            LedgerCategory::create($row);
+            LedgerCategory::firstOrCreate($row);
         }
 
 
