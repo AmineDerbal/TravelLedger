@@ -75,7 +75,11 @@ const resetDialog = () => {
 };
 
 const openEditDialog = (transaction) => {
-  initialData.value = { ...transaction };
+  initialData.value = {
+    ...transaction,
+    amount: parseFloat(transaction.amount.replace(/,/g, '')),
+  };
+
   isEdit.value = true;
   isDialogVisible.value = true;
   increaseDialogKey();
