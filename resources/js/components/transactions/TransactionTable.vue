@@ -112,7 +112,7 @@ const resolveCategoryLabel = (categoryMSG) => {
           <td>{{ item.user.name }}</td>
           <td>{{ formatDateToDdMmYyyy(item.date) }}</td>
           <td>{{ item.description }}</td>
-          <td>{{ item.amount }} DZD</td>
+          <td class="text-end">{{ item.amount }} DZD</td>
           <td>
             <VChip
               v-bind="resolveTypeLabel(item.type.label)"
