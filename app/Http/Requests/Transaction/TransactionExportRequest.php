@@ -4,6 +4,7 @@ namespace App\Http\Requests\Transaction;
 
 use App\Enums\TransactionType;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class TransactionExportRequest extends BaseTransactionRequest
 {
@@ -42,6 +43,7 @@ class TransactionExportRequest extends BaseTransactionRequest
      */
     public function rules(): array
     {
+
         return [
             'transactions' => 'required|array',
             'transactions.*.id' => 'required|exists:transactions,id',
@@ -51,8 +53,8 @@ class TransactionExportRequest extends BaseTransactionRequest
             'transactions.*.ledger.name' => 'required|exists:ledgers,name',
             'transactions.*.type.value' => ['required', Rule::in(TransactionType::valueList())],
             'transactions.*.type.label' => 'required',
-            'transactions.*.category.value' => $this->categoryValidationRule(),
-            'transactions.*.category.label' => 'required',
+            'transactions.*.category.id' => ' required|exists:ledger_categories,id',
+            'transactions.*.category.name' => 'required',
             'transactions.*.amount' => 'required|numeric|gte:0',
             'transactions.*.date' => 'required|date|date_format:Y-m-d',
             'transactions.*.description' => 'required|string|max:80',
@@ -67,5 +69,18 @@ class TransactionExportRequest extends BaseTransactionRequest
             'exportDate.end_date' => 'required|date|date_format:Y-m-d|after_or_equal:exportDate.start_date|before_or_equal:today',
 
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        if ($validator->errors()->isNotEmpty()) {
+            return;
+        }
+
+        $validator->after(function ($validator) {
+            $transactions = $this->input('transactions', []);
+
+
+        });
     }
 }
