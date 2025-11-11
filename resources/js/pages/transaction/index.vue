@@ -3,7 +3,11 @@ import useTransactionStore from '@/store/transactionStore';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
-import { getBalanceData, getTableHeaders } from '@/utils/transactionMeta';
+import {
+  getBalanceData,
+  getTableHeaders,
+  parseTransactionsAmountToNumber,
+} from '@/utils/transactionMeta';
 import { displayToast } from '@/utils/toast';
 
 definePage({
@@ -122,7 +126,7 @@ const fetchTransactionsByDateRange = async (i) => {
 const downloadExcelTransactions = async (i) => {
   loadings.value[i] = true;
   const data = {
-    transactions: transactions.value,
+    transactions: parseTransactionsAmountToNumber(transactions.value),
     balance: {
       totalDebit: balance.value.totalDebit,
       totalCredit: balance.value.totalCredit,

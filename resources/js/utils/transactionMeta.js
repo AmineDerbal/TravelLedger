@@ -39,3 +39,21 @@ export const getTableHeaders = () => {
     { title: 'Actions', key: 'actions', sortable: false },
   ];
 };
+
+export const parseToNumber = (value) => {
+  if (typeof value === 'number') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    return parseFloat(value.replace(/,/g, ''));
+  }
+};
+
+export const parseTransactionsAmountToNumber = (transactions) => {
+  return transactions.map((transaction) => {
+    return {
+      ...transaction,
+      amount: parseToNumber(transaction.amount),
+    };
+  });
+};
