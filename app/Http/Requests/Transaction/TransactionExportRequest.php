@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Transaction;
 
 use App\Enums\TransactionType;
+use App\Models\LedgerCategory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -79,7 +80,23 @@ class TransactionExportRequest extends BaseTransactionRequest
 
         $validator->after(function ($validator) {
             $transactions = $this->input('transactions', []);
+            foreach ($transactions as $transaction) {
+                $ledgerCategoryId = data_get($transaction, 'category.id');
+                $type = (int)(data_get($transaction, 'type.value'));
+                $ledgerId = (int)(data_get($transaction, 'ledger.id'));
 
+                if (!$ledgerCategoryId) {
+                    $validator->errors()->add('transactions', 'Ledger category is required for each transaction.');
+                    continue;
+                }
+
+                $ledgerCategory = LedgerCategory::find($ledgerCategoryId);
+                if (!$ledgerCategory) {
+                    $validator->errors()->add('transactions', 'Invalid ledger category for transaction ID ' . $transaction['id'] . '.');
+                    continue;
+                }
+
+            }
 
         });
     }
