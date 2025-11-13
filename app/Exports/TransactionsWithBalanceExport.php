@@ -15,14 +15,14 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
 {
     protected $transactions;
     protected $balance;
-    
-   public function __construct(array $transactions, array $balance)
+
+    public function __construct(array $transactions, array $balance)
     {
         $this->transactions = $transactions;
         $this->balance = $balance;
     }
 
-      public function headings(): array
+    public function headings(): array
     {
         return [
             ['Transactions'], // Title row (merged)
@@ -42,7 +42,7 @@ class TransactionsWithBalanceExport implements FromArray, WithHeadings, ShouldAu
                 $row['user']['name'],
                 $row['ledger']['name'],
                 $row['type']['label'],
-                $row['category']['label'],
+                $row['category']['name'],
                 number_format($row['amount'], 2),
               Carbon::parse($row['date'])->format('d-m-Y'),
                 $row['description'],

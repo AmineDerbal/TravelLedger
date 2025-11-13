@@ -44,6 +44,7 @@ class TransactionExportRequest extends BaseTransactionRequest
      */
     public function rules(): array
     {
+        \Log::info($this->all());
 
         return [
             'transactions' => 'required|array',
@@ -94,6 +95,13 @@ class TransactionExportRequest extends BaseTransactionRequest
                 if (!$ledgerCategory) {
                     $validator->errors()->add('transactions', 'Invalid ledger category for transaction ID ' . $transaction['id'] . '.');
                     continue;
+                }
+
+                if ($ledgerCategory->type['value'] !== $type || $ledgerCategory->ledger_id !== $ledgerId) {
+                    $validator->errors()->add(
+                        'transactions',
+                        'The ledger category type and ledger must match the transaction type and ledger for transaction ID ' . $transaction['id'] . '.'
+                    );
                 }
 
             }
