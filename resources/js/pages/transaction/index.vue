@@ -9,6 +9,7 @@ import {
   parseTransactionsAmountToNumber,
 } from '@/utils/transactionMeta';
 import { displayToast } from '@/utils/toast';
+import { storeTransaction, updateTransaction } from '@/utils/transaction';
 
 definePage({
   meta: {
@@ -90,19 +91,16 @@ const openEditDialog = (transaction) => {
 };
 
 const handleTranactionSubmit = async (data, isUpdating = false) => {
-  console.log(data);
-  const response = isUpdating
-    ? await transactionStore.updateTransaction(data)
-    : await transactionStore.storeTransaction(data);
-  const expectedStatus = isUpdating ? 200 : 201;
-  displayToast(expectedStatus, response.status, response.data.message);
-
-  if (response.status === expectedStatus) {
-    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
-    if (isUpdating)
-      await transactionStore.getTransactionsByDateRange(rangeDateData.value);
-    resetDialog();
-  }
+  isUpdating
+    ? await updateTransaction(
+        transactionStore,
+        ledgerStore,
+        displayToast,
+        rangeDateData.value,
+        data,
+      )
+    : await storeTransaction(transactionStore, ledgerStore, displayToast, data);
+  resetDialog();
 };
 
 const handleTransactionDelete = async (id, data) => {
