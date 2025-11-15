@@ -9,7 +9,11 @@ import {
   parseTransactionsAmountToNumber,
 } from '@/utils/transactionMeta';
 import { displayToast } from '@/utils/toast';
-import { storeTransaction, updateTransaction } from '@/utils/transaction';
+import {
+  storeTransaction,
+  updateTransaction,
+  deactivateTransaction,
+} from '@/utils/transaction';
 
 definePage({
   meta: {
@@ -104,13 +108,14 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
 };
 
 const handleTransactionDelete = async (id, data) => {
-  const response = await transactionStore.deactivateTransaction(id, data);
-  const expectedStatus = 200;
-  displayToast(expectedStatus, response.status, response.data.message);
-  if (response.status === expectedStatus) {
-    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
-    await transactionStore.getTransactionsByDateRange(rangeDateData.value);
-  }
+  await deactivateTransaction(
+    transactionStore,
+    ledgerStore,
+    displayToast,
+    rangeDateData.value,
+    id,
+    data,
+  );
 };
 
 const fetchTransactionsByDateRange = async (i) => {

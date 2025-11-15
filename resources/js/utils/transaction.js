@@ -31,3 +31,20 @@ export const updateTransaction = async (
     await transactionStore.getTransactionsByDateRange(rangeDateData);
   }
 };
+
+export const deactivateTransaction = async (
+  transactionStore,
+  ledgerStore,
+  displayToast,
+  rangeDateData,
+  id,
+  data,
+) => {
+  const response = await transactionStore.deactivateTransaction(id, data);
+  displayToast(200, response.status, response.data.message);
+
+  if (response.status === 200) {
+    await ledgerStore.UpdateLedgerBalance(ledgerStore.ledger.id);
+    await transactionStore.getTransactionsByDateRange(rangeDateData);
+  }
+};
