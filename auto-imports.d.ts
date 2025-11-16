@@ -42,6 +42,7 @@ declare global {
   const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
   const createUrl: typeof import('./resources/js/@core/composable/createUrl.js')['createUrl']
   const customRef: typeof import('vue')['customRef']
+  const deactivateTransaction: typeof import('./resources/js/utils/transaction.js')['deactivateTransaction']
   const debouncedRef: typeof import('@vueuse/core')['debouncedRef']
   const debouncedWatch: typeof import('@vueuse/core')['debouncedWatch']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
@@ -114,6 +115,8 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const paginationMeta: typeof import('./resources/js/utils/paginationMeta.js')['paginationMeta']
+  const parseToNumber: typeof import('./resources/js/utils/transactionMeta.js')['parseToNumber']
+  const parseTransactionsAmountToNumber: typeof import('./resources/js/utils/transactionMeta.js')['parseTransactionsAmountToNumber']
   const passwordValidator: typeof import('./resources/js/@core/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const prefixWithPlus: typeof import('./resources/js/@core/utils/formatters.js')['prefixWithPlus']
@@ -146,6 +149,7 @@ declare global {
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
   const storeToRefs: typeof import('pinia')['storeToRefs']
+  const storeTransaction: typeof import('./resources/js/utils/transaction.js')['storeTransaction']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
@@ -166,6 +170,8 @@ declare global {
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
   const updateAbility: typeof import('./resources/js/utils/ability.js')['updateAbility']
+  const updateLedgerBalance: typeof import('./resources/js/utils/transaction.js')['updateLedgerBalance']
+  const updateTransaction: typeof import('./resources/js/utils/transaction.js')['updateTransaction']
   const urlValidator: typeof import('./resources/js/@core/utils/validators.js')['urlValidator']
   const useAbility: typeof import('./resources/js/plugins/casl/composables/useAbility.js')['useAbility']
   const useAbs: typeof import('@vueuse/math')['useAbs']
@@ -414,6 +420,7 @@ declare module 'vue' {
     readonly createUnrefFn: UnwrapRef<typeof import('@vueuse/core')['createUnrefFn']>
     readonly createUrl: UnwrapRef<typeof import('./resources/js/@core/composable/createUrl.js')['createUrl']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
+    readonly deactivateTransaction: UnwrapRef<typeof import('./resources/js/utils/transaction.js')['deactivateTransaction']>
     readonly debouncedRef: UnwrapRef<typeof import('@vueuse/core')['debouncedRef']>
     readonly debouncedWatch: UnwrapRef<typeof import('@vueuse/core')['debouncedWatch']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
@@ -486,6 +493,8 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly paginationMeta: UnwrapRef<typeof import('./resources/js/utils/paginationMeta.js')['paginationMeta']>
+    readonly parseToNumber: UnwrapRef<typeof import('./resources/js/utils/transactionMeta.js')['parseToNumber']>
+    readonly parseTransactionsAmountToNumber: UnwrapRef<typeof import('./resources/js/utils/transactionMeta.js')['parseTransactionsAmountToNumber']>
     readonly passwordValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly prefixWithPlus: UnwrapRef<typeof import('./resources/js/@core/utils/formatters.js')['prefixWithPlus']>
@@ -518,6 +527,7 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
+    readonly storeTransaction: UnwrapRef<typeof import('./resources/js/utils/transaction.js')['storeTransaction']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
@@ -538,6 +548,8 @@ declare module 'vue' {
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
     readonly updateAbility: UnwrapRef<typeof import('./resources/js/utils/ability.js')['updateAbility']>
+    readonly updateLedgerBalance: UnwrapRef<typeof import('./resources/js/utils/transaction.js')['updateLedgerBalance']>
+    readonly updateTransaction: UnwrapRef<typeof import('./resources/js/utils/transaction.js')['updateTransaction']>
     readonly urlValidator: UnwrapRef<typeof import('./resources/js/@core/utils/validators.js')['urlValidator']>
     readonly useAbility: UnwrapRef<typeof import('./resources/js/plugins/casl/composables/useAbility.js')['useAbility']>
     readonly useAbs: UnwrapRef<typeof import('@vueuse/math')['useAbs']>

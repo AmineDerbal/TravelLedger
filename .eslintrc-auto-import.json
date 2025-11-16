@@ -372,6 +372,12 @@
     "canEditOrDestroy": true,
     "displayToast": true,
     "getBalanceData": true,
-    "getTableHeaders": true
+    "getTableHeaders": true,
+    "deactivateTransaction": true,
+    "parseToNumber": true,
+    "parseTransactionsAmountToNumber": true,
+    "storeTransaction": true,
+    "updateLedgerBalance": true,
+    "updateTransaction": true
   }
 }
