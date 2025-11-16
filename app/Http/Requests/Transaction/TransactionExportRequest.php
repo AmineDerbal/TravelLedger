@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Transaction;
 
 use App\Enums\TransactionType;
+use App\Models\LedgerCategory;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class TransactionExportRequest extends BaseTransactionRequest
 {
@@ -42,6 +44,8 @@ class TransactionExportRequest extends BaseTransactionRequest
      */
     public function rules(): array
     {
+        \Log::info($this->all());
+
         return [
             'transactions' => 'required|array',
             'transactions.*.id' => 'required|exists:transactions,id',
@@ -51,8 +55,8 @@ class TransactionExportRequest extends BaseTransactionRequest
             'transactions.*.ledger.name' => 'required|exists:ledgers,name',
             'transactions.*.type.value' => ['required', Rule::in(TransactionType::valueList())],
             'transactions.*.type.label' => 'required',
-            'transactions.*.category.value' => $this->categoryValidationRule(),
-            'transactions.*.category.label' => 'required',
+            'transactions.*.category.id' => ' required|exists:ledger_categories,id',
+            'transactions.*.category.name' => 'required',
             'transactions.*.amount' => 'required|numeric|gte:0',
             'transactions.*.date' => 'required|date|date_format:Y-m-d',
             'transactions.*.description' => 'required|string|max:80',
@@ -67,5 +71,41 @@ class TransactionExportRequest extends BaseTransactionRequest
             'exportDate.end_date' => 'required|date|date_format:Y-m-d|after_or_equal:exportDate.start_date|before_or_equal:today',
 
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        if ($validator->errors()->isNotEmpty()) {
+            return;
+        }
+
+        $validator->after(function ($validator) {
+            $transactions = $this->input('transactions', []);
+            foreach ($transactions as $transaction) {
+                $ledgerCategoryId = data_get($transaction, 'category.id');
+                $type = (int)(data_get($transaction, 'type.value'));
+                $ledgerId = (int)(data_get($transaction, 'ledger.id'));
+
+                if (!$ledgerCategoryId) {
+                    $validator->errors()->add('transactions', 'Ledger category is required for each transaction.');
+                    continue;
+                }
+
+                $ledgerCategory = LedgerCategory::find($ledgerCategoryId);
+                if (!$ledgerCategory) {
+                    $validator->errors()->add('transactions', 'Invalid ledger category for transaction ID ' . $transaction['id'] . '.');
+                    continue;
+                }
+
+                if ($ledgerCategory->type['value'] !== $type || $ledgerCategory->ledger_id !== $ledgerId) {
+                    $validator->errors()->add(
+                        'transactions',
+                        'The ledger category type and ledger must match the transaction type and ledger for transaction ID ' . $transaction['id'] . '.'
+                    );
+                }
+
+            }
+
+        });
     }
 }

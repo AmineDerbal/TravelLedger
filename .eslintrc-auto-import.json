@@ -372,6 +372,8 @@
     "canEditOrDestroy": true,
     "displayToast": true,
     "getBalanceData": true,
-    "getTableHeaders": true
+    "getTableHeaders": true,
+    "parseToNumber": true,
+    "parseTransactionsAmountToNumber": true
   }
 }
