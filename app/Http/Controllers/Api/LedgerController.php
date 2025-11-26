@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ledger;
 use App\Http\Resources\Ledger\BasicLedgerResource;
 use App\Http\Resources\Ledger\LegderWithCategoriesResource;
+use App\Http\Requests\Ledger\StoreLedgerRequest;
 
 class LedgerController extends Controller
 {
@@ -13,6 +14,17 @@ class LedgerController extends Controller
     {
         $ledgers = Ledger::all();
         return response()->json(BasicLedgerResource::collection($ledgers));
+    }
+
+    public function store(StoreLedgerRequest $request)
+    {
+        $data = $request->validated();
+        try {
+            Ledger::create($data);
+            return response()->json(['message' => 'Ledger created successfully'], 201);
+        } catch (\Exception) {
+            return response()->json(['message' => 'Something went wrong'], 500);
+        }
     }
 
     public function show($id)
