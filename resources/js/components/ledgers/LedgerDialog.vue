@@ -31,7 +31,7 @@ const emit = defineEmits([
   'closeEditDialog',
 ]);
 
-const SetDialogVisible = (val) => {
+const setDialogVisible = (val) => {
   emit('update:isDialogVisible', val);
 };
 
@@ -40,16 +40,81 @@ const closeEditDialog = () => {
 };
 
 const closeDialog = () => {
-  props.isEdit ? closeEditDialog() : SetDialogVisible(false);
+  props.isEdit ? closeEditDialog() : setDialogVisible(false);
+};
+
+const isVisible = computed({
+  get: () => props.isDialogVisible,
+  set: (val) => setDialogVisible(val),
+});
+
+const form = reactive({ ...props.formData });
+
+const nameRules = [
+  (value) => value.length <= 20 || 'Name must be less than 20 characters.',
+  (value) => !!value || 'Name is required.',
+];
+
+const formatName = () => {
+  if (!form.name) return;
+  form.name = form.name.toUpperCase();
+};
+
+const onSubmit = () => {
+  props.dialogSubmitLoading = true;
+  emit('submit', form, props.isEdit);
 };
 </script>
 
 <template>
   <VDialog
-    v-model="isDialogVisible"
+    v-model="isVisible"
     max-width="600"
     @click:outside="closeDialog()"
   >
     <DialogCloseBtn @click="closeDialog()" />
+    <VCard title="Ledger">
+      <VCardText>
+        <VRow>
+          <VCol
+            cols="12"
+            sm="12"
+            md="12"
+          >
+            <VTextField
+              v-model="form.name"
+              label="Ledger Name"
+              :rules="nameRules"
+              @input="formatName"
+              required
+            />
+            <div
+              class="mt-2 text-error"
+              v-if="errors.name"
+            >
+              {{ errors.name[0] }}
+            </div>
+          </VCol>
+        </VRow>
+      </VCardText>
+      <VCardActions>
+        <VBtn
+          variant="tonal"
+          color="secondary"
+          @click="closeDialog()"
+          :disabled="dialogSubmitLoading"
+        >
+          Close
+        </VBtn>
+        <VBtn
+          variant="tonal"
+          :disabled="!form.name"
+          :loading="props.dialogSubmitLoading"
+          @click="onSubmit"
+        >
+          {{ isEdit ? 'Update' : 'Create' }}
+        </VBtn>
+      </VCardActions>
+    </VCard>
   </VDialog>
 </template>

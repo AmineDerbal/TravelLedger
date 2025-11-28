@@ -30,13 +30,30 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ];
 
+const handleSubmit = async (data, isUpdating) => {
+  const response = isUpdating
+    ? await ledgerStore.updateLedger(data)
+    : await ledgerStore.storeLedger(data);
+
+  const expectedStatus = isUpdating ? 200 : 201;
+  if (response.status === expectedStatus) {
+    isDialogVisible.value = false;
+    formData.value = { ...defaultFormData };
+  }
+};
+
 onBeforeMount(async () => {
   await ledgerStore.getLedgers();
 });
 </script>
 
 <template>
-  <LedgerDialog v-model:isDialogVisible="isDialogVisible" />
+  <LedgerDialog
+    v-model:isDialogVisible="isDialogVisible"
+    :isEdit="isEdit"
+    :formData="formData"
+    :errors="errors"
+  />
   <VCard title="Ledgers">
     <VCardText>
       <VRow class="align-end">

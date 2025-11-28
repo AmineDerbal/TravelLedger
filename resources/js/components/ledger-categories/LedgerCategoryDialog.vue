@@ -40,7 +40,7 @@ const emit = defineEmits([
   'closeEditDialog',
 ]);
 
-const SetDialogVisible = (val) => {
+const setDialogVisible = (val) => {
   emit('update:isDialogVisible', val);
 };
 
@@ -49,7 +49,7 @@ const closeEditDialog = () => {
 };
 
 const closeDialog = () => {
-  props.isEdit ? closeEditDialog() : SetDialogVisible(false);
+  props.isEdit ? closeEditDialog() : setDialogVisible(false);
 };
 
 const nameRules = [
@@ -59,7 +59,7 @@ const nameRules = [
 
 const isVisible = computed({
   get: () => props.isDialogVisible,
-  set: (val) => SetDialogVisible(val),
+  set: (val) => setDialogVisible(val),
 });
 
 const form = reactive({ ...props.formData });
