@@ -16,10 +16,6 @@ class BasicLedgerCategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ledger' => [
-                'id' => $this->ledger->id,
-                'name' => $this->ledger->name,
-            ],
             'type' => $this->type,
             'name' => $this->name
         ];

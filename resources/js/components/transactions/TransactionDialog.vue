@@ -11,7 +11,11 @@ const props = defineProps({
     required: true,
   },
 
-  selectOptions: {
+  ledgersOptions: {
+    type: Array,
+    required: true,
+  },
+  categoriesOptions: {
     type: Array,
     required: true,
   },
@@ -89,10 +93,9 @@ const isFormValid = computed(() => {
 
 const filteredCategories = computed(() => {
   if (!form.type) return [];
-
-  return props.selectOptions
-    .find((ledger) => ledger.id === form.ledger.id)
-    .categories.filter((category) => category.type.value === form.type.value);
+  return props.categoriesOptions.filter(
+    (category) => category.type.value === form.type.value,
+  );
 });
 
 watch([() => form.type, () => form.ledger], () => {
@@ -145,7 +148,7 @@ watch(
               v-model="form.ledger"
               :hint="form.ledger?.name"
               label="Ledger"
-              :items="selectOptions"
+              :items="ledgersOptions"
               item-title="name"
               item-value="id"
               persistent-hint

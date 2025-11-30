@@ -1,5 +1,3 @@
-import { get } from '@vueuse/core';
-
 export default defineStore('ledgerCategory', {
   state: () => ({
     ledgerCategories: [],
