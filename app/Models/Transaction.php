@@ -36,15 +36,4 @@ class Transaction extends Model
         return $this->belongsTo(Ledger::class);
     }
 
-    public function linkedTransaction()
-    {
-        return $this->belongsTo(Transaction::class, 'linked_transaction_id');
-    }
-
-    public function reverseLinkedTransaction()
-    {
-        return $this->hasOne(Transaction::class, 'linked_transaction_id');
-    }
-
-
 }

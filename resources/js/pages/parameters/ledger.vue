@@ -1,6 +1,7 @@
 <script setup>
 import { useAbility } from '@/plugins/casl/composables/useAbility';
 import useLedgerStore from '@/store/ledgerStore';
+
 definePage({
   meta: {
     requiresAuth: true,
@@ -17,6 +18,7 @@ const errors = computed(() => ledgerStore.errors);
 
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
+const dialogSubmitLoading = ref(false);
 
 const defaultFormData = {
   name: '',
@@ -31,6 +33,8 @@ const headers = [
 ];
 
 const handleSubmit = async (data, isUpdating) => {
+  dialogSubmitLoading.value = true;
+  console.log('Submitted data:', data, 'Is updating:', isUpdating);
   const response = isUpdating
     ? await ledgerStore.updateLedger(data)
     : await ledgerStore.storeLedger(data);
@@ -39,6 +43,7 @@ const handleSubmit = async (data, isUpdating) => {
   if (response.status === expectedStatus) {
     isDialogVisible.value = false;
     formData.value = { ...defaultFormData };
+    dialogSubmitLoading.value = false;
   }
 };
 
@@ -50,9 +55,11 @@ onBeforeMount(async () => {
 <template>
   <LedgerDialog
     v-model:isDialogVisible="isDialogVisible"
+    :dialogSubmitLoading="dialogSubmitLoading"
     :isEdit="isEdit"
     :formData="formData"
     :errors="errors"
+    @submit="handleSubmit"
   />
   <VCard title="Ledgers">
     <VCardText>

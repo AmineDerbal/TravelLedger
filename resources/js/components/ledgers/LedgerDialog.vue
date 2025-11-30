@@ -48,6 +48,8 @@ const isVisible = computed({
   set: (val) => setDialogVisible(val),
 });
 
+const isSubmitLoading = computed(() => props.dialogSubmitLoading);
+
 const form = reactive({ ...props.formData });
 
 const nameRules = [
@@ -61,7 +63,6 @@ const formatName = () => {
 };
 
 const onSubmit = () => {
-  props.dialogSubmitLoading = true;
   emit('submit', form, props.isEdit);
 };
 </script>
@@ -109,7 +110,7 @@ const onSubmit = () => {
         <VBtn
           variant="tonal"
           :disabled="!form.name"
-          :loading="props.dialogSubmitLoading"
+          :loading="isSubmitLoading"
           @click="onSubmit"
         >
           {{ isEdit ? 'Update' : 'Create' }}
