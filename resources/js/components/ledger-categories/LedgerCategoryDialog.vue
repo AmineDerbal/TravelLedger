@@ -4,10 +4,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  ledgerOptions: {
-    type: Array,
-    required: true,
-  },
   typeOptions: {
     type: Array,
     required: true,
@@ -96,27 +92,6 @@ const onSubmit = () => {
     <VCard title="Ledger Category">
       <VCardText>
         <VRow>
-          <VCol cols="12">
-            <AppSelect
-              v-model="form.ledger_id"
-              :hint="form.ledger_id?.name"
-              label="Ledger"
-              :items="ledgerOptions"
-              item-title="name"
-              item-value="id"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Ledger"
-            />
-            <div
-              class="mt-2 text-error"
-              v-if="errors.ledger_id"
-            >
-              {{ errors.ledger_id[0] }}
-            </div>
-          </VCol>
-
           <VCol cols="12">
             <AppSelect
               v-model="form.type"

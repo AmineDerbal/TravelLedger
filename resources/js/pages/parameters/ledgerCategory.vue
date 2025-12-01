@@ -14,7 +14,6 @@ const ledgerCategoryStore = useLedgerCategoryStore();
 const ability = useAbility();
 
 const ledgerCategories = computed(() => ledgerCategoryStore.ledgerCategories);
-const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
 const typeOptions = computed(() => ledgerCategoryStore.typeOptions);
 const errors = computed(() => ledgerCategoryStore.errors);
 
