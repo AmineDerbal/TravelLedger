@@ -33,7 +33,6 @@ const formData = ref({ ...defaultFormData });
 const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Type', key: 'type' },
-  { title: 'Ledger', key: 'ledger' },
   { title: 'Actions', key: 'actions' },
 ];
 
