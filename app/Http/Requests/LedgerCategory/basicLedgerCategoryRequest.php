@@ -33,7 +33,6 @@ class basicLedgerCategoryRequest extends FormRequest
     public function baseRules(): array
     {
         return [
-         'ledger_id' => 'required|exists:ledgers,id',
          'type' => ['required', Rule::in(TransactionType::valueList())],
          'name' => [
              'required',
@@ -41,10 +40,9 @@ class basicLedgerCategoryRequest extends FormRequest
              'max:20',
              Rule::unique('ledger_categories')
                  ->where(function ($query) {
-                     return $query->where('ledger_id', $this->ledger_id)
-                                  ->where('type', $this->type);
+                     return $query->where('type', $this->type);
                  }),
-         ],
-    ];
+            ],
+        ];
     }
 }
