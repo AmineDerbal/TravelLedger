@@ -61,7 +61,7 @@ const isVisible = computed({
 const form = reactive({ ...props.formData });
 
 const isFormValid = computed(() => {
-  return form.ledger_id && form.type && form.name ? true : false;
+  return form.type && form.name ? true : false;
 });
 
 const formatName = () => {
@@ -73,7 +73,6 @@ const formatName = () => {
 const onSubmit = () => {
   let payload = {
     ...form,
-    ledger_id: form.ledger_id.id,
     type: form.type.value,
   };
 

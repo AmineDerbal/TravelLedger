@@ -23,7 +23,6 @@ const dialogSubmitLoading = ref(false);
 const dialogKey = ref(0);
 const defaultFormData = {
   name: '',
-  ledger_id: null,
   type: null,
 };
 
@@ -49,7 +48,6 @@ const openEditDialog = (ledgerCategory) => {
   formData.value = {
     id: ledgerCategory.id,
     name: ledgerCategory.name,
-    ledger_id: ledgerCategory.ledger,
     type: ledgerCategory.type,
   };
 
