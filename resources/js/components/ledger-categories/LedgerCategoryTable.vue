@@ -35,7 +35,6 @@ const openEditDialog = (ledgerCategoryData) => {
         <tr>
           <td>{{ item.name }}</td>
           <td>{{ item.type.label }}</td>
-          <td>{{ item.ledger.name }}</td>
           <td>
             <div class="d-flex gap-1">
               <IconBtn @click="openEditDialog(item)">

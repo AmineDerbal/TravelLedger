@@ -44,8 +44,6 @@ class TransactionExportRequest extends BaseTransactionRequest
      */
     public function rules(): array
     {
-        \Log::info($this->all());
-
         return [
             'transactions' => 'required|array',
             'transactions.*.id' => 'required|exists:transactions,id',

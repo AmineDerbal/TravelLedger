@@ -39,6 +39,13 @@ export default defineStore('ledger', {
       );
     },
 
+    async storeLedger(data) {
+      return await apiAction(
+        () => apiCall('ledgers/store', 'POST', data),
+        this,
+      );
+    },
+
     async UpdateLedgerBalance(id) {
       return await apiAction(
         () => apiCall(`ledgers/${id}/balance`),

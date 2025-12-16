@@ -2,6 +2,7 @@
 import useTransactionStore from '@/store/transactionStore';
 import useLedgerStore from '@/store/ledgerStore';
 import useUserStore from '@/store/userStore';
+import useLedgerCategoryStore from '@/store/ledgerCategoryStore';
 import { getTodayDate, getYesterdayDate } from '@/utils/dates';
 import {
   getBalanceData,
@@ -26,16 +27,18 @@ definePage({
 const transactionStore = useTransactionStore();
 const ledgerStore = useLedgerStore();
 const userStore = useUserStore();
+const ledgerCategoryStore = useLedgerCategoryStore();
 
 const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions);
 const balance = computed(() => transactionStore.balance);
 const transactionTypes = computed(() => transactionStore.types);
-const selectOptions = computed(() => ledgerStore.ledgersWithCategories);
+const ledgersOptions = computed(() => ledgerStore.ledgers);
+const categoriesOptions = computed(() => ledgerCategoryStore.ledgerCategories);
 
 const startDate = ref(getYesterdayDate());
 const endDate = ref(getTodayDate());
-const selectedLedger = ref(selectOptions.value[0]);
+const selectedLedger = ref(ledgersOptions.value[0]);
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
@@ -149,7 +152,7 @@ onBeforeMount(async () => {
   transactionStore.clearTransactionData();
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
-  await ledgerStore.getLedgersWithCategories();
+  await ledgerCategoryStore.getLedgerCategories();
 });
 </script>
 
@@ -159,6 +162,8 @@ onBeforeMount(async () => {
     :transactionTypes="transactionTypes"
     :initialData="initialData"
     :selectOptions="selectOptions"
+    :ledgersOptions="ledgersOptions"
+    :categoriesOptions="categoriesOptions"
     :isEdit="isEdit"
     @submit="handleTranactionSubmit"
     @closeEditDialog="resetDialog"

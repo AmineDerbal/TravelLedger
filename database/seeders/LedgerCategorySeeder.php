@@ -15,23 +15,27 @@ class LedgerCategorySeeder extends Seeder
 
     public function run(): void
     {
-        // office id 1
-        // RTW id 2
+
         $rows = [
             [
                 'name' => 'Income',
               'type' => TransactionType::Credit->value,
-              'ledger_id' => 1,
+
             ],
             [
                 'name' => 'Profit',
               'type' => TransactionType::Credit->value,
-              'ledger_id' => 1,
+
             ],
             [
                 'name' => 'Expense',
               'type' => TransactionType::Debit->value,
-              'ledger_id' => 1,
+
+            ],
+            [
+                'name' => 'Remboursement',
+              'type' => TransactionType::Debit->value,
+
             ],
 
         ];

@@ -14,7 +14,7 @@ class LedgerCategoryController extends Controller
 {
     public function index()
     {
-        $ledgerCategories = LedgerCategory::with('ledger')->get();
+        $ledgerCategories = LedgerCategory::all();
         return response()->json(BasicLedgerCategoryResource::collection($ledgerCategories));
     }
 

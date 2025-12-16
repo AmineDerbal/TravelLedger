@@ -1,5 +1,7 @@
 <script setup>
+import { useAbility } from '@/plugins/casl/composables/useAbility';
 import useLedgerStore from '@/store/ledgerStore';
+
 definePage({
   meta: {
     requiresAuth: true,
@@ -9,7 +11,20 @@ definePage({
 });
 
 const ledgerStore = useLedgerStore();
+const ability = useAbility();
+
 const ledgers = computed(() => ledgerStore.ledgers);
+const errors = computed(() => ledgerStore.errors);
+
+const isDialogVisible = ref(false);
+const isEdit = ref(false);
+const dialogSubmitLoading = ref(false);
+
+const defaultFormData = {
+  name: '',
+};
+
+const formData = ref({ ...defaultFormData });
 
 const headers = [
   { title: 'Name', key: 'name' },
@@ -17,13 +32,53 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ];
 
+const handleSubmit = async (data, isUpdating) => {
+  dialogSubmitLoading.value = true;
+  console.log('Submitted data:', data, 'Is updating:', isUpdating);
+  const response = isUpdating
+    ? await ledgerStore.updateLedger(data)
+    : await ledgerStore.storeLedger(data);
+
+  const expectedStatus = isUpdating ? 200 : 201;
+  if (response.status === expectedStatus) {
+    isDialogVisible.value = false;
+    formData.value = { ...defaultFormData };
+    dialogSubmitLoading.value = false;
+  }
+};
+
 onBeforeMount(async () => {
   await ledgerStore.getLedgers();
 });
 </script>
 
 <template>
-  <VCard>
+  <LedgerDialog
+    v-model:isDialogVisible="isDialogVisible"
+    :dialogSubmitLoading="dialogSubmitLoading"
+    :isEdit="isEdit"
+    :formData="formData"
+    :errors="errors"
+    @submit="handleSubmit"
+  />
+  <VCard title="Ledgers">
+    <VCardText>
+      <VRow class="align-end">
+        <VCol
+          cols="12"
+          md="4"
+        >
+          <VBtn
+            v-if="ability.can('manage', 'Ledger')"
+            variant="tonal"
+            color="primary"
+            @click="isDialogVisible = true"
+            >Add Ledger</VBtn
+          >
+        </VCol>
+      </VRow>
+    </VCardText>
+    <VDivider />
     <LedgerTable
       :ledgers="ledgers"
       :headers="headers"

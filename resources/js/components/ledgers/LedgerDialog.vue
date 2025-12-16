@@ -4,11 +4,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  typeOptions: {
-    type: Array,
-    required: true,
-  },
-
   formData: {
     type: Object,
     required: true,
@@ -48,35 +43,27 @@ const closeDialog = () => {
   props.isEdit ? closeEditDialog() : setDialogVisible(false);
 };
 
-const nameRules = [
-  (value) => value.length <= 20 || 'Name must be less than 20 characters.',
-  (value) => !!value || 'Name is required.',
-];
-
 const isVisible = computed({
   get: () => props.isDialogVisible,
   set: (val) => setDialogVisible(val),
 });
 
+const isSubmitLoading = computed(() => props.dialogSubmitLoading);
+
 const form = reactive({ ...props.formData });
 
-const isFormValid = computed(() => {
-  return form.type && form.name ? true : false;
-});
+const nameRules = [
+  (value) => value.length <= 20 || 'Name must be less than 20 characters.',
+  (value) => !!value || 'Name is required.',
+];
 
 const formatName = () => {
   if (!form.name) return;
-  form.name =
-    form.name.charAt(0).toUpperCase() + form.name.slice(1).toLowerCase();
+  form.name = form.name.toUpperCase();
 };
 
 const onSubmit = () => {
-  let payload = {
-    ...form,
-    type: form.type.value,
-  };
-
-  emit('submit', payload, props.isEdit);
+  emit('submit', form, props.isEdit);
 };
 </script>
 
@@ -87,38 +74,20 @@ const onSubmit = () => {
     @click:outside="closeDialog()"
   >
     <DialogCloseBtn @click="closeDialog()" />
-
-    <VCard title="Ledger Category">
+    <VCard title="Ledger">
       <VCardText>
         <VRow>
-          <VCol cols="12">
-            <AppSelect
-              v-model="form.type"
-              :hint="form.type?.label"
-              label="Type"
-              :items="typeOptions"
-              item-title="label"
-              item-value="value"
-              persistent-hint
-              return-object
-              single-line
-              placeholder="Select Type"
-            />
-            <div
-              class="mt-2 text-error"
-              v-if="errors.type"
-            >
-              {{ errors.type[0] }}
-            </div>
-          </VCol>
-
-          <VCol cols="12">
+          <VCol
+            cols="12"
+            sm="12"
+            md="12"
+          >
             <VTextField
               v-model="form.name"
-              label="Name"
-              placeholder="Name"
+              label="Ledger Name"
               :rules="nameRules"
               @input="formatName"
+              required
             />
             <div
               class="mt-2 text-error"
@@ -129,22 +98,23 @@ const onSubmit = () => {
           </VCol>
         </VRow>
       </VCardText>
-
       <VCardActions>
         <VBtn
           variant="tonal"
           color="secondary"
           @click="closeDialog()"
+          :disabled="dialogSubmitLoading"
         >
           Close
         </VBtn>
         <VBtn
           variant="tonal"
-          :disabled="!isFormValid"
-          :loading="props.dialogSubmitLoading"
+          :disabled="!form.name"
+          :loading="isSubmitLoading"
           @click="onSubmit"
-          >Save</VBtn
         >
+          {{ isEdit ? 'Update' : 'Create' }}
+        </VBtn>
       </VCardActions>
     </VCard>
   </VDialog>

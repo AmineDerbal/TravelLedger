@@ -14,7 +14,6 @@ const ledgerCategoryStore = useLedgerCategoryStore();
 const ability = useAbility();
 
 const ledgerCategories = computed(() => ledgerCategoryStore.ledgerCategories);
-const ledgerOptions = computed(() => ledgerCategoryStore.LedgerOptions);
 const typeOptions = computed(() => ledgerCategoryStore.typeOptions);
 const errors = computed(() => ledgerCategoryStore.errors);
 
@@ -24,7 +23,6 @@ const dialogSubmitLoading = ref(false);
 const dialogKey = ref(0);
 const defaultFormData = {
   name: '',
-  ledger_id: null,
   type: null,
 };
 
@@ -33,7 +31,6 @@ const formData = ref({ ...defaultFormData });
 const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Type', key: 'type' },
-  { title: 'Ledger', key: 'ledger' },
   { title: 'Actions', key: 'actions' },
 ];
 
@@ -51,7 +48,6 @@ const openEditDialog = (ledgerCategory) => {
   formData.value = {
     id: ledgerCategory.id,
     name: ledgerCategory.name,
-    ledger_id: ledgerCategory.ledger,
     type: ledgerCategory.type,
   };
 
