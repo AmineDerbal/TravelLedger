@@ -14,9 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name', 20);
             $table->unsignedTinyInteger('type');
-            $table->foreignId('ledger_id')->constrained();
             $table->timestamps();
-            $table->unique(['type', 'ledger_id', 'name'], 'unique_type_ledger_name');
         });
     }
 

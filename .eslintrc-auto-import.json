@@ -373,16 +373,11 @@
     "displayToast": true,
     "getBalanceData": true,
     "getTableHeaders": true,
-<<<<<<< HEAD
-    "parseToNumber": true,
-    "parseTransactionsAmountToNumber": true
-=======
     "deactivateTransaction": true,
     "parseToNumber": true,
     "parseTransactionsAmountToNumber": true,
     "storeTransaction": true,
     "updateLedgerBalance": true,
     "updateTransaction": true
->>>>>>> setup-permissions
   }
 }
