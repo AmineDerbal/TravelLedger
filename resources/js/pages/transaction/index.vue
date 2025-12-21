@@ -161,7 +161,6 @@ onBeforeMount(async () => {
     v-model:isDialogVisible="isDialogVisible"
     :transactionTypes="transactionTypes"
     :initialData="initialData"
-    :selectOptions="selectOptions"
     :ledgersOptions="ledgersOptions"
     :categoriesOptions="categoriesOptions"
     :isEdit="isEdit"
@@ -235,7 +234,7 @@ onBeforeMount(async () => {
           <AppSelect
             v-model="selectedLedger"
             label="Ledger"
-            :items="selectOptions"
+            :items="ledgersOptions"
             item-title="name"
             item-value="id"
             persistent-hint
