@@ -9,6 +9,14 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(['openEditDialog', 'closeEditDialog', 'deleteLedger']);
+const handleDelete = (id) => {
+  emit('deleteLedger', id);
+};
+const openEditDialog = (ledgerData) => {
+  emit('openEditDialog', ledgerData);
+};
 </script>
 
 <template>
@@ -24,7 +32,7 @@ const props = defineProps({
           <td>{{ item.balance }} DZD</td>
           <td>
             <div class="d-flex gap-1">
-              <IconBtn>
+              <IconBtn @click="openEditDialog(item)">
                 <VIcon icon="tabler-edit" />
               </IconBtn>
               <IconBtn>
