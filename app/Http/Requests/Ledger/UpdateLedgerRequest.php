@@ -4,7 +4,7 @@ namespace App\Http\Requests\Ledger;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateLedgerRequest extends FormRequest
+class UpdateLedgerRequest extends BasicLedgerRequest
 {
     /**
      * Determine if the user is authorized to make this request.
