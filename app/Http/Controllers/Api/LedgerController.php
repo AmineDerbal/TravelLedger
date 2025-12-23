@@ -7,6 +7,7 @@ use App\Models\Ledger;
 use App\Http\Resources\Ledger\BasicLedgerResource;
 use App\Http\Resources\Ledger\LegderWithCategoriesResource;
 use App\Http\Requests\Ledger\StoreLedgerRequest;
+use App\Http\Requests\Ledger\UpdateLedgerRequest;
 
 class LedgerController extends Controller
 {
@@ -32,6 +33,18 @@ class LedgerController extends Controller
         $ledger = Ledger::find($id);
         return response()->json(new BasicLedgerResource($ledger));
     }
+
+    public function update(UpdateLedgerRequest $request, $id)
+    {
+        $data = $request->validated();
+        try {
+            Ledger::find($id)->update($data);
+            return response()->json(['message' => 'Ledger updated successfully'], 200);
+        } catch (\Exception) {
+            return response()->json(['message' => 'Something went wrong'], 500);
+        }
+    }
+    
     public function getFirstLedger()
     {
         $ledger = Ledger::first();
