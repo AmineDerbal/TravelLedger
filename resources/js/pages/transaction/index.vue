@@ -33,7 +33,7 @@ const user = computed(() => userStore.userData);
 const transactions = computed(() => transactionStore.transactions);
 const balance = computed(() => transactionStore.balance);
 const transactionTypes = computed(() => transactionStore.types);
-const ledgersOptions = computed(() => ledgerStore.ledgers);
+const ledgersOptions = computed(() => ledgerStore.ledgersForSelect);
 const categoriesOptions = computed(() => ledgerCategoryStore.ledgerCategories);
 
 const startDate = ref(getYesterdayDate());
@@ -153,6 +153,7 @@ onBeforeMount(async () => {
   await transactionStore.getTransactionTypes();
   await transactionStore.getTransactionCategories();
   await ledgerCategoryStore.getLedgerCategories();
+  await ledgerStore.getLedgersForSelect();
 });
 </script>
 
