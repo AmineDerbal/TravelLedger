@@ -19,6 +19,7 @@ const errors = computed(() => ledgerStore.errors);
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogSubmitLoading = ref(false);
+const dialogKey = ref(0);
 
 const defaultFormData = {
   name: '',
@@ -32,18 +33,45 @@ const headers = [
   { title: 'Actions', key: 'actions' },
 ];
 
+const increaseDialogKey = () => {
+  dialogKey.value += 1;
+};
+const resetDialog = () => {
+  isDialogVisible.value = false;
+  isEdit.value = false;
+  formData.value = { ...defaultFormData };
+  increaseDialogKey();
+};
+
+const openEditDialog = (ledger) => {
+  formData.value = {
+    id: ledger.id,
+    name: ledger.name,
+  };
+
+  isEdit.value = true;
+  isDialogVisible.value = true;
+  increaseDialogKey();
+};
 const handleSubmit = async (data, isUpdating) => {
   dialogSubmitLoading.value = true;
-  console.log('Submitted data:', data, 'Is updating:', isUpdating);
+
   const response = isUpdating
     ? await ledgerStore.updateLedger(data)
     : await ledgerStore.storeLedger(data);
 
   const expectedStatus = isUpdating ? 200 : 201;
   if (response.status === expectedStatus) {
-    isDialogVisible.value = false;
-    formData.value = { ...defaultFormData };
+    await ledgerStore.getLedgers();
+    resetDialog();
     dialogSubmitLoading.value = false;
+  }
+};
+
+const handleDelete = async (id) => {
+  const response = await ledgerStore.deleteLedger(id);
+  if (response.status === 200) {
+    await ledgerStore.getLedgers();
   }
 };
 
@@ -60,6 +88,8 @@ onBeforeMount(async () => {
     :formData="formData"
     :errors="errors"
     @submit="handleSubmit"
+    @closeEditDialog="resetDialog"
+    :key="dialogKey"
   />
   <VCard title="Ledgers">
     <VCardText>
@@ -82,6 +112,8 @@ onBeforeMount(async () => {
     <LedgerTable
       :ledgers="ledgers"
       :headers="headers"
+      @openEditDialog="openEditDialog"
+      @deleteLedger="handleDelete"
     />
   </VCard>
 </template>
