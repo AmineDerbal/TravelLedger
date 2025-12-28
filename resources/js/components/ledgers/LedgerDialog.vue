@@ -103,7 +103,7 @@ const onSubmit = () => {
           variant="tonal"
           color="secondary"
           @click="closeDialog()"
-          :disabled="dialogSubmitLoading"
+          :disabled="isSubmitLoading"
         >
           Close
         </VBtn>
