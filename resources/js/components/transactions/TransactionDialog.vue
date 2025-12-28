@@ -19,6 +19,11 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  dialogSubmitLoading: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 
   initialData: {
     type: Object,
@@ -72,6 +77,8 @@ const isVisible = computed({
   get: () => props.isDialogVisible,
   set: (val) => emit('update:isDialogVisible', val),
 });
+
+const isSubmitLoading = computed(() => props.dialogSubmitLoading);
 
 const form = reactive({ ...props.initialData });
 
@@ -234,12 +241,15 @@ watch(
           variant="tonal"
           color="secondary"
           @click="isEdit ? handleCloseEditDialog() : dialogVisibleUpdate(false)"
+          :disabled="isSubmitLoading"
         >
           Close
         </VBtn>
         <VBtn
           @click="onSubmit"
           :disabled="!isFormValid"
+          :loading="isSubmitLoading"
+          variant="tonal"
         >
           {{ props.isEdit ? 'Update' : 'Submit' }}
         </VBtn>

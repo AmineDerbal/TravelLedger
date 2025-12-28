@@ -42,6 +42,7 @@ const selectedLedger = ref(ledgersOptions.value[0]);
 const isDialogVisible = ref(false);
 const isEdit = ref(false);
 const dialogKey = ref(0);
+const dialogSubmitLoading = ref(false);
 const loadings = ref([]);
 
 const rangeDateData = computed(() => ({
@@ -98,6 +99,7 @@ const openEditDialog = (transaction) => {
 };
 
 const handleTranactionSubmit = async (data, isUpdating = false) => {
+  dialogSubmitLoading.value = true;
   isUpdating
     ? await updateTransaction(
         transactionStore,
@@ -108,6 +110,7 @@ const handleTranactionSubmit = async (data, isUpdating = false) => {
       )
     : await storeTransaction(transactionStore, ledgerStore, displayToast, data);
   resetDialog();
+  dialogSubmitLoading.value = false;
 };
 
 const handleTransactionDelete = async (id, data) => {
@@ -160,6 +163,7 @@ onBeforeMount(async () => {
 <template>
   <TransactionDialog
     v-model:isDialogVisible="isDialogVisible"
+    :dialogSubmitLoading="dialogSubmitLoading"
     :transactionTypes="transactionTypes"
     :initialData="initialData"
     :ledgersOptions="ledgersOptions"
