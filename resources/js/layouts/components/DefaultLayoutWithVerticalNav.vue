@@ -138,3 +138,9 @@ onBeforeMount(async () => {
     <!-- <TheCustomizer /> -->
   </VerticalNavLayout>
 </template>
+
+<style scoped>
+.v-card-text {
+  flex: 1 1 0 !important;
+}
+</style>
