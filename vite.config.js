@@ -102,6 +102,9 @@ export default defineConfig({
     }),
     svgLoader(),
   ],
+  server: {
+    host: true,
+  },
   define: { 'process.env': {} },
   resolve: {
     alias: {
