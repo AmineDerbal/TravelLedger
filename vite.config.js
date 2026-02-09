@@ -102,13 +102,7 @@ export default defineConfig({
     }),
     svgLoader(),
   ],
-  server: {
-     host: '0.0.0.0',
-    https: {
-      key: fs.readFileSync('path/to/key.pem'),
-      cert: fs.readFileSync('path/to/cert.pem'),
-    },
-  },
+
   define: { 'process.env': {} },
   resolve: {
     alias: {
